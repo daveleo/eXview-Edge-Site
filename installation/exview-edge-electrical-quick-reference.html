@@ -59,6 +59,16 @@
   .num-card .power { font-family: "IBM Plex Mono", monospace; font-size: 0.86rem; margin-top: 0.6rem; border-top: 1px dashed var(--hairline); padding-top: 0.5rem; }
   .num-card .est { color: var(--amber); }
 
+  /* ---------- Compact data table ---------- */
+  .table-scroll { overflow-x: auto; border: 1px solid var(--hairline); border-radius: 8px; background: var(--paper-raised); }
+  table.mini { border-collapse: collapse; width: 100%; font-size: 0.88rem; min-width: 460px; }
+  table.mini th, table.mini td { border-bottom: 1px solid var(--hairline); padding: 0.5rem 0.9rem; text-align: left; }
+  table.mini td { font-family: "IBM Plex Mono", monospace; font-size: 0.86rem; }
+  table.mini thead th { background: var(--ink); color: var(--paper); font-family: "Space Grotesk", sans-serif; font-weight: 600; font-size: 0.82rem; }
+  table.mini tbody tr:last-child td, table.mini tbody tr:last-child th { border-bottom: none; }
+  table.mini tr.group-end td, table.mini tr.group-end th { border-bottom: 2px solid var(--hairline); }
+  p.table-note { font-size: 0.82rem; color: var(--steel); margin: 0.6rem 0 0 0; }
+
   /* ---------- Spec strip ---------- */
   .facts { background: var(--paper-raised); border: 1px solid var(--hairline); border-radius: 8px; padding: 0.9rem 1.2rem; display: flex; flex-wrap: wrap; gap: 0.4rem 2rem; font-size: 0.88rem; }
   .facts div { white-space: nowrap; }
@@ -157,6 +167,30 @@
       <div class="power">4.6&nbsp;kW max <span class="est">(est.)</span><br>1.53&nbsp;kW typical <span class="est">(est.)</span></div>
     </div>
   </div>
+</section>
+
+<section>
+  <h2><span class="n">01a</span>Estimated max power per PSU</h2>
+  <div class="table-scroll">
+  <table class="mini">
+    <thead><tr><th scope="col">Size</th><th scope="col">PSU</th><th scope="col">Est. max power</th></tr></thead>
+    <tbody>
+      <tr class="group-end"><th scope="row">135&Prime;</th><td>Main PSU (only)</td><td>1.87&nbsp;kW</td></tr>
+
+      <tr><th scope="row">162&Prime;</th><td>Main PSU</td><td>1.35&nbsp;kW</td></tr>
+      <tr class="group-end"><th scope="row"></th><td>Secondary PSU</td><td>1.35&nbsp;kW</td></tr>
+
+      <tr><th scope="row">190&Prime;</th><td>Main PSU</td><td>1.50&nbsp;kW <span class="est">(est.)</span></td></tr>
+      <tr><th scope="row"></th><td>Secondary PSU 1</td><td>1.00&nbsp;kW <span class="est">(est.)</span></td></tr>
+      <tr class="group-end"><th scope="row"></th><td>Secondary PSU 2</td><td>1.00&nbsp;kW <span class="est">(est.)</span></td></tr>
+
+      <tr><th scope="row">216&Prime;</th><td>Main PSU</td><td>1.73&nbsp;kW <span class="est">(est.)</span></td></tr>
+      <tr><th scope="row"></th><td>Secondary PSU 1</td><td>1.73&nbsp;kW <span class="est">(est.)</span></td></tr>
+      <tr class="group-end"><th scope="row"></th><td>Secondary PSU 2</td><td>1.15&nbsp;kW <span class="est">(est.)</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="table-note">Datasheet max power split across each model's PSUs, proportional to the cabinets each PSU serves &mdash; useful for sizing an individual circuit, not a substitute for the screen-total max above. Circuit and protective-device selection remain the electrician's decision.</p>
 </section>
 
 <section>
