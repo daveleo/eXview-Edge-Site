@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>eXview Edge — Electrical &amp; Power Architecture Installation Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:      #F5F6F3;
+    --paper-raised:#FFFFFF;
+    --ink:        #14181D;
+    --navy:       #0B1E27;
+    --steel:      #4B5760;
+    --hairline:   #DCE2E4;
+    --signal:     #0B7285;
+    --signal-dim: #E3F1F2;
+    --amber:      #B5650D;
+    --amber-dim:  #FBEFDD;
+    --radius:     3px;
+    --content-w:  1240px;
+
+    --w-psu:      #F6C6C6;
+    --w-psu-line: #B33939;
+    --w-board:    #C8E6A0;
+    --w-board-line:#5B8C1A;
+    --w-dist:     #F5E27A;
+    --w-dist-line:#B8960C;
+    --w-3pin:     #2255D6;
+    --w-5pin:     #B93FC1;
+    --w-ac:       #E23B3B;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.5;
+    font-size: 15px;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: "Space Grotesk", "Segoe UI", sans-serif;
+    font-weight: 600;
+    margin: 0;
+    color: var(--ink);
+  }
+
+  code, .mono, .num { font-family: "IBM Plex Mono", ui-monospace, "Courier New", monospace; }
+  a { color: var(--signal); }
+  a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* ---------- Masthead ---------- */
+  .masthead { background: var(--navy); color: var(--paper); padding: 2rem 1.5rem 2.1rem; }
+  .masthead__inner { max-width: var(--content-w); margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem; flex-wrap: wrap; }
+  .masthead__logo { background: var(--paper); border-radius: 6px; padding: 4px 12px; display: inline-flex; align-items: center; flex-shrink: 0; }
+  .masthead__logo img { width: 110px; height: auto; display: block; }
+  .eyebrow { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: #7FC4CC; margin: 0 0 0.7rem 0; }
+  .masthead h1 { color: var(--paper); font-size: clamp(1.6rem, 3vw, 2.15rem); letter-spacing: -0.01em; line-height: 1.15; max-width: 26ch; }
+  .masthead .subtitle { margin: 0.6rem 0 0 0; color: #C4CCD1; font-size: 1rem; max-width: 52ch; }
+  .masthead .doc-meta { margin: 1.3rem 0 0 0; font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; color: #889299; letter-spacing: 0.03em; }
+  .masthead .quick-link { display: inline-block; margin-top: 0.9rem; font-family: "IBM Plex Mono", monospace; font-size: 0.78rem; color: #7FC4CC; text-decoration: none; border-bottom: 1px dotted #7FC4CC; }
+  .masthead .quick-link:hover { color: var(--paper); border-color: var(--paper); }
+
+  main { max-width: var(--content-w); margin: 0 auto; padding: 0 1.5rem; }
+
+  /* ---------- Summary strip ---------- */
+  .summary-strip { margin: 2.2rem 0 0 0; background: var(--signal-dim); border-left: 3px solid var(--signal); border-radius: 0 6px 6px 0; padding: 1rem 1.3rem; font-size: 0.92rem; }
+  .summary-strip strong { color: var(--ink); }
+
+  /* ---------- Nav ---------- */
+  nav.toc { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.6rem 0 0 0; padding: 0; list-style: none; }
+  nav.toc a { display: inline-block; font-family: "IBM Plex Mono", monospace; font-size: 0.76rem; text-decoration: none; color: var(--ink); background: var(--paper-raised); border: 1px solid var(--hairline); border-radius: 20px; padding: 0.38rem 0.85rem; }
+  nav.toc a:hover { border-color: var(--signal); color: var(--signal); }
+
+  section { margin: 2.8rem 0; }
+  .section-head { display: flex; align-items: baseline; gap: 0.8rem; border-bottom: 2px solid var(--ink); padding-bottom: 0.5rem; margin-bottom: 1rem; }
+  .section-head h2 { font-size: 1.3rem; }
+  .section-head .section-index { font-family: "IBM Plex Mono", monospace; font-size: 0.78rem; color: var(--signal); }
+  p.section-note { font-size: 0.88rem; color: var(--steel); margin: 0 0 1.1rem 0; max-width: 90ch; }
+
+  .tag { display: inline-block; font-family: "IBM Plex Mono", monospace; font-size: 0.64rem; font-weight: 600; letter-spacing: 0.04em; padding: 0.1rem 0.4rem; border-radius: 3px; vertical-align: middle; margin-left: 0.35rem; white-space: nowrap; }
+  .tag-est  { background: var(--amber-dim); color: var(--amber); }
+  .tag-rule { background: var(--signal-dim); color: var(--signal); }
+
+  /* ---------- Callouts ---------- */
+  .callout { background: var(--paper-raised); border: 1px solid var(--hairline); border-left: 4px solid var(--signal); border-radius: 0 6px 6px 0; padding: 1rem 1.2rem; margin: 1rem 0; font-size: 0.9rem; }
+  .callout h4 { font-size: 0.86rem; margin-bottom: 0.4rem; }
+  .callout--amber { border-left-color: var(--amber); }
+  .callout--amber h4 { color: var(--amber); }
+  .callout p { margin: 0.3rem 0; }
+  .callout p + p { margin-top: 0.5rem; }
+
+  /* ---------- Tables ---------- */
+  .table-scroll { overflow-x: auto; border: 1px solid var(--hairline); border-radius: 6px; background: var(--paper-raised); }
+  table { border-collapse: collapse; width: 100%; font-size: 0.86rem; min-width: 560px; }
+  th, td { border-bottom: 1px solid var(--hairline); padding: 0.55rem 0.75rem; text-align: left; vertical-align: top; }
+  td, td.num { font-family: "IBM Plex Mono", monospace; font-size: 0.82rem; }
+  th { font-weight: 500; }
+  thead th { background: var(--ink); color: var(--paper); font-family: "Space Grotesk", sans-serif; font-weight: 600; font-size: 0.85rem; white-space: nowrap; border-bottom: none; }
+  table th[scope="row"] { font-family: "IBM Plex Sans", sans-serif; font-weight: 500; color: var(--ink); white-space: nowrap; }
+  table th:first-child, table td:first-child { position: sticky; left: 0; background: var(--paper-raised); z-index: 1; border-right: 1px solid var(--hairline); }
+  thead th:first-child { z-index: 2; background: var(--ink); }
+  tbody tr:hover td { background: #FAFBF9; }
+  tbody tr:hover td:first-child { background: #FAFBF9; }
+  table caption { caption-side: top; text-align: left; font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; color: var(--steel); padding: 0.6rem 0.75rem 0; }
+  .anchor-cell { font-weight: 700; background: var(--signal-dim) !important; }
+  tr.subtotal-row td, tr.subtotal-row th { border-top: 1.5px solid var(--ink); font-weight: 600; background: #FAFBF9; }
+
+  /* ---------- Legend swatches ---------- */
+  ul.legend { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.5rem 1rem; }
+  ul.legend li { display: flex; align-items: center; gap: 0.55rem; font-size: 0.84rem; padding: 0.4rem 0.1rem; }
+  ul.legend .swatch { width: 20px; height: 14px; border-radius: 3px; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.15); }
+  ul.legend .line { width: 24px; height: 3px; border-radius: 2px; flex-shrink: 0; }
+
+  /* ---------- Diagram card ---------- */
+  .diagram-card { background: var(--paper-raised); border: 1px solid var(--hairline); border-radius: 6px; padding: 1.2rem; }
+  .diagram-card svg { display: block; width: 100%; height: auto; }
+  .diagram-caption { font-size: 0.8rem; color: var(--steel); margin-top: 0.7rem; max-width: 90ch; }
+
+  /* ---------- Model figure gallery ---------- */
+  .figure-grid { display: grid; grid-template-columns: 1fr; gap: 1.4rem; }
+  .figure-card { background: var(--paper-raised); border: 1px solid var(--hairline); border-radius: 6px; overflow: hidden; }
+  .figure-card__head { padding: 0.9rem 1.1rem; border-bottom: 1px solid var(--hairline); display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .figure-card__head h3 { font-size: 1rem; }
+  .figure-card__head .meta { font-family: "IBM Plex Mono", monospace; font-size: 0.74rem; color: var(--steel); }
+  .figure-card__body { padding: 1rem 1.1rem 1.2rem; }
+  .figure-card__body a { display: block; }
+  .figure-card img { width: 100%; height: auto; border: 1px solid var(--hairline); border-radius: 4px; display: block; }
+  .figure-card__body figure { margin: 0 0 1rem 0; }
+  .figure-card__body figure:last-child { margin-bottom: 0; }
+  .figure-card figcaption { font-size: 0.78rem; color: var(--steel); margin-top: 0.4rem; }
+  .figure-card figcaption code { font-size: 0.72rem; }
+
+  /* ---------- Sequence list ---------- */
+  ol.sequence { margin: 0; padding-left: 1.3rem; }
+  ol.sequence li { margin-bottom: 0.85rem; font-size: 0.92rem; }
+  ol.sequence li::marker { font-family: "IBM Plex Mono", monospace; font-weight: 600; color: var(--signal); }
+  ol.sequence li:last-child { margin-bottom: 0; }
+
+  /* ---------- Rule list ---------- */
+  dl.rules { margin: 0; }
+  dl.rules > div { display: grid; grid-template-columns: 90px 1fr; gap: 0.8rem; padding: 0.6rem 0; border-bottom: 1px dashed var(--hairline); }
+  dl.rules > div:last-child { border-bottom: none; }
+  dl.rules dt { font-family: "IBM Plex Mono", monospace; font-size: 0.76rem; font-weight: 600; color: var(--signal); }
+  dl.rules dd { margin: 0; font-size: 0.88rem; }
+
+  footer.page-footer { max-width: var(--content-w); margin: 3rem auto 0 auto; padding: 1.4rem 1.5rem 2.5rem; font-size: 0.8rem; color: var(--steel); border-top: 1px solid var(--hairline); }
+  footer.page-footer ul { padding-left: 1.2rem; margin: 0.5rem 0; }
+  footer.page-footer code { font-size: 0.74rem; }
+
+  @media (max-width: 640px) {
+    .masthead { padding: 1.7rem 1.1rem; }
+    main { padding: 0 1.1rem; }
+    dl.rules > div { grid-template-columns: 1fr; gap: 0.2rem; }
+  }
+
+  @media print {
+    .masthead { background: none; color: #000; border-bottom: 2px solid #000; }
+    .masthead__logo { background: none; padding: 0; }
+    .eyebrow, .masthead .doc-meta { color: #333; }
+    .masthead .subtitle { color: #333; }
+    nav.toc { display: none; }
+    thead th { background: #eee !important; color: #000 !important; }
+    table th:first-child, table td:first-child { background: #f7f7f7 !important; }
+    a { color: #000; text-decoration: none; }
+    section { margin: 1.4rem 0; }
+    .figure-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead__inner">
+    <div>
+      <p class="eyebrow">Installation Reference &middot; FX27 cabinet</p>
+      <h1>Electrical &amp; Power Architecture Installation Guide</h1>
+      <p class="subtitle">eXview Edge family &mdash; 135&Prime;, 162&Prime;, 190&Prime; and 216&Prime;. How the screens are supplied, switched and interconnected, and what your electrician needs to plan the circuit.</p>
+      <p class="doc-meta">DOC EDGE&#8209;ELEC&#8209;INSTALL&#8209;01 &middot; REV 1 &middot; 2026&#8209;07&#8209;30 &middot; Related: EDGE&#8209;SPEC&#8209;COMPARE&#8209;01</p>
+      <a class="quick-link" href="exview-edge-electrical-quick-reference.html">&larr; In a hurry? Read the 2-minute quick reference</a>
+    </div>
+    <span class="masthead__logo"><img src="assets/expromo-logo.jpg" alt="Expromo"></span>
+  </div>
+</header>
+
+<main>
+
+<div class="summary-strip">
+  <strong>In short:</strong> all four sizes run on 100&ndash;240&nbsp;VAC, 50/60&nbsp;Hz. 135&Prime; has 1 main power inlet, 162&Prime; has 2, and 190&Prime; and 216&Prime; each have 3 &mdash; every inlet is an independent AC supply entry that can be placed on its own circuit and phase. Expromo does not specify circuit breakers, RCDs or phase allocation: <strong>circuit sizing and protective device selection are entirely the responsibility of the installing electrician</strong>, based on the power figures in this guide and local regulations.
+</div>
+
+<nav class="toc" aria-label="Table of contents">
+  <a href="#terminology">Terminology</a>
+  <a href="#power-domains">Power domains &amp; standby</a>
+  <a href="#numbering">Cabinet numbering</a>
+  <a href="#placement">Component placement</a>
+  <a href="#model-matrix">Per-model electrical summary</a>
+  <a href="#harness">PSU interconnect (3-pin / 5-pin)</a>
+  <a href="#sequence">Installation sequence</a>
+  <a href="#drawings">Reference drawings</a>
+  <a href="#notes">Installation notes</a>
+</nav>
+
+<section id="terminology">
+  <div class="section-head"><span class="section-index">01</span><h2>Terminology</h2></div>
+  <p class="section-note">All four models share one <strong>600 &times; 337.5&nbsp;mm FX27 cabinet</strong>. Larger sizes are built by adding a row and a column of the same cabinet &mdash; nothing changes inside the cabinet itself.</p>
+
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th scope="col">Term</th><th scope="col">What it means</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Cabinet</th><td>One 600 &times; 337.5&nbsp;mm panel, 4&nbsp;kg excl. mounting bar, individually numbered (see &sect;03).</td></tr>
+      <tr><th scope="row">3-in-1 board</th><td>The board inside every cabinet combining power supply, receiving card and HUB. <strong>This is the screen's real power supply</strong> &mdash; one per cabinet.</td></tr>
+      <tr><th scope="row">&ldquo;PSU&rdquo;</th><td>The AC switching module(s) at the bottom of the screen. Functionally a <strong>relay</strong>, not a power supply &mdash; see the note below.</td></tr>
+      <tr><th scope="row">Main PSU</th><td>The one PSU that carries the AC&#8209;DC (12&nbsp;V) converter. It is the only source of 12&nbsp;V for the whole screen.</td></tr>
+      <tr><th scope="row">Secondary PSU</th><td>Any additional PSU. It has no AC&#8209;DC converter of its own &mdash; it receives 12&nbsp;V from the main PSU.</td></tr>
+      <tr><th scope="row">Sending card</th><td>The video/control processor. Powered from the main PSU and stays alive in standby.</td></tr>
+      <tr><th scope="row">Distribution board</th><td>The point each secondary PSU connects to for power and standby signalling.</td></tr>
+      <tr><th scope="row">Main inlet</th><td>One AC supply entry point. There is exactly one per PSU.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="callout callout--amber">
+    <h4>Why the relay module is still called &ldquo;PSU&rdquo;</h4>
+    <p>The modules labelled <em>PSU</em> in the drawings and in this guide are used as <strong>relays</strong>: the actual power supplies are the per-cabinet 3-in-1 boards. The term <em>PSU</em> is kept deliberately, in drawings, documentation and service communication, because it is the name your service contact and the factory both already use &mdash; renaming it would create confusion, not remove it.</p>
+  </div>
+</section>
+
+<section id="power-domains">
+  <div class="section-head"><span class="section-index">02</span><h2>Power domains &amp; standby</h2></div>
+  <p class="section-note">The main PSU's AC&#8209;DC converter is the only source of 12&nbsp;V in the screen. That 12&nbsp;V feeds the AC&nbsp;OUT relay coil in every PSU, the sending card, and &mdash; via the inter-PSU link &mdash; every secondary PSU. Everything else in the screen only receives power once a relay switches AC through to it.</p>
+
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th scope="col">Domain</th><th scope="col">Live in standby?</th><th scope="col">Contains</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Always-on (12&nbsp;V)</th><td>Yes</td><td>AC&#8209;DC converter, all AC&nbsp;OUT relay coils, the sending card</td></tr>
+      <tr><th scope="row">Switched (AC&nbsp;OUT)</th><td>No</td><td>Every 3-in-1 board (power/receiving/HUB) and every LED IC driver</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="section-note">The family has no fans; the always-on domain contains nothing beyond the items above &mdash; HDMI detect, IR receive and the physical button are all handled by the sending card itself.</p>
+
+  <h3 style="font-size:1rem; margin-bottom:0.6rem;">Standby modes</h3>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th scope="col"></th><th scope="col">Active standby (Expromo default)</th><th scope="col">Eco standby</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Measured consumption</th><td><strong>14&nbsp;W</strong></td><td><strong>0.5&nbsp;W</strong></td></tr>
+      <tr><th scope="row">LAN / UDP control</th><td>Yes</td><td>No</td></tr>
+      <tr><th scope="row">RS232</th><td>Yes</td><td>Yes</td></tr>
+      <tr><th scope="row">Physical button / IR remote</th><td>Yes</td><td>Yes</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="callout">
+    <h4>Which figure will your screen actually draw in standby?</h4>
+    <p>The &le;0.5&nbsp;W standby figure quoted on the datasheet is the <strong>Eco</strong> standby value, not the delivered default. Expromo ships screens in <strong>Active standby</strong> so that LAN/UDP wake, remote monitoring and control-system polling keep working &mdash; so budget <strong>14&nbsp;W</strong> for standby consumption unless Eco mode has been deliberately configured. Eco mode drops network connectivity entirely and should not be used on a screen driven by a network control system.</p>
+  </div>
+
+  <div class="callout">
+    <h4>Standby switching</h4>
+    <p>In either mode, the entire switched domain is fully de-energised &mdash; every 3-in-1 board and LED driver loses AC, not just video. The PSUs use <strong>zero-cross relays</strong> to minimise inrush current when the switched domain is re-energised.</p>
+  </div>
+</section>
+
+<section id="numbering">
+  <div class="section-head"><span class="section-index">03</span><h2>Cabinet numbering</h2></div>
+  <p class="section-note">Cabinet 1 is always the <strong>top-left</strong> cabinet, viewed from the front of the screen. Numbering is <strong>column-major</strong>: it runs top&rarr;bottom down the leftmost column, then continues top&rarr;bottom in the next column to the right, and so on across the screen.</p>
+
+  <div class="callout">
+    <h4>General formula</h4>
+    <p>For an <em>n&times;n</em> grid with total cabinet count <code>N = n&sup2;</code>, and 1-based <code>row</code>/<code>column</code> counted from the top-left, front view:</p>
+    <p class="mono">cabinet_number&nbsp;=&nbsp;((column&nbsp;&minus;&nbsp;1)&nbsp;&times;&nbsp;n)&nbsp;+&nbsp;row</p>
+  </div>
+
+  <div class="table-scroll">
+  <table>
+    <caption>Verified example &mdash; 135&Prime; (5&times;5 = 25 cabinets), front view</caption>
+    <thead><tr><th scope="col"></th><th scope="col">Col 1</th><th scope="col">Col 2</th><th scope="col">Col 3</th><th scope="col">Col 4</th><th scope="col">Col 5</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Row 1</th><td class="anchor-cell">1</td><td>6</td><td>11</td><td>16</td><td class="anchor-cell">21</td></tr>
+      <tr><th scope="row">Row 2</th><td>2</td><td>7</td><td>12</td><td>17</td><td>22</td></tr>
+      <tr><th scope="row">Row 3</th><td>3</td><td>8</td><td>13</td><td>18</td><td>23</td></tr>
+      <tr><th scope="row">Row 4</th><td>4</td><td>9</td><td>14</td><td>19</td><td>24</td></tr>
+      <tr><th scope="row">Row 5</th><td class="anchor-cell">5</td><td>10</td><td>15</td><td>20</td><td class="anchor-cell">25</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="diagram-caption">Anchors, for any size: top-left = <code>1</code>, bottom-left = <code>n</code>, top-right = <code>N&minus;n+1</code>, bottom-right = <code>N</code>.</p>
+</section>
+
+<section id="placement">
+  <div class="section-head"><span class="section-index">04</span><h2>Fixed component placement</h2></div>
+  <p class="section-note">These placements are identical across the whole family &mdash; no exceptions.</p>
+
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th scope="col">Model</th><th scope="col">Sending card + main PSU</th><th scope="col">Supply cable entry cabinet</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">135&Prime;</th><td>Cabinet 25 (bottom-right)</td><td>Cabinet 24</td></tr>
+      <tr><th scope="row">162&Prime;</th><td>Cabinet 36 (bottom-right)</td><td>Cabinet 35</td></tr>
+      <tr><th scope="row">190&Prime;</th><td>Cabinet 49 (bottom-right)</td><td>Cabinet 48</td></tr>
+      <tr><th scope="row">216&Prime;</th><td>Cabinet 64 (bottom-right)</td><td>Cabinet 63</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <dl class="rules" style="margin-top:1.2rem;">
+    <div><dt>Sending card</dt><dd>Always in the bottom-right cabinet (cabinet <code>N</code>). No exceptions across the family.</dd></div>
+    <div><dt>Main PSU</dt><dd>Always alongside the sending card, in the same bottom-right cabinet.</dd></div>
+    <div><dt>Cable entry</dt><dd>The main supply cable enters through the cabinet directly above the bottom-right one (cabinet <code>N&minus;1</code>) and runs down to the main PSU's AC&nbsp;IN.</dd></div>
+    <div><dt>Inlet connector</dt><dd>The screen's main power inlet is an <strong>IEC&nbsp;60320&nbsp;C20</strong> appliance inlet (male pins) &mdash; unpowered until connected. The mating supply cordset terminates in a <strong>C19</strong> connector (female), which is the powered end that connects to the screen.</dd></div>
+    <div><dt>Direct wiring</dt><dd>The C20 appliance inlet can be removed and the phase conductors landed directly on the PSU's screw terminals. <strong>Certified electrician only</strong> &mdash; see &sect;09.</dd></div>
+  </dl>
+</section>
+
+<section id="model-matrix">
+  <div class="section-head"><span class="section-index">05</span><h2>Per-model electrical summary</h2></div>
+  <p class="section-note">These are the fixed hardware facts for each size: how many PSUs/main inlets it has, and its power draw from the official datasheet. Circuit sizing, protective devices and phase allocation are not specified by Expromo &mdash; that is the installing electrician's decision, made for the specific site. <span class="tag tag-est">EST</span> marks a figure still pending final production test.</p>
+
+  <div class="table-scroll">
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Specification</th>
+        <th scope="col">135&Prime;</th>
+        <th scope="col">162&Prime;</th>
+        <th scope="col">190&Prime;</th>
+        <th scope="col">216&Prime;</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><th scope="row">Cabinet grid</th><td>5&times;5 (25)</td><td>6&times;6 (36)</td><td>7&times;7 (49)</td><td>8&times;8 (64)</td></tr>
+      <tr><th scope="row">PSU count / main inlets</th><td>1</td><td>2</td><td>3</td><td>3</td></tr>
+      <tr><th scope="row">Maximum power</th><td>1.87&nbsp;kW</td><td>2.69&nbsp;kW</td><td>3.5&nbsp;kW <span class="tag tag-est">EST</span></td><td>4.6&nbsp;kW <span class="tag tag-est">EST</span></td></tr>
+      <tr><th scope="row">Typical power</th><td>0.623&nbsp;kW</td><td>0.895&nbsp;kW</td><td>1.17&nbsp;kW <span class="tag tag-est">EST</span></td><td>1.53&nbsp;kW <span class="tag tag-est">EST</span></td></tr>
+      <tr><th scope="row">Standby (Active default / Eco)</th><td colspan="4">14&nbsp;W / 0.5&nbsp;W</td></tr>
+      <tr><th scope="row">Input voltage</th><td colspan="4">100&ndash;240&nbsp;VAC, 50/60&nbsp;Hz</td></tr>
+      <tr><th scope="row">Circuit design</th><td colspan="4">By installing electrician &mdash; not specified by Expromo</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="diagram-caption">Power figures are per screen, from the official datasheet. Each main inlet is an independent AC supply entry and can be placed on its own circuit and phase; how many circuits/phases to use, and which breakers and RCDs to fit, is a decision for the installing electrician based on the site's supply and local regulations &mdash; see &sect;09.</p>
+
+  <h3 style="font-size:1rem; margin:2rem 0 0.6rem;">Estimated power per PSU group, at 600 nits</h3>
+  <p class="section-note">The datasheet figures above cover the whole screen and are the correct ones for electrical planning. This breakdown instead shows where that load actually falls, PSU by PSU, using each PSU's real cabinet count &mdash; useful context for the electrician when deciding how to split circuits across the main inlets, without Expromo prescribing the split itself.</p>
+
+  <div class="callout">
+    <h4>Method</h4>
+    <p class="mono">Estimated power @ 600 nits&nbsp;=&nbsp;(cabinets served &times; measured cabinet power @ 600 nits)&nbsp;+&nbsp;24&nbsp;W sending-card/control overhead (Main PSU only)</p>
+    <p>The 24&nbsp;W overhead is the sending card/control draw measured during factory testing; it only applies once per screen, on the Main PSU, because there is only one sending card. Cabinet power @ 600 nits is normalized from measured samples of the closest-pitch cabinet:</p>
+  </div>
+
+  <div class="table-scroll">
+  <table style="min-width:0;">
+    <thead><tr><th scope="col">Model</th><th scope="col">Cabinet power @ 600 nits</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">135&Prime;</th><td class="num">63.0&nbsp;W</td></tr>
+      <tr><th scope="row">162&Prime;</th><td class="num">57.8&nbsp;W</td></tr>
+      <tr><th scope="row">190&Prime;</th><td class="num">57.8&nbsp;W</td></tr>
+      <tr><th scope="row">216&Prime;</th><td class="num">53.0&nbsp;W</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="table-scroll" style="margin-top:1rem;">
+  <table>
+    <caption>Cabinets served and estimated power per PSU group, at 600 nits</caption>
+    <thead><tr><th scope="col">Model</th><th scope="col">PSU</th><th scope="col">Cabinets served</th><th scope="col">Est. power @ 600 nits</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">135&Prime;</th><td>Main PSU (+ sending card)</td><td class="num">25</td><td class="num">1,599&nbsp;W</td></tr>
+      <tr class="subtotal-row"><th scope="row">135&Prime; screen total</th><td colspan="2"></td><td class="num">&asymp;1.60&nbsp;kW</td></tr>
+
+      <tr><th scope="row">162&Prime;</th><td>Main PSU (+ sending card)</td><td class="num">18</td><td class="num">1,064&nbsp;W</td></tr>
+      <tr><th scope="row">162&Prime;</th><td>Secondary PSU</td><td class="num">18</td><td class="num">1,040&nbsp;W</td></tr>
+      <tr class="subtotal-row"><th scope="row">162&Prime; screen total</th><td colspan="2"></td><td class="num">&asymp;2.11&nbsp;kW</td></tr>
+
+      <tr><th scope="row">190&Prime;</th><td>Main PSU (+ sending card)</td><td class="num">21</td><td class="num">1,238&nbsp;W</td></tr>
+      <tr><th scope="row">190&Prime;</th><td>Secondary PSU 1</td><td class="num">14</td><td class="num">809&nbsp;W</td></tr>
+      <tr><th scope="row">190&Prime;</th><td>Secondary PSU 2</td><td class="num">14</td><td class="num">809&nbsp;W</td></tr>
+      <tr class="subtotal-row"><th scope="row">190&Prime; screen total</th><td colspan="2"></td><td class="num">&asymp;2.86&nbsp;kW</td></tr>
+
+      <tr><th scope="row">216&Prime;</th><td>Main PSU (+ sending card)</td><td class="num">24</td><td class="num">1,296&nbsp;W</td></tr>
+      <tr><th scope="row">216&Prime;</th><td>Secondary PSU 1</td><td class="num">24</td><td class="num">1,272&nbsp;W</td></tr>
+      <tr><th scope="row">216&Prime;</th><td>Secondary PSU 2</td><td class="num">16</td><td class="num">848&nbsp;W</td></tr>
+      <tr class="subtotal-row"><th scope="row">216&Prime; screen total</th><td colspan="2"></td><td class="num">&asymp;3.41&nbsp;kW</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="diagram-caption">These are realistic operating estimates at 600 nits, not the conservative datasheet maximum &mdash; see the eXview power-consumption snapshot for the full measurement basis. They are provided for operational/discussion purposes; the official datasheet maximum power in the table above remains the correct figure for electrical planning.</p>
+</section>
+
+<section id="harness">
+  <div class="section-head"><span class="section-index">06</span><h2>PSU interconnect &mdash; 3-pin &amp; 5-pin harness</h2></div>
+  <p class="section-note">Every PSU &mdash; main and secondary &mdash; carries the same two low-voltage ports, always in the same position.</p>
+
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th scope="col">Port</th><th scope="col">Position on PSU</th><th scope="col">Function</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">3-pin</th><td>Bottom-left</td><td><strong>12&nbsp;V link between PSUs</strong> &mdash; distributes the main PSU's 12&nbsp;V to every secondary PSU</td></tr>
+      <tr><th scope="row">5-pin</th><td>Bottom-right</td><td><strong>12&nbsp;V + standby activate/deactivate</strong> &mdash; from the main PSU to the sending card, and from each secondary PSU to its distribution board</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="diagram-card" style="margin-top:1.4rem;">
+    <svg viewBox="0 0 1000 380" role="img" aria-labelledby="harness-diagram-title">
+      <title id="harness-diagram-title">Conceptual power and control signal flow for a three-PSU eXview Edge screen</title>
+      <defs>
+        <marker id="arrowRed" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#E23B3B"/>
+        </marker>
+      </defs>
+
+      <!-- Column centers: Sec2=150, Sec1=500, Main=850 -->
+
+      <!-- Cabinet groups -->
+      <g>
+        <rect x="50" y="14" width="200" height="56" rx="6" fill="#C8E6A0" stroke="#5B8C1A"/>
+        <text x="150" y="38" text-anchor="middle" font-family="IBM Plex Sans" font-size="12" font-weight="600" fill="#2B3B0F">Cabinets</text>
+        <text x="150" y="54" text-anchor="middle" font-family="IBM Plex Mono" font-size="9.5" fill="#3E5015">Secondary PSU 2 group</text>
+
+        <rect x="400" y="14" width="200" height="56" rx="6" fill="#C8E6A0" stroke="#5B8C1A"/>
+        <text x="500" y="38" text-anchor="middle" font-family="IBM Plex Sans" font-size="12" font-weight="600" fill="#2B3B0F">Cabinets</text>
+        <text x="500" y="54" text-anchor="middle" font-family="IBM Plex Mono" font-size="9.5" fill="#3E5015">Secondary PSU 1 group</text>
+
+        <rect x="750" y="14" width="200" height="56" rx="6" fill="#C8E6A0" stroke="#5B8C1A"/>
+        <text x="850" y="38" text-anchor="middle" font-family="IBM Plex Sans" font-size="12" font-weight="600" fill="#2B3B0F">Cabinets</text>
+        <text x="850" y="54" text-anchor="middle" font-family="IBM Plex Mono" font-size="9.5" fill="#3E5015">Main PSU group</text>
+      </g>
+
+      <!-- AC OUT arrows up to cabinets -->
+      <line x1="150" y1="95" x2="150" y2="72" stroke="#E23B3B" stroke-width="3" marker-end="url(#arrowRed)"/>
+      <line x1="500" y1="95" x2="500" y2="72" stroke="#E23B3B" stroke-width="3" marker-end="url(#arrowRed)"/>
+      <line x1="850" y1="95" x2="850" y2="72" stroke="#E23B3B" stroke-width="3" marker-end="url(#arrowRed)"/>
+      <text x="850" y="88" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#E23B3B">AC OUT</text>
+
+      <!-- PSU boxes -->
+      <g>
+        <rect x="50" y="95" width="200" height="90" rx="6" fill="#F6C6C6" stroke="#B33939" stroke-width="1.4"/>
+        <text x="150" y="122" text-anchor="middle" font-family="Space Grotesk" font-size="13" font-weight="700" fill="#5C1414">Secondary PSU 2</text>
+        <text x="150" y="140" text-anchor="middle" font-family="IBM Plex Mono" font-size="9.5" fill="#7A2323">AC IN &larr; main inlet #3</text>
+
+        <rect x="400" y="95" width="200" height="90" rx="6" fill="#F6C6C6" stroke="#B33939" stroke-width="1.4"/>
+        <text x="500" y="122" text-anchor="middle" font-family="Space Grotesk" font-size="13" font-weight="700" fill="#5C1414">Secondary PSU 1</text>
+        <text x="500" y="140" text-anchor="middle" font-family="IBM Plex Mono" font-size="9.5" fill="#7A2323">AC IN &larr; main inlet #2</text>
+
+        <rect x="750" y="95" width="200" height="90" rx="6" fill="#F6C6C6" stroke="#B33939" stroke-width="1.4"/>
+        <text x="850" y="118" text-anchor="middle" font-family="Space Grotesk" font-size="13" font-weight="700" fill="#5C1414">Main PSU</text>
+        <text x="850" y="134" text-anchor="middle" font-family="IBM Plex Mono" font-size="9.5" fill="#7A2323">AC IN &larr; main inlet #1</text>
+        <rect x="800" y="145" width="100" height="24" rx="4" fill="#FBEFDD" stroke="#B8960C"/>
+        <text x="850" y="161" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" font-weight="600" fill="#7A5A08">AC-DC (12V)</text>
+      </g>
+
+      <!-- 3-pin bus -->
+      <line x1="150" y1="185" x2="150" y2="210" stroke="#2255D6" stroke-width="3"/>
+      <line x1="500" y1="185" x2="500" y2="210" stroke="#2255D6" stroke-width="3"/>
+      <line x1="850" y1="185" x2="850" y2="210" stroke="#2255D6" stroke-width="3"/>
+      <line x1="150" y1="210" x2="850" y2="210" stroke="#2255D6" stroke-width="3"/>
+      <text x="500" y="228" text-anchor="middle" font-family="IBM Plex Mono" font-size="10.5" fill="#2255D6">3-pin &middot; 12V link, main PSU &rarr; every secondary</text>
+
+      <!-- 5-pin drops -->
+      <line x1="190" y1="185" x2="190" y2="270" stroke="#B93FC1" stroke-width="3"/>
+      <line x1="540" y1="185" x2="540" y2="270" stroke="#B93FC1" stroke-width="3"/>
+      <line x1="890" y1="185" x2="890" y2="270" stroke="#B93FC1" stroke-width="3"/>
+      <text x="890" y="255" text-anchor="end" font-family="IBM Plex Mono" font-size="10.5" fill="#B93FC1">5-pin &middot; 12V + standby control</text>
+
+      <!-- Downstream boxes -->
+      <rect x="60" y="270" width="180" height="50" rx="6" fill="#F5E27A" stroke="#B8960C"/>
+      <text x="150" y="300" text-anchor="middle" font-family="IBM Plex Sans" font-size="12" font-weight="600" fill="#5C4A05">Distribution board</text>
+
+      <rect x="410" y="270" width="180" height="50" rx="6" fill="#F5E27A" stroke="#B8960C"/>
+      <text x="500" y="300" text-anchor="middle" font-family="IBM Plex Sans" font-size="12" font-weight="600" fill="#5C4A05">Distribution board</text>
+
+      <rect x="760" y="270" width="180" height="50" rx="6" fill="#FFFFFF" stroke="#0B1E27" stroke-width="1.6"/>
+      <text x="850" y="300" text-anchor="middle" font-family="IBM Plex Sans" font-size="12" font-weight="600" fill="#0B1E27">Sending card</text>
+
+      <text x="500" y="352" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#4B5760">Conceptual signal flow, not to scale. On 162&Prime;, drop Secondary PSU 2. On 135&Prime;, only the Main PSU exists &mdash; no 3-pin link applies.</text>
+    </svg>
+  </div>
+
+  <dl class="rules" style="margin-top:1.4rem;">
+    <div><dt>3-pin link</dt><dd>The main PSU's 3-pin port links to the 3-pin port of every secondary PSU, distributing the 12&nbsp;V the main PSU's AC&#8209;DC converter produces. The 135&Prime; has a single PSU, so no 3-pin link cable applies.</dd></div>
+    <div><dt>5-pin path</dt><dd>The sending card is powered from the main PSU's <strong>5-pin</strong> port, not the 3-pin. If a sending card appears dead, trace the 5-pin run from the main PSU &mdash; the inter-PSU 12&nbsp;V chain is a separate fault domain.</dd></div>
+    <div><dt>Custom cables</dt><dd>On 162&Prime;, 190&Prime; and 216&Prime;, both the 3-pin and 5-pin cables are <strong>custom-made per model</strong> and are not interchangeable between sizes. Order by model, not by length.</dd></div>
+    <div><dt>Pinouts</dt><dd>The 3-pin and 5-pin pinouts are proprietary and not published. Do not fabricate substitute cables &mdash; order factory cables through Expromo.</dd></div>
+    <div><dt>Direct wiring</dt><dd>If the C20 appliance inlet is removed and phase conductors are landed directly on the PSU screw terminals, all 3-pin/5-pin wiring is unaffected.</dd></div>
+  </dl>
+
+  <div class="callout" style="margin-top:1rem;">
+    <h4>Troubleshooting tip: partial standby</h4>
+    <p>If one group of columns shows no content coming out of standby, but its 3-in-1 boards and LED drivers stay warm, that group's PSU relay is not being driven. Check first that both the <strong>3-pin (12&nbsp;V link)</strong> and <strong>5-pin (power + standby control)</strong> connections to that secondary PSU are fitted and fully seated &mdash; this is the expected symptom of a loose or missing harness connection, not a firmware fault. Checking both connectors also confirms which one needs reseating before you look any further.</p>
+  </div>
+</section>
+
+<section id="sequence">
+  <div class="section-head"><span class="section-index">07</span><h2>Recommended installation sequence</h2></div>
+  <p class="section-note">The screen's front-access, tool-less design means the LED modules go in last, after the electrical backbone is proven to be correct &mdash; not before. This avoids energising freshly-fitted modules against a mis-wired or incomplete power/control chain.</p>
+  <ol class="sequence">
+    <li>Mount and align all cabinets on the wall-mounting bar (or stand/trolley, where offered) before any wiring.</li>
+    <li>Route and land the mains AC supply to each main inlet, per the circuit design agreed for the model (&sect;05).</li>
+    <li>Connect the 3-pin (12&nbsp;V link) harness between the main PSU and every secondary PSU, and the 5-pin (power + standby control) harness from the main PSU to the sending card and from each secondary PSU to its distribution board. Factory cables only (&sect;06).</li>
+    <li>Power on and confirm correct behaviour before fitting any modules: all AC&nbsp;OUT groups should energise together, and the sending card should respond to control/standby commands.</li>
+    <li>Only then install the LED modules into the cabinets from the front, cabinet by cabinet.</li>
+  </ol>
+</section>
+
+<section id="drawings">
+  <div class="section-head"><span class="section-index">08</span><h2>Reference wiring diagrams</h2></div>
+  <p class="section-note">Factory harness drawings for all four models. Grid lines are for reference only &mdash; the assembled screen surface is seamless. Click any drawing to open it full-size.</p>
+
+  <ul class="legend" style="margin-bottom:1.4rem;">
+    <li><span class="swatch" style="background:#C8E6A0;border-color:#5B8C1A;"></span>3-in-1 board (per-cabinet power/receiving/HUB)</li>
+    <li><span class="swatch" style="background:#F6C6C6;border-color:#B33939;"></span>PSU / relay module</li>
+    <li><span class="swatch" style="background:#F5E27A;border-color:#B8960C;"></span>Distribution board</li>
+    <li><span class="swatch" style="background:#FFFFFF;border:1.6px solid #0B1E27;"></span>Sending card</li>
+    <li><span class="line" style="background:#E23B3B;"></span>Switched AC bus (colour per PSU group)</li>
+    <li><span class="line" style="background:#2255D6;"></span>3-pin &middot; 12V link, PSU to PSU</li>
+    <li><span class="line" style="background:#B93FC1;"></span>5-pin &middot; power + standby control</li>
+  </ul>
+
+  <div class="figure-grid">
+
+    <article class="figure-card">
+      <div class="figure-card__head"><h3>135&Prime;</h3><span class="meta">5&times;5 &middot; 1 PSU &middot; main inlet #1</span></div>
+      <div class="figure-card__body">
+        <figure>
+          <a href="assets/135inch.png" target="_blank" rel="noopener"><img src="assets/135inch.png" alt="135 inch full cabinet and harness overview"></a>
+          <figcaption>Full harness overview &mdash; <code>135inch.png</code></figcaption>
+        </figure>
+        <figure>
+          <a href="assets/135inch_Wire_Harness_Zoom.png" target="_blank" rel="noopener"><img src="assets/135inch_Wire_Harness_Zoom.png" alt="135 inch bottom-right detail: AC-DC module, sending card, 5-pin run"></a>
+          <figcaption>Bottom-right detail: AC&#8209;DC module, sending card, 5-pin run &mdash; <code>135inch_Wire_Harness_Zoom.png</code></figcaption>
+        </figure>
+      </div>
+    </article>
+
+    <article class="figure-card">
+      <div class="figure-card__head"><h3>162&Prime;</h3><span class="meta">6&times;6 &middot; 2 PSUs &middot; main inlets #1&ndash;#2</span></div>
+      <div class="figure-card__body">
+        <figure>
+          <a href="assets/162inch.png" target="_blank" rel="noopener"><img src="assets/162inch.png" alt="162 inch full cabinet and harness overview"></a>
+          <figcaption>Full harness overview &mdash; <code>162inch.png</code></figcaption>
+        </figure>
+        <figure>
+          <a href="assets/162inch_Wire_Harness_Zoom.png" target="_blank" rel="noopener"><img src="assets/162inch_Wire_Harness_Zoom.png" alt="162 inch bottom-right detail: main and secondary PSU, 3-pin and 5-pin runs"></a>
+          <figcaption>Bottom-right detail: main + secondary PSU, 3-pin and 5-pin runs &mdash; <code>162inch_Wire_Harness_Zoom.png</code></figcaption>
+        </figure>
+      </div>
+    </article>
+
+    <article class="figure-card">
+      <div class="figure-card__head"><h3>190&Prime;</h3><span class="meta">7&times;7 &middot; 3 PSUs &middot; main inlets #1&ndash;#3</span></div>
+      <div class="figure-card__body">
+        <figure>
+          <a href="assets/190inch.png" target="_blank" rel="noopener"><img src="assets/190inch.png" alt="190 inch full cabinet and harness overview"></a>
+          <figcaption>Full harness overview &mdash; <code>190inch.png</code></figcaption>
+        </figure>
+        <figure>
+          <a href="assets/190inch_and_216inch_Wire_Harness_Zoom.png" target="_blank" rel="noopener"><img src="assets/190inch_and_216inch_Wire_Harness_Zoom.png" alt="190 and 216 inch bottom-right detail, three PSUs"></a>
+          <figcaption>Bottom-right detail, 3 PSUs (shared drawing with 216&Prime;) &mdash; <code>190inch_and_216inch_Wire_Harness_Zoom.png</code></figcaption>
+        </figure>
+      </div>
+    </article>
+
+    <article class="figure-card">
+      <div class="figure-card__head"><h3>216&Prime;</h3><span class="meta">8&times;8 &middot; 3 PSUs &middot; main inlets #1&ndash;#3</span></div>
+      <div class="figure-card__body">
+        <figure>
+          <a href="assets/216inch.png" target="_blank" rel="noopener"><img src="assets/216inch.png" alt="216 inch full cabinet and harness overview"></a>
+          <figcaption>Full harness overview &mdash; <code>216inch.png</code></figcaption>
+        </figure>
+        <figure>
+          <a href="assets/190inch_and_216inch_Wire_Harness_Zoom.png" target="_blank" rel="noopener"><img src="assets/190inch_and_216inch_Wire_Harness_Zoom.png" alt="190 and 216 inch bottom-right detail, three PSUs"></a>
+          <figcaption>Bottom-right detail, 3 PSUs (shared drawing with 190&Prime;) &mdash; <code>190inch_and_216inch_Wire_Harness_Zoom.png</code></figcaption>
+        </figure>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section id="notes">
+  <div class="section-head"><span class="section-index">09</span><h2>Installation electrical notes</h2></div>
+  <dl class="rules">
+    <div><dt>Responsibility</dt><dd>Circuit sizing, protective devices (breakers, RCDs) and phase allocation are entirely the responsibility of the installing electrician, per local regulations and the per-model power figures in &sect;05. Expromo does not specify or recommend a circuit breaker, RCD rating or curve type for these screens &mdash; we specify the number of PSUs/main inlets, and the electrician selects the protective device for each.</dd></div>
+    <div><dt>Inrush</dt><dd>The PSUs use zero-cross relays, which limit inrush current at switch-on. This is a hardware fact for the electrician to factor into their own device selection, not a substitute for it.</dd></div>
+    <div><dt>Multi-inlet screens</dt><dd>On 162&Prime;, 190&Prime; and 216&Prime;, each main inlet is a separate supply entry and may sit on its own phase and its own protective device. Because the inter-PSU link is 12&nbsp;V (not AC), separate inlets can be fed from different phases while the screen still switches standby as one unit.</dd></div>
+    <div><dt>Direct phase wiring</dt><dd>Removing the C20 appliance inlet and landing phase conductors directly on the PSU screw terminals is a supported option, and must be carried out by a <strong>certified electrician</strong>.</dd></div>
+  </dl>
+</section>
+
+</main>
+
+<footer class="page-footer">
+  <p>Compiled from internal engineering documentation covering cabinet numbering, power architecture, the factory harness drawings referenced in &sect;08, and measured cabinet power data (used in &sect;05).</p>
+  <p>Related documents:</p>
+  <ul>
+    <li><a href="../specs/exview-edge-specification-comparison.html">eXview Edge Specification Comparison</a> &mdash; full technical spec reference</li>
+    <li><a href="../marketing/exview-edge-datasheet.html">eXview Edge Datasheet</a> &mdash; customer-facing product sheet</li>
+  </ul>
+  <p>Questions on a specific site's circuit design should be directed to Expromo project engineering before work begins.</p>
+</footer>
+
+</body>
+</html>

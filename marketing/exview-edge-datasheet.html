@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>eXview Edge &mdash; Technical Datasheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:        #0B1E27;
+    --navy-2:      #0F2A35;
+    --cyan-deep:   #0E6E78;
+    --cyan:        #22C7DB;
+    --ink:         #14181D;
+    --steel:       #4B5760;
+    --hairline:    #D8DEE2;
+    --paper:       #FFFFFF;
+    --tint:        #EAF7F8;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: #DDE3E6;
+    color: var(--ink);
+    font-family: "Poppins", "Noto Sans SC", -apple-system, "Segoe UI", sans-serif;
+    font-weight: 600;
+    line-height: 1.5;
+    font-size: 14px;
+  }
+
+  h1, h2, h3, .display {
+    font-family: "Poppins", "Noto Sans SC", "Segoe UI", sans-serif;
+    font-weight: 700;
+    margin: 0;
+    color: var(--ink);
+  }
+  p, caption, figure, dl, dd, ul { margin: 0; }
+
+  .mono { font-family: "IBM Plex Mono", "Noto Sans SC", ui-monospace, "Courier New", monospace; }
+
+  img { display: block; max-width: 100%; }
+
+  /* ---------- Toolbar (edit / export / language switch) ---------- */
+  .toolbar-wrap {
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    z-index: 100;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    max-width: calc(100vw - 28px);
+  }
+  .toolbar, .lang-switch {
+    display: flex;
+    gap: 2px;
+    background: var(--navy);
+    padding: 4px;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.28);
+  }
+  .toolbar-wrap button {
+    font-family: "IBM Plex Mono", "Noto Sans SC", monospace;
+    font-size: 11px;
+    font-weight: 600;
+    border: none;
+    background: transparent;
+    color: #9FB4BB;
+    padding: 6px 12px;
+    border-radius: 16px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
+  }
+  .toolbar-wrap button:hover { color: #fff; }
+  .toolbar-wrap button.active { background: var(--cyan); color: var(--navy); }
+  .toolbar-wrap button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+
+  /* ---------- Edit mode ---------- */
+  body.edit-mode .sheet {
+    outline: 2px dashed var(--cyan-deep);
+    outline-offset: -2px;
+    cursor: text;
+  }
+  body.edit-mode table.spec td:hover,
+  body.edit-mode table.spec th:hover,
+  body.edit-mode p:hover,
+  body.edit-mode li:hover {
+    background: rgba(34, 199, 219, 0.12);
+  }
+
+  /* ---------- Sheet / A4 print scaffold ---------- */
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 10mm auto;
+    background: var(--paper);
+    box-shadow: 0 2px 14px rgba(0,0,0,0.18);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sheet__band {
+    background: var(--navy);
+    color: var(--paper);
+    padding: 6mm 12mm;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .sheet__logo {
+    background: var(--paper);
+    border-radius: 6px;
+    padding: 3px 10px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .sheet__logo img { width: 105px; height: auto; }
+  .sheet__product {
+    font-family: "Poppins", "Noto Sans SC", sans-serif;
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: 0.01em;
+  }
+  .sheet__product .thin { font-weight: 600; opacity: 0.82; }
+
+  .sheet__body {
+    padding: 7mm 12mm 4mm 12mm;
+    flex: 1;
+  }
+
+  .sheet__footer {
+    background: var(--navy);
+    color: #8CA0A9;
+    padding: 4mm 12mm;
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    letter-spacing: 0.02em;
+  }
+
+  /* ---------- Hero (sheet 1) ---------- */
+  .eyebrow-dots {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .eyebrow-dots span {
+    width: 9px; height: 9px; border-radius: 50%;
+  }
+  .eyebrow-dots span:nth-child(1) { background: #E4573D; }
+  .eyebrow-dots span:nth-child(2) { background: #E8A93B; }
+  .eyebrow-dots span:nth-child(3) { background: #6C6FD8; }
+  .eyebrow-dots span:nth-child(4) { background: var(--cyan); }
+
+  .hero {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 8mm;
+    align-items: start;
+  }
+  .hero h1 {
+    font-size: 32px;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+  }
+  .hero h1 .light { font-weight: 600; color: var(--steel); display: block; font-size: 19px; margin-bottom: 3px; }
+  .hero p.lede {
+    font-size: 13px;
+    color: var(--steel);
+    max-width: 46ch;
+    margin-top: 10px;
+  }
+
+  .scale-strip {
+    background: var(--tint);
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .scale-strip .card { text-align: center; }
+  .grid-diagram {
+    width: var(--w, 60px);
+    aspect-ratio: 16 / 9;
+    margin: 0 auto 6px auto;
+    background-color: var(--paper);
+    border: 1.4px solid var(--navy);
+    border-radius: 2px;
+    background-image:
+      linear-gradient(to right, var(--cyan-deep) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--cyan-deep) 1px, transparent 1px);
+    background-size: calc(100% / var(--n)) 100%, 100% calc(100% / var(--n));
+  }
+  .scale-strip .size { font-family: "Poppins", "Noto Sans SC", sans-serif; font-weight: 700; font-size: 16px; }
+  .scale-strip .meta { font-family: "IBM Plex Mono", "Noto Sans SC", monospace; font-size: 9.5px; color: var(--steel); line-height: 1.4; }
+
+  /* ---------- Crestron / Cisco callout ---------- */
+  .control-callout {
+    margin-top: 5mm;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5mm;
+    break-inside: avoid;
+  }
+  .control-card {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+    color: var(--paper);
+    border-radius: 10px;
+    padding: 12px 15px;
+  }
+  .control-card .tagline {
+    font-family: "IBM Plex Mono", "Noto Sans SC", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 4px;
+  }
+  .control-card h2 {
+    font-size: 20px;
+    color: var(--paper);
+    line-height: 1.12;
+  }
+  .control-card p {
+    font-size: 11px;
+    color: #C7D4D8;
+    margin-top: 5px;
+    max-width: 42ch;
+  }
+
+  /* ---------- Icon strip ---------- */
+  .icon-strip {
+    margin-top: 5mm;
+    background: var(--navy);
+    border-radius: 10px;
+    padding: 10px 8px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+    break-inside: avoid;
+  }
+  .icon-strip .item {
+    text-align: center;
+    color: var(--paper);
+  }
+  .icon-strip svg { width: 22px; height: 22px; margin: 0 auto 4px auto; display: block; }
+  .icon-strip .label { font-size: 9px; color: #AEC2C8; line-height: 1.25; }
+
+  .intro-copy {
+    margin-top: 5mm;
+    font-size: 11px;
+    color: var(--steel);
+    max-width: 90%;
+  }
+  .intro-copy strong { color: var(--ink); }
+
+  /* ---------- Section title band ---------- */
+  .title-band {
+    background: linear-gradient(90deg, var(--cyan-deep) 0%, var(--cyan) 100%);
+    color: var(--paper);
+    text-align: center;
+    padding: 6px 0;
+    border-radius: 6px;
+    font-family: "Poppins", "Noto Sans SC", sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 4mm;
+  }
+
+  /* ---------- Spec tables ---------- */
+  table.spec {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 4mm;
+    font-size: 10.5px;
+  }
+  table.spec caption {
+    caption-side: top;
+    text-align: left;
+    font-family: "Poppins", "Noto Sans SC", sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--ink);
+    padding: 0 0 4px 2px;
+  }
+  table.spec th, table.spec td {
+    border: 1px solid var(--hairline);
+    padding: 3.5px 8px;
+    text-align: left;
+    vertical-align: middle;
+  }
+  table.spec tr { break-inside: avoid; }
+  table.spec thead th {
+    background: var(--navy);
+    color: var(--paper);
+    font-family: "Poppins", "Noto Sans SC", sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+  }
+  table.spec td.data, table.spec th.data { font-family: "IBM Plex Mono", "Noto Sans SC", monospace; font-size: 10.5px; }
+  table.spec .cat-cell {
+    background: var(--tint);
+    font-weight: 600;
+    width: 15%;
+    font-size: 10.5px;
+  }
+  table.spec .row-label { width: 27%; font-weight: 500; }
+  table.spec tbody tr:nth-child(even) td:not(.cat-cell) { background: #FAFBFB; }
+  .est-mark { color: var(--cyan-deep); font-weight: 600; }
+
+  .full-row td.data { text-align: left; }
+
+  /* ---------- Support feature list ---------- */
+  ul.feature-list {
+    list-style: none;
+    margin: 0 0 4mm 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 12px;
+  }
+  ul.feature-list li {
+    font-size: 10.5px;
+    padding: 5px 9px;
+    background: var(--tint);
+    border-radius: 5px;
+    border-left: 3px solid var(--cyan-deep);
+    break-inside: avoid;
+    line-height: 1.35;
+  }
+
+  /* ---------- Scale comparison (sheet 3) ----------
+     Layered size silhouette: all four screens share one bottom-left
+     origin next to a 175cm reference figure, drawn largest-first so
+     each smaller screen sits in front and only the taller/wider
+     excess of each larger size shows behind it. Unlike the previous
+     eXview AIO sheet, there is no base-bar gap under the screens here
+     — eXview Edge has no protruding bar, so every rectangle sits
+     flush on the same baseline as the figure's feet. */
+  .scale-compare {
+    margin-top: 3mm;
+    background: var(--tint);
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    padding: 10px 14px 8px 14px;
+  }
+  .scale-compare svg { display: block; width: 100%; height: auto; }
+  .scale-compare .sc-figure { fill: #CFEBEC; stroke: var(--navy); stroke-width: 1.4; }
+  .scale-compare .sc-screen-back { fill: #CFEBEC; stroke: var(--navy); stroke-width: 1.4; }
+  .scale-compare .sc-screen-front { fill: var(--paper); stroke: var(--navy); stroke-width: 1.6; }
+  .scale-compare .sc-baseline { stroke: var(--navy); stroke-width: 1.4; }
+  .scale-compare .sc-label {
+    font-family: "IBM Plex Mono", "Noto Sans SC", monospace;
+    font-weight: 600;
+    fill: var(--ink);
+  }
+  .scale-compare .sc-caption {
+    font-family: "IBM Plex Mono", "Noto Sans SC", monospace;
+    fill: var(--steel);
+  }
+
+  .footnote-small {
+    font-size: 8.5px;
+    color: var(--steel);
+    margin-top: 4px;
+  }
+
+  /* ---------- Print ---------- */
+  @page { size: A4; margin: 0; }
+  @media print {
+    body { background: none; margin: 0; }
+    .toolbar-wrap { display: none !important; }
+    body.edit-mode .sheet { outline: none; }
+    html, body { height: 100%; }
+    .sheet {
+      margin: 0;
+      box-shadow: none;
+      width: 210mm;
+      height: 297mm;
+      min-height: 0;
+      max-height: 297mm;
+      page-break-after: always;
+      page-break-inside: avoid;
+    }
+    .sheet:last-child { page-break-after: auto; }
+    * {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .sheet { width: 100%; min-height: 0; margin: 0 0 6px 0; }
+    .hero { grid-template-columns: 1fr; }
+    .control-callout { grid-template-columns: 1fr; }
+    .icon-strip { grid-template-columns: repeat(3, 1fr); }
+    ul.feature-list { grid-template-columns: 1fr; }
+    .scale-strip { grid-template-columns: repeat(2, 1fr); }
+    .toolbar-wrap { position: static; margin: 10px auto 0 auto; width: fit-content; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar-wrap">
+  <div class="toolbar" role="group" aria-label="Page tools">
+    <button type="button" id="editToggleBtn" aria-pressed="false">Edit</button>
+    <button type="button" id="exportPdfBtn" data-i18n="btnExportPdf">Export PDF</button>
+  </div>
+  <div class="lang-switch" role="group" aria-label="Language">
+    <button type="button" data-lang="en" class="active" aria-pressed="true">EN</button>
+    <button type="button" data-lang="da" aria-pressed="false">DA</button>
+    <button type="button" data-lang="de" aria-pressed="false">DE</button>
+    <button type="button" data-lang="zh" aria-pressed="false">中文</button>
+  </div>
+</div>
+
+<!-- ================= SHEET 1 — COVER ================= -->
+<section class="sheet">
+  <div class="sheet__band">
+    <span class="sheet__logo"><img src="assets/expromo-logo.jpg" alt="Expromo"></span>
+    <span class="sheet__product"><span class="thin">eXview</span> Edge</span>
+  </div>
+
+  <div class="sheet__body">
+    <div class="eyebrow-dots"><span></span><span></span><span></span><span></span></div>
+
+    <div class="hero">
+      <div>
+        <h1><span class="light" data-i18n="heroLight">Seamless, all-in-one LED</span><span data-i18n="heroMain">Built for scale.</span></h1>
+        <p class="lede" data-i18n="lede">eXview Edge is a seamless SMD LED all-in-one display, built to grow from a boardroom wall to a 216&Prime; command-centre canvas without changing the viewing experience &mdash; every size shares the same cabinet, the same image quality, and the same front-access simplicity.</p>
+      </div>
+
+      <div class="scale-strip">
+        <div class="card">
+          <div class="grid-diagram" style="--n:5; --w:52px;"></div>
+          <p class="size">135&Prime;</p>
+          <p class="meta">1.5625mm <span data-i18n="pitchWord">pitch</span><br>1920&times;1080</p>
+        </div>
+        <div class="card">
+          <div class="grid-diagram" style="--n:6; --w:60px;"></div>
+          <p class="size">162&Prime;</p>
+          <p class="meta">1.875mm <span data-i18n="pitchWord">pitch</span><br>1920&times;1080</p>
+        </div>
+        <div class="card">
+          <div class="grid-diagram" style="--n:7; --w:68px;"></div>
+          <p class="size">190&Prime;</p>
+          <p class="meta">1.875mm <span data-i18n="pitchWord">pitch</span><br>2240&times;1260</p>
+        </div>
+        <div class="card">
+          <div class="grid-diagram" style="--n:8; --w:76px;"></div>
+          <p class="size">216&Prime;</p>
+          <p class="meta">2.5mm <span data-i18n="pitchWord">pitch</span><br>1920&times;1080</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="control-callout">
+      <div class="control-card">
+        <p class="tagline" data-i18n="ctrlTag1">Control Ecosystem</p>
+        <h2 data-i18n="ctrlH1">Crestron ready.</h2>
+        <p data-i18n="ctrlP1">Control modules are available for Crestron systems, so eXview Edge drops straight into your existing control programming &mdash; no bespoke driver work required.</p>
+      </div>
+      <div class="control-card">
+        <p class="tagline" data-i18n="ctrlTag2">Video Conferencing</p>
+        <h2 data-i18n="ctrlH2">Works seamlessly with Cisco.</h2>
+        <p data-i18n="ctrlP2">Built-in HDMI-CEC lets eXview Edge wake, sleep, and switch inputs in sync with Cisco video endpoints &mdash; one less thing for the room to think about.</p>
+      </div>
+    </div>
+
+    <div class="icon-strip">
+      <div class="item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h13v-9"/></svg>
+        <p class="label" data-i18n="iconIndoor">Indoor</p>
+      </div>
+      <div class="item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><circle cx="6" cy="6" r="1.4"/><circle cx="12" cy="6" r="1.4"/><circle cx="18" cy="6" r="1.4"/><circle cx="6" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="18" cy="12" r="1.4"/><circle cx="6" cy="18" r="1.4"/><circle cx="12" cy="18" r="1.4"/><circle cx="18" cy="18" r="1.4"/></svg>
+        <p class="label" data-i18n="iconSMD">SMD LED</p>
+      </div>
+      <div class="item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg>
+        <p class="label" data-i18n="iconSeamless">Seamless&nbsp;tiling</p>
+      </div>
+      <div class="item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16"/><path d="M8 8l-4 4 4 4"/><path d="M16 8l4 4-4 4"/></svg>
+        <p class="label" data-i18n="iconPitchRange">1.56&ndash;2.5mm pitch</p>
+      </div>
+      <div class="item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+        <p class="label" data-i18n="iconViewing">3.2&ndash;5m viewing</p>
+      </div>
+      <div class="item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.4 1 2.5h6c0-1.1.4-1.9 1-2.5A6 6 0 0 0 12 3z"/></svg>
+        <p class="label" data-i18n="iconNits">100&ndash;600 nits</p>
+      </div>
+    </div>
+
+    <p class="intro-copy" data-i18n="introCopy">eXview Edge shares one platform across four sizes: <strong>135&Prime;, 162&Prime;, 190&Prime; and 216&Prime;</strong>, each built from the same 600&times;337.5mm cabinet. Front-accessible, hot-swappable service and an Android-based control system come standard across the range.</p>
+  </div>
+
+  <div class="sheet__footer">
+    <span>www.expromo.com</span>
+    <span data-i18n="copyright">Copyright &copy;2026</span>
+  </div>
+</section>
+
+<!-- ================= SHEET 2 — SPECIFICATIONS ================= -->
+<section class="sheet">
+  <div class="sheet__band">
+    <span class="sheet__logo"><img src="assets/expromo-logo.jpg" alt="Expromo"></span>
+    <span class="sheet__product"><span class="thin">eXview</span> Edge</span>
+  </div>
+
+  <div class="sheet__body">
+    <div class="title-band" data-i18n="specTitle">Specifications</div>
+
+    <table class="spec">
+      <thead>
+        <tr>
+          <th colspan="2"></th>
+          <th class="data">135&Prime;</th>
+          <th class="data">162&Prime;</th>
+          <th class="data">190&Prime;</th>
+          <th class="data">216&Prime;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="cat-cell" rowspan="2" data-i18n="catPixelModule">Pixel &amp;<br>Module</td>
+          <td class="row-label" data-i18n="rowPixelPitch">Pixel pitch (mm)</td>
+          <td class="data">1.5625</td><td class="data">1.875</td><td class="data">1.875</td><td class="data">2.5</td>
+        </tr>
+        <tr>
+          <td class="row-label" data-i18n="rowCabinetConfig">Cabinet configuration</td>
+          <td class="data">5&times;5</td><td class="data">6&times;6</td><td class="data">7&times;7</td><td class="data">8&times;8</td>
+        </tr>
+
+        <tr>
+          <td class="cat-cell" rowspan="7" data-i18n="catPhysical">Physical</td>
+          <td class="row-label" data-i18n="rowDisplaySizeIn">Display size (inches)</td>
+          <td class="data">135</td><td class="data">162</td><td class="data">190</td><td class="data">216</td>
+        </tr>
+        <tr>
+          <td class="row-label" data-i18n="rowDisplaySizeMM">Display size (mm)</td>
+          <td class="data">3000&times;1687.5</td><td class="data">3600&times;2025</td><td class="data">4200&times;2362.5</td><td class="data">4800&times;2700</td>
+        </tr>
+        <tr>
+          <td class="row-label" data-i18n="rowOverallSize">Overall size incl. bezel (mm)</td>
+          <td class="data">3012&times;1699.5</td><td class="data">3612&times;2037</td><td class="data">4212&times;2374.5</td><td class="data">4812&times;2712</td>
+        </tr>
+        <tr>
+          <td class="row-label" data-i18n="rowOverallDepth">Overall depth (mm)</td>
+          <td class="data" colspan="4">48.1</td>
+        </tr>
+        <tr>
+          <td class="row-label" data-i18n="rowWeight">Weight (kg), excl. mount/stand</td>
+          <td class="data">100</td><td class="data">144</td><td class="data">196</td><td class="data">256</td>
+        </tr>
+        <tr>
+          <td class="row-label" data-i18n="rowStandTrolley">Stand/Trolley option</td>
+          <td class="data" data-i18n="valAvailable">Available</td><td class="data" data-i18n="valAvailable">Available</td><td class="data">&ndash;</td><td class="data">&ndash;</td>
+        </tr>
+        <tr>
+          <td class="row-label" data-i18n="rowServiceAccess">Service access</td>
+          <td class="data" colspan="4" data-i18n="valFront">Front</td>
+        </tr>
+        <tr class="full-row">
+          <td class="cat-cell"></td>
+          <td class="row-label" data-i18n="rowSPT">Expromo SPT (Surface Protection Technology)</td>
+          <td class="data" data-i18n="valIncluded">Included</td><td class="data" data-i18n="valIncluded">Included</td><td class="data" data-i18n="valIncluded">Included</td><td class="data" data-i18n="valOption">Option</td>
+        </tr>
+
+        <tr>
+          <td class="cat-cell" rowspan="5" data-i18n="catElectrical">Electrical</td>
+          <td class="row-label" data-i18n="rowInputVoltage">Input voltage (nominal)</td>
+          <td class="data" colspan="4">AC 100&ndash;240V, 50/60Hz</td>
+        </tr>
+        <tr>
+          <td class="row-label" data-i18n="rowStandbyPower">Standby power consumption</td>
+          <td class="data" colspan="4">&le;0.5W</td>
+        </tr>
+        <tr>
+          <td class="row-label" data-i18n="rowMaxPower">Max. power consumption per screen (kW)</td>
+          <td class="data">1.87</td><td class="data">2.69</td><td class="data">3.5<span class="est-mark">*</span></td><td class="data">4.6<span class="est-mark">*</span></td>
+        </tr>
+        <tr>
+          <td class="row-label" data-i18n="rowTypicalPower">Typical power consumption per screen (kW)</td>
+          <td class="data">0.623</td><td class="data">0.895</td><td class="data">1.17<span class="est-mark">*</span></td><td class="data">1.53<span class="est-mark">*</span></td>
+        </tr>
+        <tr>
+          <td class="row-label" data-i18n="rowEcoLabels">Eco-labels</td>
+          <td class="data" colspan="4">PFC &middot; RoHS &middot; EMC &middot; WEEE</td>
+        </tr>
+        <tr class="full-row">
+          <td class="cat-cell"></td>
+          <td class="row-label" data-i18n="rowLEDLifetime">Minimum LED lifetime (hrs)</td>
+          <td class="data" colspan="4">&ge;100,000</td>
+        </tr>
+
+        <tr>
+          <td class="cat-cell" rowspan="4" data-i18n="catApprovals">Approvals &amp;<br>Environmental</td>
+          <td class="row-label" data-i18n="rowCertifications">Certifications</td>
+          <td class="data" colspan="4">RoHS &middot; CE &middot; FCC</td>
+        </tr>
+        <tr>
+          <td class="row-label" data-i18n="rowIPRating">Protection level (IP)</td>
+          <td class="data" colspan="4">IP30</td>
+        </tr>
+        <tr>
+          <td class="row-label" data-i18n="rowCooling">Cooling</td>
+          <td class="data" colspan="4" data-i18n="valNoFans">No fans</td>
+        </tr>
+        <tr>
+          <td class="row-label" data-i18n="rowOperatingTemp">Operating temperature</td>
+          <td class="data" colspan="4">-10&deg;C to +40&deg;C</td>
+        </tr>
+        <tr class="full-row">
+          <td class="cat-cell"></td>
+          <td class="row-label" data-i18n="rowHumidity">Humidity (non-condensing)</td>
+          <td class="data" colspan="4">10%&ndash;80% RH</td>
+        </tr>
+
+        <tr>
+          <td class="cat-cell" rowspan="7" data-i18n="catVideo">Video</td>
+          <td class="row-label" data-i18n="rowResolution">Physical resolution per screen</td>
+          <td class="data">1920&times;1080</td><td class="data">1920&times;1080</td><td class="data">2240&times;1260</td><td class="data">1920&times;1080</td>
+        </tr>
+        <tr>
+          <td class="row-label" data-i18n="rowViewingAngle">Viewing angle</td>
+          <td class="data" colspan="4">160&deg;H / 140&deg;V</td>
+        </tr>
+        <tr>
+          <td class="row-label" data-i18n="rowViewingDistance">Recommended viewing distance</td>
+          <td class="data">&ge;3.2m</td><td class="data">&ge;3.8m</td><td class="data">&ge;4m</td><td class="data">&ge;5m</td>
+        </tr>
+        <tr>
+          <td class="row-label" data-i18n="rowBrightness">Brightness (adjustable)</td>
+          <td class="data" colspan="4">100&ndash;600 cd/m&sup2;</td>
+        </tr>
+        <tr>
+          <td class="row-label" data-i18n="rowContrastRatio">Contrast ratio</td>
+          <td class="data" colspan="4">6500:1</td>
+        </tr>
+        <tr>
+          <td class="row-label" data-i18n="rowRefreshRate">Refresh rate</td>
+          <td class="data">7680Hz</td><td class="data">3840Hz</td><td class="data">3840Hz</td><td class="data">3840Hz</td>
+        </tr>
+        <tr>
+          <td class="row-label" data-i18n="rowScanRate">Scan rate</td>
+          <td class="data">1/64</td><td class="data">1/40</td><td class="data">1/40</td><td class="data">1/27</td>
+        </tr>
+        <tr class="full-row">
+          <td class="cat-cell"></td>
+          <td class="row-label" data-i18n="rowGreyscale">Greyscale / Colour temperature</td>
+          <td class="data" colspan="4">13-bit &middot; 2300&ndash;9300K</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="footnote-small"><span class="est-mark">*</span> <span data-i18n="footnoteEst">Estimated figure, pending final production test.</span></p>
+  </div>
+
+  <div class="sheet__footer">
+    <span>www.expromo.com</span>
+    <span data-i18n="copyright">Copyright &copy;2026</span>
+  </div>
+</section>
+
+<!-- ================= SHEET 3 — AUDIO / I-O / SYSTEM / FEATURES ================= -->
+<section class="sheet">
+  <div class="sheet__band">
+    <span class="sheet__logo"><img src="assets/expromo-logo.jpg" alt="Expromo"></span>
+    <span class="sheet__product"><span class="thin">eXview</span> Edge</span>
+  </div>
+
+  <div class="sheet__body">
+    <div class="title-band" data-i18n="audioIOTitle">I/O &amp; Control</div>
+
+    <table class="spec">
+      <tbody>
+        <tr>
+          <td class="cat-cell" rowspan="5" data-i18n="catIO">Input /<br>Output</td>
+          <td class="row-label" data-i18n="rowHDMI">HDMI</td>
+          <td class="data" colspan="4">2 &mdash; 1&times;HDMI 2.0 + 1&times;HDMI 1.4</td>
+        </tr>
+        <tr>
+          <td class="row-label" data-i18n="rowUSB30">USB 3.0</td>
+          <td class="data" colspan="4" data-i18n="valUSB30">2 (1 internal + 1 external), 2.5W output</td>
+        </tr>
+        <tr>
+          <td class="row-label" data-i18n="rowUSBC">USB Type-C</td>
+          <td class="data" colspan="4" data-i18n="valUSBC">1 (external)</td>
+        </tr>
+        <tr>
+          <td class="row-label" data-i18n="rowAudioOut">Audio out (3.5mm)</td>
+          <td class="data" colspan="4">1</td>
+        </tr>
+        <tr>
+          <td class="row-label" data-i18n="rowRS232">RS232</td>
+          <td class="data" colspan="4" data-i18n="valRS232">1 (3.5mm jack, internal)</td>
+        </tr>
+        <tr class="full-row">
+          <td class="cat-cell"></td>
+          <td class="row-label" data-i18n="rowLAN">LAN</td>
+          <td class="data" colspan="4" data-i18n="valLAN">1 (RJ45, internal)</td>
+        </tr>
+
+        <tr>
+          <td class="cat-cell" rowspan="2" data-i18n="catSystem">System</td>
+          <td class="row-label" data-i18n="rowOS">Operating system</td>
+          <td class="data" colspan="4">Android 13.0</td>
+        </tr>
+        <tr>
+          <td class="row-label" data-i18n="rowRAMStorage">RAM / Storage</td>
+          <td class="data" colspan="4">4GB / 64GB</td>
+        </tr>
+        <tr class="full-row">
+          <td class="cat-cell"></td>
+          <td class="row-label" data-i18n="rowControl">Control</td>
+          <td class="data" colspan="4" data-i18n="valControl">RS232 &amp; LAN (UDP, eXconfig) &middot; remote control included</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="spec">
+      <caption data-i18n="featuresCaption">Support features</caption>
+    </table>
+    <ul class="feature-list">
+      <li data-i18n="feat1">Built-in video processing engine</li>
+      <li data-i18n="feat2">Wi-Fi 6 dual-band (2.4G/5G), AP &amp; STA modes</li>
+      <li data-i18n="feat3">Bluetooth 5.3</li>
+      <li data-i18n="feat4">Centralized control via RS232 &amp; LAN (eXconfig)</li>
+      <li data-i18n="feat5">Multiple scene modes for different applications</li>
+      <li data-i18n="feat6">Intelligent Memory-on-Module (MOM) &mdash; automatic colour and brightness matching on module replacement</li>
+      <li data-i18n="feat7">HDMI-CEC &mdash; automatic wake on HDMI connect</li>
+      <li data-i18n="feat8">Front-access, tool-less hot-swap maintenance</li>
+      <li data-i18n="feat9">6mm bezel, seamless cabinet-to-cabinet tiling</li>
+      <li data-i18n="feat10">Crestron control modules available; Cisco CEC interoperability</li>
+    </ul>
+
+    <div class="title-band" style="margin-top:2mm;" data-i18n="scaleTitle">Scale at a glance</div>
+    <div class="scale-compare">
+      <svg viewBox="0 0 460 260" role="img" aria-label="Size comparison of the four eXview Edge models against a 175cm reference figure">
+        <line class="sc-baseline" x1="0" y1="211" x2="452" y2="211"/>
+
+        <!-- 175cm reference figure -->
+        <ellipse class="sc-figure" cx="30" cy="90" rx="8" ry="9"/>
+        <path class="sc-figure" d="M18,101 L42,101 L39,150 L21,150 Z"/>
+        <rect class="sc-figure" x="10" y="103" width="7" height="50" rx="3"/>
+        <rect class="sc-figure" x="43" y="103" width="7" height="50" rx="3"/>
+        <rect class="sc-figure" x="20" y="150" width="8" height="60" rx="2"/>
+        <rect class="sc-figure" x="32" y="150" width="8" height="60" rx="2"/>
+        <text class="sc-caption" x="0" y="68" font-size="11">175cm</text>
+
+        <!-- screens, largest first (behind) so each smaller size sits in front -->
+        <rect class="sc-screen-back" x="90" y="8" width="358" height="202" rx="2"/>
+        <text class="sc-label" x="440" y="26" font-size="13" text-anchor="end">216&Prime;</text>
+
+        <rect class="sc-screen-back" x="90" y="34" width="313" height="176" rx="2"/>
+        <text class="sc-label" x="395" y="52" font-size="13" text-anchor="end">190&Prime;</text>
+
+        <rect class="sc-screen-back" x="90" y="59" width="268" height="151" rx="2"/>
+        <text class="sc-label" x="350" y="77" font-size="13" text-anchor="end">162&Prime;</text>
+
+        <rect class="sc-screen-front" x="90" y="84" width="224" height="126" rx="2"/>
+        <text class="sc-label" x="306" y="102" font-size="13" text-anchor="end">135&Prime;</text>
+      </svg>
+    </div>
+    <p class="footnote-small" data-i18n="scaleFootnote">Screens shown to scale (including bezel) against a 175cm reference figure; smallest size in front.</p>
+  </div>
+
+  <div class="sheet__footer">
+    <span>www.expromo.com</span>
+    <span data-i18n="copyright">Copyright &copy;2026</span>
+  </div>
+</section>
+
+<script>
+(function () {
+  var STRINGS = {
+    en: {
+      heroLight: `Seamless, all-in-one LED`,
+      heroMain: `Built for scale.`,
+      lede: `eXview Edge is a seamless SMD LED all-in-one display, built to grow from a boardroom wall to a 216&Prime; command-centre canvas without changing the viewing experience &mdash; every size shares the same cabinet, the same image quality, and the same front-access simplicity.`,
+      pitchWord: `pitch`,
+      ctrlTag1: `Control Ecosystem`,
+      ctrlH1: `Crestron ready.`,
+      ctrlP1: `Control modules are available for Crestron systems, so eXview Edge drops straight into your existing control programming &mdash; no bespoke driver work required.`,
+      ctrlTag2: `Video Conferencing`,
+      ctrlH2: `Works seamlessly with Cisco.`,
+      ctrlP2: `Built-in HDMI-CEC lets eXview Edge wake, sleep, and switch inputs in sync with Cisco video endpoints &mdash; one less thing for the room to think about.`,
+      iconIndoor: `Indoor`,
+      iconSMD: `SMD LED`,
+      iconSeamless: `Seamless&nbsp;tiling`,
+      iconPitchRange: `1.56&ndash;2.5mm pitch`,
+      iconViewing: `3.2&ndash;5m viewing`,
+      iconNits: `100&ndash;600 nits`,
+      introCopy: `eXview Edge shares one platform across four sizes: <strong>135&Prime;, 162&Prime;, 190&Prime; and 216&Prime;</strong>, each built from the same 600&times;337.5mm cabinet. Front-accessible, hot-swappable service and an Android-based control system come standard across the range.`,
+      copyright: `Copyright &copy;2026`,
+      specTitle: `Specifications`,
+      catPixelModule: `Pixel &amp;<br>Module`,
+      catPhysical: `Physical`,
+      catElectrical: `Electrical`,
+      catApprovals: `Approvals &amp;<br>Environmental`,
+      catVideo: `Video`,
+      rowPixelPitch: `Pixel pitch (mm)`,
+      rowCabinetConfig: `Cabinet configuration`,
+      rowDisplaySizeIn: `Display size (inches)`,
+      rowDisplaySizeMM: `Display size (mm)`,
+      rowOverallSize: `Overall size incl. bezel (mm)`,
+      rowOverallDepth: `Overall depth (mm)`,
+      rowWeight: `Weight (kg), excl. mount/stand`,
+      rowStandTrolley: `Stand/Trolley option`,
+      rowServiceAccess: `Service access`,
+      rowSPT: `Expromo SPT (Surface Protection Technology)`,
+      rowInputVoltage: `Input voltage (nominal)`,
+      rowStandbyPower: `Standby power consumption`,
+      rowMaxPower: `Max. power consumption per screen (kW)`,
+      rowTypicalPower: `Typical power consumption per screen (kW)`,
+      rowEcoLabels: `Eco-labels`,
+      rowLEDLifetime: `Minimum LED lifetime (hrs)`,
+      rowCertifications: `Certifications`,
+      rowIPRating: `Protection level (IP)`,
+      rowCooling: `Cooling`,
+      rowOperatingTemp: `Operating temperature`,
+      rowHumidity: `Humidity (non-condensing)`,
+      rowResolution: `Physical resolution per screen`,
+      rowViewingAngle: `Viewing angle`,
+      rowViewingDistance: `Recommended viewing distance`,
+      rowBrightness: `Brightness (adjustable)`,
+      rowContrastRatio: `Contrast ratio`,
+      rowRefreshRate: `Refresh rate`,
+      rowScanRate: `Scan rate`,
+      rowGreyscale: `Greyscale / Colour temperature`,
+      valAvailable: `Available`,
+      valFront: `Front`,
+      valIncluded: `Included`,
+      valOption: `Option`,
+      valNoFans: `No fans`,
+      footnoteEst: `Estimated figure, pending final production test.`,
+      audioIOTitle: `I/O &amp; Control`,
+      catIO: `Input /<br>Output`,
+      catSystem: `System`,
+      rowHDMI: `HDMI`,
+      rowUSB30: `USB 3.0`,
+      rowUSBC: `USB Type-C`,
+      rowAudioOut: `Audio out (3.5mm)`,
+      rowRS232: `RS232`,
+      rowLAN: `LAN`,
+      rowOS: `Operating system`,
+      rowRAMStorage: `RAM / Storage`,
+      rowControl: `Control`,
+      valUSB30: `2 (1 internal + 1 external), 2.5W output`,
+      valUSBC: `1 (external)`,
+      valRS232: `1 (3.5mm jack, internal)`,
+      valLAN: `1 (RJ45, internal)`,
+      valControl: `RS232 &amp; LAN (UDP, eXconfig) &middot; remote control included`,
+      featuresCaption: `Support features`,
+      feat1: `Built-in video processing engine`,
+      feat2: `Wi-Fi 6 dual-band (2.4G/5G), AP &amp; STA modes`,
+      feat3: `Bluetooth 5.3`,
+      feat4: `Centralized control via RS232 &amp; LAN (eXconfig)`,
+      feat5: `Multiple scene modes for different applications`,
+      feat6: `Intelligent Memory-on-Module (MOM) &mdash; automatic colour and brightness matching on module replacement`,
+      feat7: `HDMI-CEC &mdash; automatic wake on HDMI connect`,
+      feat8: `Front-access, tool-less hot-swap maintenance`,
+      feat9: `6mm bezel, seamless cabinet-to-cabinet tiling`,
+      feat10: `Crestron control modules available; Cisco CEC interoperability`,
+      scaleTitle: `Scale at a glance`,
+      scaleFootnote: `Screens shown to scale (including bezel) against a 175cm reference figure; smallest size in front.`,
+      btnEdit: `Edit`,
+      btnDone: `Done`,
+      btnExportPdf: `Export PDF`
+    },
+    da: {
+      heroLight: `S&oslash;ml&oslash;s LED, alt-i-&eacute;n`,
+      heroMain: `Bygget til at skalere.`,
+      lede: `eXview Edge er en s&oslash;ml&oslash;s SMD LED alt-i-&eacute;n-sk&aelig;rm, udviklet til at vokse fra en m&oslash;delokalev&aelig;g til et 216&Prime; kommandocenter-l&aelig;rred uden at &aelig;ndre visningsoplevelsen &mdash; alle st&oslash;rrelser deler samme kabinet, samme billedkvalitet og samme enkle service forfra.`,
+      pitchWord: `pixelafstand`,
+      ctrlTag1: `Kontrol&oslash;kosystem`,
+      ctrlH1: `Klar til Crestron.`,
+      ctrlP1: `Der findes kontrolmoduler til Crestron-systemer, s&aring; eXview Edge g&aring;r lige ind i din eksisterende styringsprogrammering &mdash; uden behov for specialudviklede drivere.`,
+      ctrlTag2: `Videokonference`,
+      ctrlH2: `Fungerer problemfrit med Cisco.`,
+      ctrlP2: `Indbygget HDMI-CEC lader eXview Edge t&aelig;nde, slukke og skifte input i takt med dine Cisco-videoenheder &mdash; &eacute;n ting mindre at t&aelig;nke p&aring; i m&oslash;delokalet.`,
+      iconIndoor: `Indend&oslash;rs`,
+      iconSMD: `SMD LED`,
+      iconSeamless: `S&oslash;ml&oslash;s&nbsp;sammenstilling`,
+      iconPitchRange: `1,56&ndash;2,5mm pixelafstand`,
+      iconViewing: `3,2&ndash;5m synsafstand`,
+      iconNits: `100&ndash;600 nits`,
+      introCopy: `eXview Edge deler &eacute;n platform p&aring; tv&aelig;rs af fire st&oslash;rrelser: <strong>135&Prime;, 162&Prime;, 190&Prime; og 216&Prime;</strong>, alle bygget af samme 600&times;337,5mm kabinet. Adgang forfra, service uden driftsstop og et Android-baseret styresystem er standard p&aring; tv&aelig;rs af hele serien.`,
+      copyright: `Copyright &copy;2026`,
+      specTitle: `Specifikationer`,
+      catPixelModule: `Pixel &amp;<br>modul`,
+      catPhysical: `Fysisk`,
+      catElectrical: `Elektrisk`,
+      catApprovals: `Godkendelser &amp;<br>milj&oslash;`,
+      catVideo: `Video`,
+      rowPixelPitch: `Pixelafstand (mm)`,
+      rowCabinetConfig: `Kabinetkonfiguration`,
+      rowDisplaySizeIn: `Sk&aelig;rmst&oslash;rrelse (tommer)`,
+      rowDisplaySizeMM: `Sk&aelig;rmst&oslash;rrelse (mm)`,
+      rowOverallSize: `Samlet st&oslash;rrelse inkl. kant (mm)`,
+      rowOverallDepth: `Samlet dybde (mm)`,
+      rowWeight: `V&aelig;gt (kg), ekskl. besl&aring;g/stativ`,
+      rowStandTrolley: `Stativ/trolley (tilvalg)`,
+      rowServiceAccess: `Serviceadgang`,
+      rowSPT: `Expromo SPT (overfladebeskyttelsesteknologi)`,
+      rowInputVoltage: `Indgangssp&aelig;nding (nominel)`,
+      rowStandbyPower: `Standbyforbrug`,
+      rowMaxPower: `Maks. effektforbrug pr. sk&aelig;rm (kW)`,
+      rowTypicalPower: `Typisk effektforbrug pr. sk&aelig;rm (kW)`,
+      rowEcoLabels: `Milj&oslash;m&aelig;rkninger`,
+      rowLEDLifetime: `Minimum LED-levetid (timer)`,
+      rowCertifications: `Certificeringer`,
+      rowIPRating: `Kapslingsklasse (IP)`,
+      rowCooling: `K&oslash;ling`,
+      rowOperatingTemp: `Driftstemperatur`,
+      rowHumidity: `Luftfugtighed (ikke-kondenserende)`,
+      rowResolution: `Fysisk opl&oslash;sning pr. sk&aelig;rm`,
+      rowViewingAngle: `Synsvinkel`,
+      rowViewingDistance: `Anbefalet synsafstand`,
+      rowBrightness: `Lysstyrke (justerbar)`,
+      rowContrastRatio: `Kontrastforhold`,
+      rowRefreshRate: `Opdateringsfrekvens`,
+      rowScanRate: `Scanningsfrekvens`,
+      rowGreyscale: `Gr&aring;toner / farvetemperatur`,
+      valAvailable: `Tilg&aelig;ngelig`,
+      valFront: `Forfra`,
+      valIncluded: `Inkluderet`,
+      valOption: `Tilvalg`,
+      valNoFans: `Ingen bl&aelig;sere`,
+      footnoteEst: `Estimeret v&aelig;rdi, afventer endelig produktionstest.`,
+      audioIOTitle: `I/O &amp; styring`,
+      catIO: `Input /<br>Output`,
+      catSystem: `System`,
+      rowHDMI: `HDMI`,
+      rowUSB30: `USB 3.0`,
+      rowUSBC: `USB Type-C`,
+      rowAudioOut: `Lydudgang (3,5mm)`,
+      rowRS232: `RS232`,
+      rowLAN: `LAN`,
+      rowOS: `Styresystem`,
+      rowRAMStorage: `RAM / lagerplads`,
+      rowControl: `Styring`,
+      valUSB30: `2 (1 intern + 1 ekstern), 2,5W udgang`,
+      valUSBC: `1 (ekstern)`,
+      valRS232: `1 (3,5mm jackstik, intern)`,
+      valLAN: `1 (RJ45, intern)`,
+      valControl: `RS232 &amp; LAN (UDP, eXconfig) &middot; fjernbetjening medf&oslash;lger`,
+      featuresCaption: `Underst&oslash;ttede funktioner`,
+      feat1: `Indbygget videobehandlingsmotor`,
+      feat2: `Wi-Fi 6 dual-band (2,4G/5G), AP- og STA-tilstand`,
+      feat3: `Bluetooth 5.3`,
+      feat4: `Central styring via RS232 &amp; LAN (eXconfig)`,
+      feat5: `Flere scenetilstande til forskellige anvendelser`,
+      feat6: `Intelligent Memory-on-Module (MOM) &mdash; automatisk farve- og lysstyrketilpasning ved udskiftning af modul`,
+      feat7: `HDMI-CEC &mdash; automatisk opv&aring;gning ved tilslutning af HDMI`,
+      feat8: `Service forfra, v&aelig;rkt&oslash;jsfri udskiftning i drift`,
+      feat9: `6mm kant, s&oslash;ml&oslash;s sammenstilling mellem kabinetter`,
+      feat10: `Crestron-kontrolmoduler tilg&aelig;ngelige; Cisco CEC-interoperabilitet`,
+      scaleTitle: `St&oslash;rrelse i overblik`,
+      scaleFootnote: `Sk&aelig;rmene er vist i skala (inkl. kant) i forhold til en referenceperson p&aring; 175cm; mindste st&oslash;rrelse forrest.`,
+      btnEdit: `Rediger`,
+      btnDone: `F&aelig;rdig`,
+      btnExportPdf: `Eksport&eacute;r PDF`
+    },
+    de: {
+      heroLight: `Nahtloses All-in-One-LED`,
+      heroMain: `F&uuml;r jede Gr&ouml;&szlig;e gebaut.`,
+      lede: `eXview Edge ist ein nahtloses SMD-LED-All-in-One-Display, das von einer Besprechungsraumwand bis zu einer 216&Prime; gro&szlig;en Leitstand-Leinwand mitw&auml;chst, ohne das Seherlebnis zu ver&auml;ndern &mdash; jede Gr&ouml;&szlig;e teilt dasselbe Kabinett, dieselbe Bildqualit&auml;t und denselben einfachen Zugang von vorne.`,
+      pitchWord: `Pixelabstand`,
+      ctrlTag1: `Steuerungs-&Ouml;kosystem`,
+      ctrlH1: `Crestron-ready.`,
+      ctrlP1: `F&uuml;r Crestron-Systeme stehen Steuerungsmodule zur Verf&uuml;gung, sodass sich eXview Edge nahtlos in Ihre bestehende Steuerungsprogrammierung einf&uuml;gt &mdash; ohne aufwendige Treiberentwicklung.`,
+      ctrlTag2: `Videokonferenz`,
+      ctrlH2: `Arbeitet nahtlos mit Cisco zusammen.`,
+      ctrlP2: `Dank integriertem HDMI-CEC schaltet sich eXview Edge im Gleichschritt mit Ihren Cisco-Videoendger&auml;ten ein, aus und wechselt die Eing&auml;nge &mdash; eine Sorge weniger im Raum.`,
+      iconIndoor: `Indoor`,
+      iconSMD: `SMD-LED`,
+      iconSeamless: `Nahtlose&nbsp;Kachelung`,
+      iconPitchRange: `1,56&ndash;2,5mm Pixelabstand`,
+      iconViewing: `3,2&ndash;5m Betrachtungsabstand`,
+      iconNits: `100&ndash;600 Nits`,
+      introCopy: `eXview Edge nutzt eine gemeinsame Plattform &uuml;ber vier Gr&ouml;&szlig;en hinweg: <strong>135&Prime;, 162&Prime;, 190&Prime; und 216&Prime;</strong>, jeweils aus demselben 600&times;337,5mm-Kabinett aufgebaut. Wartungszugang von vorne, hot-swap-f&auml;higer Service und ein Android-basiertes Steuerungssystem sind serienm&auml;&szlig;ig &uuml;ber die gesamte Baureihe.`,
+      copyright: `Copyright &copy;2026`,
+      specTitle: `Spezifikationen`,
+      catPixelModule: `Pixel &amp;<br>Modul`,
+      catPhysical: `Physisch`,
+      catElectrical: `Elektrisch`,
+      catApprovals: `Zulassungen &amp;<br>Umgebung`,
+      catVideo: `Video`,
+      rowPixelPitch: `Pixelabstand (mm)`,
+      rowCabinetConfig: `Kabinettkonfiguration`,
+      rowDisplaySizeIn: `Bildschirmgr&ouml;&szlig;e (Zoll)`,
+      rowDisplaySizeMM: `Bildschirmgr&ouml;&szlig;e (mm)`,
+      rowOverallSize: `Gesamtgr&ouml;&szlig;e inkl. Rahmen (mm)`,
+      rowOverallDepth: `Gesamttiefe (mm)`,
+      rowWeight: `Gewicht (kg), ohne Halterung/Standfu&szlig;`,
+      rowStandTrolley: `Standfu&szlig;/Trolley (Option)`,
+      rowServiceAccess: `Wartungszugang`,
+      rowSPT: `Expromo SPT (Oberfl&auml;chenschutztechnologie)`,
+      rowInputVoltage: `Eingangsspannung (nominal)`,
+      rowStandbyPower: `Standby-Leistungsaufnahme`,
+      rowMaxPower: `Max. Leistungsaufnahme pro Bildschirm (kW)`,
+      rowTypicalPower: `Typische Leistungsaufnahme pro Bildschirm (kW)`,
+      rowEcoLabels: `Umweltkennzeichen`,
+      rowLEDLifetime: `Mindest-LED-Lebensdauer (Std.)`,
+      rowCertifications: `Zertifizierungen`,
+      rowIPRating: `Schutzart (IP)`,
+      rowCooling: `K&uuml;hlung`,
+      rowOperatingTemp: `Betriebstemperatur`,
+      rowHumidity: `Luftfeuchtigkeit (nicht kondensierend)`,
+      rowResolution: `Physische Aufl&ouml;sung pro Bildschirm`,
+      rowViewingAngle: `Betrachtungswinkel`,
+      rowViewingDistance: `Empfohlener Betrachtungsabstand`,
+      rowBrightness: `Helligkeit (einstellbar)`,
+      rowContrastRatio: `Kontrastverh&auml;ltnis`,
+      rowRefreshRate: `Bildwiederholrate`,
+      rowScanRate: `Scanrate`,
+      rowGreyscale: `Graustufen / Farbtemperatur`,
+      valAvailable: `Verf&uuml;gbar`,
+      valFront: `Von vorne`,
+      valIncluded: `Inklusive`,
+      valOption: `Optional`,
+      valNoFans: `L&uuml;fterlos`,
+      footnoteEst: `Gesch&auml;tzter Wert, vorbehaltlich abschlie&szlig;ender Fertigungstests.`,
+      audioIOTitle: `I/O &amp; Steuerung`,
+      catIO: `Eingang /<br>Ausgang`,
+      catSystem: `System`,
+      rowHDMI: `HDMI`,
+      rowUSB30: `USB 3.0`,
+      rowUSBC: `USB-C`,
+      rowAudioOut: `Audioausgang (3,5mm)`,
+      rowRS232: `RS232`,
+      rowLAN: `LAN`,
+      rowOS: `Betriebssystem`,
+      rowRAMStorage: `RAM / Speicher`,
+      rowControl: `Steuerung`,
+      valUSB30: `2 (1 intern + 1 extern), 2,5W Ausgangsleistung`,
+      valUSBC: `1 (extern)`,
+      valRS232: `1 (3,5mm-Klinke, intern)`,
+      valLAN: `1 (RJ45, intern)`,
+      valControl: `RS232 &amp; LAN (UDP, eXconfig) &middot; Fernbedienung im Lieferumfang enthalten`,
+      featuresCaption: `Unterst&uuml;tzte Funktionen`,
+      feat1: `Integrierte Videoverarbeitungs-Engine`,
+      feat2: `Wi-Fi 6 Dual-Band (2,4G/5G), AP- und STA-Modus`,
+      feat3: `Bluetooth 5.3`,
+      feat4: `Zentrale Steuerung &uuml;ber RS232 &amp; LAN (eXconfig)`,
+      feat5: `Mehrere Szenenmodi f&uuml;r unterschiedliche Anwendungen`,
+      feat6: `Intelligentes Memory-on-Module (MOM) &mdash; automatischer Farb- und Helligkeitsabgleich beim Modulwechsel`,
+      feat7: `HDMI-CEC &mdash; automatisches Einschalten beim Anschlie&szlig;en von HDMI`,
+      feat8: `Wartungszugang von vorne, werkzeugloser Hot-Swap-Service`,
+      feat9: `6mm Rahmen, nahtlose Kachelung zwischen den Kabinetten`,
+      feat10: `Crestron-Steuerungsmodule verf&uuml;gbar; Cisco-CEC-Interoperabilit&auml;t`,
+      scaleTitle: `Gr&ouml;&szlig;envergleich`,
+      scaleFootnote: `Die Bildschirme sind ma&szlig;stabsgetreu (inkl. Rahmen) im Vergleich zu einer 175cm gro&szlig;en Referenzperson dargestellt; kleinste Gr&ouml;&szlig;e im Vordergrund.`,
+      btnEdit: `Bearbeiten`,
+      btnDone: `Fertig`,
+      btnExportPdf: `PDF exportieren`
+    },
+    zh: {
+      heroLight: `无缝一体化LED显示屏`,
+      heroMain: `为规模而生。`,
+      lede: `eXview Edge 是一款无缝拼接的SMD LED一体机显示屏，可从会议室墙面一路扩展至216&Prime;的指挥中心大屏，观看体验始终如一——所有尺寸共用同一机柜、同等画质与同样便捷的前维护方式。`,
+      pitchWord: `点间距`,
+      ctrlTag1: `控制生态`,
+      ctrlH1: `支持 Crestron。`,
+      ctrlP1: `已提供适用于 Crestron 系统的控制模块，eXview Edge 可直接接入您现有的控制编程——无需额外开发驱动程序。`,
+      ctrlTag2: `视频会议`,
+      ctrlH2: `与 Cisco 无缝协同。`,
+      ctrlP2: `内置 HDMI-CEC 功能让 eXview Edge 可与 Cisco 视频终端同步开关机、切换信号源——为会议室省去一道操作步骤。`,
+      iconIndoor: `室内`,
+      iconSMD: `SMD LED`,
+      iconSeamless: `无缝拼接`,
+      iconPitchRange: `1.56&ndash;2.5mm 点间距`,
+      iconViewing: `3.2&ndash;5m 观看距离`,
+      iconNits: `100&ndash;600 nits 亮度`,
+      introCopy: `eXview Edge 在四种尺寸间共用同一平台：<strong>135&Prime;、162&Prime;、190&Prime; 和 216&Prime;</strong>，均由相同的600&times;337.5mm机柜构建而成。前维护、热插拔维修与基于Android的控制系统均为全系列标配。`,
+      copyright: `版权所有 &copy;2026`,
+      specTitle: `技术规格`,
+      catPixelModule: `点间距与<br>模组`,
+      catPhysical: `物理规格`,
+      catElectrical: `电气规格`,
+      catApprovals: `认证与<br>环境`,
+      catVideo: `视频规格`,
+      rowPixelPitch: `点间距（mm）`,
+      rowCabinetConfig: `机柜配置`,
+      rowDisplaySizeIn: `屏幕尺寸（英寸）`,
+      rowDisplaySizeMM: `屏幕尺寸（mm）`,
+      rowOverallSize: `整体尺寸含边框（mm）`,
+      rowOverallDepth: `整体厚度（mm）`,
+      rowWeight: `重量（kg，不含挂架/支架）`,
+      rowStandTrolley: `支架/推车（可选）`,
+      rowServiceAccess: `维护方式`,
+      rowSPT: `Expromo SPT（表面保护技术）`,
+      rowInputVoltage: `输入电压（额定）`,
+      rowStandbyPower: `待机功耗`,
+      rowMaxPower: `单屏最大功耗（kW）`,
+      rowTypicalPower: `单屏典型功耗（kW）`,
+      rowEcoLabels: `环保认证标识`,
+      rowLEDLifetime: `LED最低寿命（小时）`,
+      rowCertifications: `认证`,
+      rowIPRating: `防护等级（IP）`,
+      rowCooling: `散热方式`,
+      rowOperatingTemp: `工作温度`,
+      rowHumidity: `工作湿度（无冷凝）`,
+      rowResolution: `单屏物理分辨率`,
+      rowViewingAngle: `可视角度`,
+      rowViewingDistance: `建议观看距离`,
+      rowBrightness: `亮度（可调）`,
+      rowContrastRatio: `对比度`,
+      rowRefreshRate: `刷新率`,
+      rowScanRate: `扫描率`,
+      rowGreyscale: `灰度 / 色温`,
+      valAvailable: `可选配`,
+      valFront: `前维护`,
+      valIncluded: `标配`,
+      valOption: `可选`,
+      valNoFans: `无风扇散热`,
+      footnoteEst: `预估数值，待最终量产测试确认。`,
+      audioIOTitle: `接口与控制`,
+      catIO: `输入 /<br>输出`,
+      catSystem: `系统`,
+      rowHDMI: `HDMI`,
+      rowUSB30: `USB 3.0`,
+      rowUSBC: `USB Type-C`,
+      rowAudioOut: `音频输出（3.5mm）`,
+      rowRS232: `RS232`,
+      rowLAN: `LAN`,
+      rowOS: `操作系统`,
+      rowRAMStorage: `内存 / 存储`,
+      rowControl: `控制方式`,
+      valUSB30: `2个（内置1个+外置1个），输出功率2.5W`,
+      valUSBC: `1个（外置）`,
+      valRS232: `1个（3.5mm插孔，内置）`,
+      valLAN: `1个（RJ45，内置）`,
+      valControl: `RS232 与 LAN（UDP，eXconfig）&middot; 含遥控器`,
+      featuresCaption: `支持的功能`,
+      feat1: `内置视频处理引擎`,
+      feat2: `Wi-Fi 6 双频（2.4G/5G），支持AP与STA模式`,
+      feat3: `蓝牙5.3`,
+      feat4: `支持通过RS232与LAN（eXconfig）集中控制`,
+      feat5: `多种场景模式，适配不同应用需求`,
+      feat6: `智能模组记忆功能（MOM）——更换模组时自动匹配色彩与亮度`,
+      feat7: `HDMI-CEC——连接HDMI后自动开机`,
+      feat8: `前维护设计，免工具热插拔维修`,
+      feat9: `6mm边框，机柜间无缝拼接`,
+      feat10: `支持Crestron控制模块；兼容Cisco CEC互联互通`,
+      scaleTitle: `尺寸对比一览`,
+      scaleFootnote: `屏幕按比例（含边框）与175cm参照身高对比绘制，最小尺寸置于最前。`,
+      btnEdit: `编辑`,
+      btnDone: `完成`,
+      btnExportPdf: `导出PDF`
+    }
+  };
+
+  var HTML_LANG = { en: 'en', da: 'da', de: 'de', zh: 'zh-CN' };
+  var STORAGE_KEY = 'exview-edge-lang';
+  var currentLang = 'en';
+  var editMode = false;
+
+  function applyLang(lang) {
+    currentLang = STRINGS[lang] ? lang : 'en';
+    var dict = STRINGS[currentLang];
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var key = nodes[i].getAttribute('data-i18n');
+      if (dict[key] !== undefined) {
+        nodes[i].innerHTML = dict[key];
+      }
+    }
+    document.documentElement.lang = HTML_LANG[currentLang] || 'en';
+    var btns = document.querySelectorAll('.lang-switch button');
+    for (var j = 0; j < btns.length; j++) {
+      var isActive = btns[j].getAttribute('data-lang') === currentLang;
+      btns[j].classList.toggle('active', isActive);
+      btns[j].setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    }
+    try { localStorage.setItem(STORAGE_KEY, currentLang); } catch (e) {}
+    refreshEditButtonLabel();
+  }
+
+  function refreshEditButtonLabel() {
+    var dict = STRINGS[currentLang] || STRINGS.en;
+    var btn = document.getElementById('editToggleBtn');
+    if (!btn) return;
+    btn.textContent = editMode ? dict.btnDone : dict.btnEdit;
+    btn.classList.toggle('active', editMode);
+    btn.setAttribute('aria-pressed', editMode ? 'true' : 'false');
+  }
+
+  function setEditMode(on) {
+    editMode = on;
+    var sheets = document.querySelectorAll('.sheet');
+    for (var i = 0; i < sheets.length; i++) {
+      sheets[i].setAttribute('contenteditable', on ? 'true' : 'false');
+    }
+    document.body.classList.toggle('edit-mode', on);
+    refreshEditButtonLabel();
+  }
+
+  var switchBtns = document.querySelectorAll('.lang-switch button');
+  for (var k = 0; k < switchBtns.length; k++) {
+    switchBtns[k].addEventListener('click', function () {
+      applyLang(this.getAttribute('data-lang'));
+    });
+  }
+
+  var editBtn = document.getElementById('editToggleBtn');
+  if (editBtn) {
+    editBtn.addEventListener('click', function () { setEditMode(!editMode); });
+  }
+  var exportBtn = document.getElementById('exportPdfBtn');
+  if (exportBtn) {
+    exportBtn.addEventListener('click', function () { window.print(); });
+  }
+
+  var saved = null;
+  try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+  applyLang(saved && STRINGS[saved] ? saved : 'en');
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>eXview Edge Specification Comparison</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:      #F5F6F3;
+    --paper-raised:#FFFFFF;
+    --ink:        #14181D;
+    --steel:      #4B5760;
+    --hairline:   #DCE2E4;
+    --signal:     #0B7285;
+    --signal-dim: #E3F1F2;
+    --amber:      #B5650D;
+    --amber-dim:  #FBEFDD;
+    --radius:     3px;
+    --content-w:  1240px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.5;
+    font-size: 15px;
+  }
+
+  h1, h2, h3 {
+    font-family: "Space Grotesk", "Segoe UI", sans-serif;
+    font-weight: 600;
+    margin: 0;
+    color: var(--ink);
+  }
+
+  code, .mono, .num {
+    font-family: "IBM Plex Mono", ui-monospace, "Courier New", monospace;
+  }
+
+  a { color: var(--signal); }
+  a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 2px;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  /* ---------- Masthead ---------- */
+  .masthead {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2.6rem 1.5rem 2.2rem;
+  }
+  .masthead__inner {
+    max-width: var(--content-w);
+    margin: 0 auto;
+  }
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #7FC4CC;
+    margin: 0 0 0.7rem 0;
+  }
+  .masthead h1 {
+    color: var(--paper);
+    font-size: clamp(1.7rem, 3.2vw, 2.35rem);
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+  .masthead .subtitle {
+    margin: 0.55rem 0 0 0;
+    color: #C4CCD1;
+    font-size: 1rem;
+    max-width: 46ch;
+  }
+  .masthead .doc-meta {
+    margin: 1.4rem 0 0 0;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    color: #889299;
+    letter-spacing: 0.03em;
+  }
+
+  /* ---------- Draft note ---------- */
+  .draft-note {
+    max-width: var(--content-w);
+    margin: 1.4rem auto 0 auto;
+    padding: 0 1.5rem;
+  }
+  .draft-note__strip {
+    display: flex;
+    gap: 0.7rem;
+    align-items: baseline;
+    padding: 0.65rem 0.9rem;
+    background: var(--amber-dim);
+    border-left: 3px solid var(--amber);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-size: 0.87rem;
+  }
+  .draft-note__tag {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--amber);
+    flex-shrink: 0;
+  }
+
+  main {
+    max-width: var(--content-w);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* ---------- Hero: scale / cabinet-grid diagrams ---------- */
+  .hero-scale {
+    margin: 2.6rem 0 2.2rem 0;
+  }
+  .scale-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.2rem;
+    align-items: end;
+    padding: 1.6rem 1.4rem 1.4rem;
+    background: var(--paper-raised);
+    border: 1px solid var(--hairline);
+    border-radius: 6px;
+  }
+  .scale-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.55rem;
+  }
+  .grid-diagram {
+    width: var(--w, 120px);
+    aspect-ratio: 16 / 9;
+    background-color: var(--paper);
+    border: 1.5px solid var(--ink);
+    border-radius: 2px;
+    background-image:
+      linear-gradient(to right, var(--signal) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--signal) 1px, transparent 1px);
+    background-size: calc(100% / var(--n)) 100%, 100% calc(100% / var(--n));
+    opacity: 0.9;
+  }
+  .scale-card__size {
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin: 0;
+  }
+  .scale-card__size .unit { font-weight: 500; color: var(--steel); }
+  .scale-card__meta {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    color: var(--steel);
+    line-height: 1.5;
+    margin: 0;
+  }
+  .hero-scale__footnote {
+    font-size: 0.78rem;
+    color: var(--steel);
+    margin: 0.6rem 0 0 0;
+    max-width: 80ch;
+  }
+
+  /* ---------- Nav ---------- */
+  nav.toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0 0 2.4rem 0;
+    padding: 0;
+    list-style: none;
+  }
+  nav.toc a {
+    display: inline-block;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.76rem;
+    text-decoration: none;
+    color: var(--ink);
+    background: var(--paper-raised);
+    border: 1px solid var(--hairline);
+    border-radius: 20px;
+    padding: 0.38rem 0.85rem;
+  }
+  nav.toc a:hover { border-color: var(--signal); color: var(--signal); }
+
+  section { margin: 2.6rem 0; }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.8rem;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .section-head h2 { font-size: 1.35rem; }
+  .section-head .section-index {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.78rem;
+    color: var(--signal);
+  }
+
+  p.section-note {
+    font-size: 0.87rem;
+    color: var(--steel);
+    margin: 0 0 1rem 0;
+    max-width: 90ch;
+  }
+
+  .tag {
+    display: inline-block;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 0.06rem 0.4rem;
+    border-radius: 3px;
+    vertical-align: middle;
+    margin-left: 0.35rem;
+    white-space: nowrap;
+  }
+  .tag-est   { background: var(--amber-dim); color: var(--amber); }
+  .tag-tbd   { background: var(--amber-dim); color: var(--amber); }
+  .tag-rev   { background: var(--signal-dim); color: var(--signal); }
+
+  /* ---------- Tables ---------- */
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--hairline);
+    border-radius: 6px;
+    background: var(--paper-raised);
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.86rem;
+    min-width: 680px;
+  }
+  table.model-table { min-width: 0; }
+
+  th, td {
+    border-bottom: 1px solid var(--hairline);
+    padding: 0.55rem 0.75rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  td, td.num { font-family: "IBM Plex Mono", monospace; font-size: 0.82rem; }
+  th { font-weight: 500; }
+
+  thead th {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    position: sticky;
+    top: 0;
+    white-space: nowrap;
+    border-bottom: none;
+  }
+
+  .comparison-table th[scope="row"] {
+    font-family: "IBM Plex Sans", sans-serif;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .comparison-table th:first-child,
+  .comparison-table td:first-child {
+    position: sticky;
+    left: 0;
+    background: var(--paper-raised);
+    min-width: 210px;
+    z-index: 1;
+    border-right: 1px solid var(--hairline);
+  }
+  .comparison-table thead th:first-child {
+    z-index: 2;
+    background: var(--ink);
+  }
+
+  tr.category-row td {
+    background: var(--signal-dim);
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    color: var(--signal);
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    position: sticky;
+    left: 0;
+  }
+  .comparison-table tr.category-row td { position: static; }
+
+  tbody tr:hover td { background: #FAFBF9; }
+  tbody tr.category-row:hover td { background: var(--signal-dim); }
+  .comparison-table tbody tr:hover td:first-child { background: #FAFBF9; }
+
+  table caption {
+    caption-side: top;
+    text-align: left;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    color: var(--steel);
+    padding: 0.6rem 0.75rem 0;
+  }
+
+  /* ---------- Model cards ---------- */
+  .model-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.6rem;
+  }
+  @media (min-width: 920px) {
+    .model-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  .model-card {
+    background: var(--paper-raised);
+    border: 1px solid var(--hairline);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .model-card__head {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    padding: 1.1rem 1.25rem;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .model-card__head .grid-diagram { flex-shrink: 0; }
+  .model-card__title {
+    font-size: 1.05rem;
+    margin: 0 0 0.15rem 0;
+  }
+  .model-card__title .model-no {
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 400;
+    color: var(--steel);
+    font-size: 0.82rem;
+  }
+  .model-card__meta {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    color: var(--steel);
+    margin: 0;
+  }
+  .model-card__body { padding: 0; }
+  .model-card__body table { font-size: 0.83rem; }
+  .model-card__body th, .model-card__body td { padding: 0.48rem 1.25rem; }
+  .model-card__body tr.category-row td { padding-left: 1.25rem; }
+  .model-card__body th[scope="row"] { width: 46%; font-weight: 500; }
+
+  .source-note {
+    font-size: 0.75rem;
+    color: var(--steel);
+    padding: 0.85rem 1.25rem 1rem;
+    border-top: 1px solid var(--hairline);
+  }
+  .source-note code { font-size: 0.72rem; }
+
+  /* ---------- Review notes ---------- */
+  .review-block {
+    background: var(--paper-raised);
+    border: 1px solid var(--hairline);
+    border-radius: 6px;
+    padding: 1.3rem 1.4rem;
+    margin-bottom: 1.1rem;
+  }
+  .review-block h3 {
+    font-size: 0.95rem;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .review-block h3 .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    display: inline-block;
+  }
+  .review-block--open h3 .dot { background: var(--amber); }
+  .review-block--resolved h3 .dot { background: var(--signal); }
+
+  ul.review-list {
+    margin: 0;
+    padding-left: 1.2rem;
+  }
+  ul.review-list li {
+    margin-bottom: 0.65rem;
+    font-size: 0.88rem;
+  }
+  ul.review-list li:last-child { margin-bottom: 0; }
+  ul.review-list strong { font-weight: 600; }
+
+  .footnote {
+    font-size: 0.8rem;
+    color: var(--steel);
+    border-top: 1px dashed var(--hairline);
+    padding-top: 0.8rem;
+    margin-top: 1rem;
+  }
+
+  footer.page-footer {
+    max-width: var(--content-w);
+    margin: 3rem auto 0 auto;
+    padding: 1.4rem 1.5rem 2.5rem;
+    font-size: 0.8rem;
+    color: var(--steel);
+    border-top: 1px solid var(--hairline);
+  }
+  footer.page-footer ul { padding-left: 1.2rem; margin: 0.5rem 0; }
+  footer.page-footer code { font-size: 0.74rem; }
+
+  @media (max-width: 640px) {
+    .scale-row { grid-template-columns: repeat(2, 1fr); }
+    .masthead { padding: 2rem 1.1rem; }
+    main { padding: 0 1.1rem; }
+    .draft-note { padding: 0 1.1rem; }
+  }
+
+  @media print {
+    .masthead { background: none; color: #000; border-bottom: 2px solid #000; }
+    .eyebrow, .masthead .doc-meta { color: #333; }
+    .masthead .subtitle { color: #333; }
+    nav.toc { display: none; }
+    thead th { background: #eee !important; color: #000 !important; }
+    tr.category-row td { background: #eee !important; color: #000 !important; }
+    .comparison-table th:first-child, .comparison-table td:first-child { background: #f7f7f7 !important; }
+    .table-scroll { overflow-x: visible; border: none; }
+    .scale-row { border: 1px solid #000; }
+    a { color: #000; text-decoration: none; }
+    section { margin: 1.4rem 0; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead__inner">
+    <p class="eyebrow">Technical Review &middot; eXview Edge Platform</p>
+    <h1>eXview Edge Specification Comparison</h1>
+    <p class="subtitle">eXview Edge all-in-one LED display &mdash; 135&Prime;, 162&Prime;, 190&Prime; and 216&Prime; models, normalized side-by-side.</p>
+    <p class="doc-meta">DOC EDGE&#8209;SPEC&#8209;COMPARE&#8209;01 &middot; DRAFT &middot; REV 2 &middot; 2026&#8209;07&#8209;02</p>
+  </div>
+</header>
+
+<div class="draft-note">
+  <div class="draft-note__strip">
+    <span class="draft-note__tag">NOTE</span>
+    <span>Draft technical review version. Images and drawings will be added later.</span>
+  </div>
+</div>
+
+<main>
+
+<section class="hero-scale" aria-labelledby="hero-scale-heading">
+  <h2 id="hero-scale-heading" class="visually-hidden">Model size and cabinet grid overview</h2>
+  <div class="scale-row">
+
+    <div class="scale-card">
+      <div class="grid-diagram" style="--n:5; --w:112px;" aria-hidden="true"></div>
+      <p class="scale-card__size">135<span class="unit">&Prime;</span></p>
+      <p class="scale-card__meta">5&nbsp;&times;&nbsp;5 &middot; 25 cabinets<br>1.5625&nbsp;mm pitch<br>1920&nbsp;&times;&nbsp;1080</p>
+    </div>
+
+    <div class="scale-card">
+      <div class="grid-diagram" style="--n:6; --w:135px;" aria-hidden="true"></div>
+      <p class="scale-card__size">162<span class="unit">&Prime;</span></p>
+      <p class="scale-card__meta">6&nbsp;&times;&nbsp;6 &middot; 36 cabinets<br>1.875&nbsp;mm pitch<br>1920&nbsp;&times;&nbsp;1080</p>
+    </div>
+
+    <div class="scale-card">
+      <div class="grid-diagram" style="--n:7; --w:158px;" aria-hidden="true"></div>
+      <p class="scale-card__size">190<span class="unit">&Prime;</span></p>
+      <p class="scale-card__meta">7&nbsp;&times;&nbsp;7 &middot; 49 cabinets<br>1.875&nbsp;mm pitch<br>2240&nbsp;&times;&nbsp;1260</p>
+    </div>
+
+    <div class="scale-card">
+      <div class="grid-diagram" style="--n:8; --w:180px;" aria-hidden="true"></div>
+      <p class="scale-card__size">216<span class="unit">&Prime;</span></p>
+      <p class="scale-card__meta">8&nbsp;&times;&nbsp;8 &middot; 64 cabinets<br>2.5&nbsp;mm pitch<br>1920&nbsp;&times;&nbsp;1080</p>
+    </div>
+
+  </div>
+  <p class="hero-scale__footnote">All four models share the same 600&nbsp;&times;&nbsp;337.5&nbsp;mm cabinet (16:9). Larger sizes are built by adding a row and a column of cabinets, not by changing the cabinet itself. Diagram grid lines are for reference only &mdash; the assembled screen surface is seamless, with a 6&nbsp;mm outer bezel and no visible line between cabinets.</p>
+</section>
+
+<nav class="toc" aria-label="Table of contents">
+  <a href="#comparison">Comparison table</a>
+  <a href="#model-135">135&Prime;</a>
+  <a href="#model-162">162&Prime;</a>
+  <a href="#model-190">190&Prime;</a>
+  <a href="#model-216">216&Prime;</a>
+  <a href="#review-notes">Data review notes</a>
+</nav>
+
+<section id="comparison">
+  <div class="section-head">
+    <span class="section-index">01</span>
+    <h2>Main Comparison Table</h2>
+  </div>
+  <p class="section-note">All four models side-by-side, grouped by category. <span class="tag tag-est">EST</span> marks estimated/not-tested values. <span class="tag tag-tbd">TBD</span> marks data pending from the factory. <span class="tag tag-rev">REV</span> marks a value corrected during this review &mdash; see <a href="#review-notes">Data Review Notes</a>.</p>
+
+  <div class="table-scroll">
+  <table class="comparison-table">
+    <thead>
+      <tr>
+        <th scope="col">Specification</th>
+        <th scope="col">135&Prime;</th>
+        <th scope="col">162&Prime;</th>
+        <th scope="col">190&Prime;</th>
+        <th scope="col">216&Prime;</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr class="category-row"><td colspan="5">General / Identification</td></tr>
+      <tr><th scope="row">LED Technology</th><td colspan="4">SMD (Surface Mount Device)</td></tr>
+      <tr><th scope="row">Document Version</th><td>V1.0 (2025-09-18)</td><td>V1.1 (2025-09-24)</td><td>V1.0 (2026-07-02)</td><td>V1.0 (2026-07-02)</td></tr>
+
+      <tr class="category-row"><td colspan="5">Display / Dimensions</td></tr>
+      <tr><th scope="row">Display Size</th><td>135 inch</td><td>162 inch</td><td>190 inch</td><td>216 inch</td></tr>
+      <tr><th scope="row">Aspect Ratio</th><td>16:9</td><td>16:9</td><td>16:9</td><td>16:9</td></tr>
+      <tr><th scope="row">Resolution</th><td>1920 &times; 1080</td><td>1920 &times; 1080</td><td>2240 &times; 1260</td><td>1920 &times; 1080</td></tr>
+      <tr><th scope="row">Pixel Pitch</th><td>1.5625 mm</td><td>1.875 mm</td><td>1.875 mm</td><td>2.5 mm</td></tr>
+      <tr><th scope="row">Cabinet Grid</th><td>5 &times; 5 (25 cabinets)</td><td>6 &times; 6 (36 cabinets)</td><td>7 &times; 7 (49 cabinets)</td><td>8 &times; 8 (64 cabinets)</td></tr>
+      <tr><th scope="row">Cabinet Size</th><td colspan="4">600 &times; 337.5 mm (16:9) &mdash; identical across all four models</td></tr>
+      <tr><th scope="row">Overall Size (L&times;H)</th><td>3012 &times; 1699.5 mm</td><td>3612 &times; 2037 mm</td><td>4212 &times; 2374.5 mm</td><td>4812 &times; 2712 mm</td></tr>
+      <tr><th scope="row">Display Area (L&times;H)</th><td>3000 &times; 1687.5 mm</td><td>3600 &times; 2025 mm</td><td>4200 &times; 2362.5 mm</td><td>4800 &times; 2700 mm</td></tr>
+      <tr><th scope="row">Screen Thickness</th><td colspan="4">31 mm</td></tr>
+      <tr><th scope="row">Overall Thickness</th><td colspan="4">48.1 mm</td></tr>
+      <tr><th scope="row">Net Weight</th><td>100 kg</td><td>144 kg</td><td>196 kg <span class="tag tag-rev">REV</span></td><td>256 kg <span class="tag tag-rev">REV</span></td></tr>
+      <tr><th scope="row">Weight per Cabinet</th><td colspan="4">4 kg (excl. wall-mounting bar / stand)</td></tr>
+      <tr><th scope="row">Bezel Width</th><td colspan="4">6 mm (top, bottom, left, right) &mdash; outer frame only; no seam between cabinets</td></tr>
+      <tr><th scope="row">Recommended Viewing Distance</th><td>&ge;3.2 m</td><td>&ge;3.8 m</td><td>&ge;4 m</td><td>&ge;5 m</td></tr>
+      <tr><th scope="row">Maintenance Method</th><td colspan="4">Front Access, hot-swappable</td></tr>
+      <tr><th scope="row">Installation Mode</th><td>Stand/Trolley, Wall-mounting</td><td>Stand/Trolley, Wall-mounting</td><td>Wall-mounting</td><td>Wall-mounting</td></tr>
+
+      <tr class="category-row"><td colspan="5">Optical Parameters</td></tr>
+      <tr><th scope="row">Brightness</th><td colspan="4">100&ndash;600 cd/m&sup2; (Adjustable)</td></tr>
+      <tr><th scope="row">Refresh Rate</th><td>7680 Hz</td><td>3840 Hz</td><td>3840 Hz</td><td>3840 Hz</td></tr>
+      <tr><th scope="row">Scan Rate</th><td>1/64</td><td>1/40</td><td>1/40</td><td>1/27</td></tr>
+      <tr><th scope="row">Gray Scale (Color Depth)</th><td colspan="4">13-bit</td></tr>
+      <tr><th scope="row">Contrast Ratio</th><td colspan="4">6500:1</td></tr>
+      <tr><th scope="row">Color Temperature</th><td colspan="4">2300&ndash;9300 K (Adjustable)</td></tr>
+      <tr><th scope="row">Viewing Angle</th><td colspan="4">Horizontal 160&deg;, Vertical 140&deg;</td></tr>
+
+      <tr class="category-row"><td colspan="5">Electrical Parameters</td></tr>
+      <tr><th scope="row">Input Voltage</th><td colspan="4">100&ndash;240 VAC, 50/60 Hz</td></tr>
+      <tr><th scope="row">Standby Power</th><td colspan="4">&le;0.5 W</td></tr>
+      <tr><th scope="row">Average Power Consumption</th><td>0.623 kW</td><td>0.895 kW</td><td>1.17 kW <span class="tag tag-est">EST</span></td><td>1.53 kW <span class="tag tag-est">EST</span></td></tr>
+      <tr><th scope="row">Maximum Power Consumption</th><td>1.87 kW</td><td>2.69 kW</td><td>3.5 kW <span class="tag tag-est">EST</span></td><td>4.6 kW <span class="tag tag-est">EST</span></td></tr>
+
+      <tr class="category-row"><td colspan="5">System / Control</td></tr>
+      <tr><th scope="row">Operating System</th><td colspan="4">Android 13.0</td></tr>
+      <tr><th scope="row">CPU</th><td colspan="4">Four Cortex-A76 + four Cortex-A55, 2.4 GHz (8-core)</td></tr>
+      <tr><th scope="row">GPU</th><td colspan="4">4-core</td></tr>
+      <tr><th scope="row">RAM / Storage</th><td colspan="4">4 GB / 64 GB</td></tr>
+      <tr><th scope="row">Wireless Connectivity</th><td colspan="4">Wi-Fi 6 (AP/STA, dual-band 2.4G/5G); Bluetooth 5.3; wireless screen sharing</td></tr>
+      <tr><th scope="row">Adjustment / Control Methods</th><td colspan="4">Wi-Fi, LAN (UDP, eXconfig), USB, remote control</td></tr>
+      <tr><th scope="row">Remote Centralized Control</th><td colspan="4">RS232 (3.5 mm jack) and LAN (UDP control protocol via eXconfig) &mdash; single LAN port on the sending card serves both data and control</td></tr>
+
+      <tr class="category-row"><td colspan="5">I/O Ports</td></tr>
+      <tr><th scope="row">HDMI Input</th><td colspan="4">2 (HDMI 2.0 + HDMI 1.4)</td></tr>
+      <tr><th scope="row">USB 3.0</th><td colspan="4">2 (one internal, one external); 2.5 W output</td></tr>
+      <tr><th scope="row">Audio Output</th><td colspan="4">1 &times; 3.5 mm</td></tr>
+      <tr><th scope="row">RS232</th><td colspan="4">1 &times; 3.5 mm jack</td></tr>
+      <tr><th scope="row">LAN</th><td colspan="4">1</td></tr>
+
+      <tr class="category-row"><td colspan="5">Environmental Parameters</td></tr>
+      <tr><th scope="row">Operating Temperature</th><td colspan="4">-10&deg;C to 40&deg;C</td></tr>
+      <tr><th scope="row">Operating Humidity</th><td colspan="4">10%&ndash;80% RH, no condensation</td></tr>
+
+      <tr class="category-row"><td colspan="5">Certifications</td></tr>
+      <tr><th scope="row">Certifications</th><td colspan="4">RoHS, CE, FCC</td></tr>
+
+      <tr class="category-row"><td colspan="5">Included Accessories</td></tr>
+      <tr><th scope="row">Standard Items</th><td colspan="4">Remote Control (1), Front Maintenance Tool (1), Tool Kit (1), Wall-mounting Bar (1)</td></tr>
+      <tr><th scope="row">Stand/Trolley Accessory</th><td>Available (optional)</td><td>Available (optional)</td><td>Not offered</td><td>Not offered</td></tr>
+
+      <tr class="category-row"><td colspan="5">Packing Dimensions</td></tr>
+      <tr><th scope="row">Wooden Case Packing</th><td>1980 &times; 1000 &times; 1075 mm</td><td>1980 &times; 1250 &times; 1100 mm</td><td><span class="tag tag-tbd">TBD</span></td><td><span class="tag tag-tbd">TBD</span></td></tr>
+      <tr><th scope="row">Cabinet Carton Packing</th><td>1850 &times; 705 &times; 240 mm &times; 3</td><td>1160 &times; 705 &times; 240 mm &times; 6</td><td><span class="tag tag-tbd">TBD</span></td><td><span class="tag tag-tbd">TBD</span></td></tr>
+      <tr><th scope="row">Module Carton Packing</th><td>795 &times; 445 &times; 165 mm &times; 5</td><td>795 &times; 445 &times; 165 mm &times; 7</td><td><span class="tag tag-tbd">TBD</span></td><td><span class="tag tag-tbd">TBD</span></td></tr>
+
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section id="individual-specs">
+  <div class="section-head">
+    <span class="section-index">02</span>
+    <h2>Individual Model Specifications</h2>
+  </div>
+  <p class="section-note">Same categorized data as the comparison table, presented per model for standalone review.</p>
+
+  <div class="model-grid">
+
+    <article class="model-card" id="model-135">
+      <div class="model-card__head">
+        <div class="grid-diagram" style="--n:5; --w:64px;" aria-hidden="true"></div>
+        <div>
+          <h3 class="model-card__title">135&Prime;</h3>
+          <p class="model-card__meta">V1.0 &middot; 2025-09-18 &middot; 5&times;5 grid, 25 cabinets</p>
+        </div>
+      </div>
+      <div class="model-card__body">
+      <table class="model-table">
+        <tbody>
+          <tr class="category-row"><td colspan="2">Display / Dimensions</td></tr>
+          <tr><th scope="row">Resolution</th><td>1920 &times; 1080</td></tr>
+          <tr><th scope="row">Pixel Pitch</th><td>1.5625 mm</td></tr>
+          <tr><th scope="row">Overall Size (L&times;H)</th><td>3012 &times; 1699.5 mm</td></tr>
+          <tr><th scope="row">Display Area (L&times;H)</th><td>3000 &times; 1687.5 mm</td></tr>
+          <tr><th scope="row">Thickness (Screen / Overall)</th><td>31 mm / 48.1 mm</td></tr>
+          <tr><th scope="row">Net Weight</th><td>100 kg (4 kg &times; 25 cabinets)</td></tr>
+          <tr><th scope="row">Bezel Width</th><td>6 mm (T/B/L/R)</td></tr>
+          <tr><th scope="row">Viewing Distance</th><td>&ge;3.2 m</td></tr>
+          <tr><th scope="row">Maintenance</th><td>Front Access, hot-swappable</td></tr>
+          <tr><th scope="row">Installation Mode</th><td>Stand/Trolley, Wall-mounting</td></tr>
+
+          <tr class="category-row"><td colspan="2">Optical</td></tr>
+          <tr><th scope="row">Brightness</th><td>100&ndash;600 cd/m&sup2; (Adjustable)</td></tr>
+          <tr><th scope="row">Refresh Rate</th><td>7680 Hz</td></tr>
+          <tr><th scope="row">Scan Rate</th><td>1/64</td></tr>
+          <tr><th scope="row">Gray Scale</th><td>13-bit</td></tr>
+          <tr><th scope="row">Contrast Ratio</th><td>6500:1</td></tr>
+          <tr><th scope="row">Color Temperature</th><td>2300&ndash;9300 K (Adjustable)</td></tr>
+          <tr><th scope="row">Viewing Angle</th><td>Horizontal 160&deg;, Vertical 140&deg;</td></tr>
+
+          <tr class="category-row"><td colspan="2">Electrical</td></tr>
+          <tr><th scope="row">Input Voltage</th><td>100&ndash;240 VAC, 50/60 Hz</td></tr>
+          <tr><th scope="row">Standby Power</th><td>&le;0.5 W</td></tr>
+          <tr><th scope="row">Average Power</th><td>0.623 kW</td></tr>
+          <tr><th scope="row">Maximum Power</th><td>1.87 kW</td></tr>
+
+          <tr class="category-row"><td colspan="2">System / Control</td></tr>
+          <tr><th scope="row">Operating System</th><td>Android 13.0</td></tr>
+          <tr><th scope="row">CPU / RAM / Storage</th><td>A76+A55 2.4GHz / 4GB / 64GB</td></tr>
+          <tr><th scope="row">Wireless</th><td>Wi-Fi 6 (AP/STA), Bluetooth 5.3</td></tr>
+          <tr><th scope="row">Remote Control</th><td>RS232 (3.5mm) &amp; LAN (UDP, eXconfig)</td></tr>
+
+          <tr class="category-row"><td colspan="2">I/O Ports</td></tr>
+          <tr><th scope="row">HDMI / USB 3.0</th><td>2 / 2 (2.5W out)</td></tr>
+          <tr><th scope="row">Audio / RS232 / LAN</th><td>1 / 1 / 1</td></tr>
+
+          <tr class="category-row"><td colspan="2">Environmental</td></tr>
+          <tr><th scope="row">Operating Range</th><td>-10&deg;C&ndash;40&deg;C, 10&ndash;80%RH</td></tr>
+
+          <tr class="category-row"><td colspan="2">Certifications</td></tr>
+          <tr><th scope="row">Certifications</th><td>RoHS, CE, FCC</td></tr>
+
+          <tr class="category-row"><td colspan="2">Accessories &amp; Packing</td></tr>
+          <tr><th scope="row">Stand/Trolley Accessory</th><td>Available (optional)</td></tr>
+          <tr><th scope="row">Wooden Case Packing</th><td>1980 &times; 1000 &times; 1075 mm</td></tr>
+          <tr><th scope="row">Cabinet Carton</th><td>1850 &times; 705 &times; 240 mm &times; 3</td></tr>
+          <tr><th scope="row">Module Carton</th><td>795 &times; 445 &times; 165 mm &times; 5</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </article>
+
+    <article class="model-card" id="model-162">
+      <div class="model-card__head">
+        <div class="grid-diagram" style="--n:6; --w:64px;" aria-hidden="true"></div>
+        <div>
+          <h3 class="model-card__title">162&Prime;</h3>
+          <p class="model-card__meta">V1.1 &middot; 2025-09-24 &middot; 6&times;6 grid, 36 cabinets</p>
+        </div>
+      </div>
+      <div class="model-card__body">
+      <table class="model-table">
+        <tbody>
+          <tr class="category-row"><td colspan="2">Display / Dimensions</td></tr>
+          <tr><th scope="row">Resolution</th><td>1920 &times; 1080</td></tr>
+          <tr><th scope="row">Pixel Pitch</th><td>1.875 mm</td></tr>
+          <tr><th scope="row">Overall Size (L&times;H)</th><td>3612 &times; 2037 mm</td></tr>
+          <tr><th scope="row">Display Area (L&times;H)</th><td>3600 &times; 2025 mm</td></tr>
+          <tr><th scope="row">Thickness (Screen / Overall)</th><td>31 mm / 48.1 mm</td></tr>
+          <tr><th scope="row">Net Weight</th><td>144 kg (4 kg &times; 36 cabinets)</td></tr>
+          <tr><th scope="row">Bezel Width</th><td>6 mm (T/B/L/R)</td></tr>
+          <tr><th scope="row">Viewing Distance</th><td>&ge;3.8 m</td></tr>
+          <tr><th scope="row">Maintenance</th><td>Front Access, hot-swappable</td></tr>
+          <tr><th scope="row">Installation Mode</th><td>Stand/Trolley, Wall-mounting</td></tr>
+
+          <tr class="category-row"><td colspan="2">Optical</td></tr>
+          <tr><th scope="row">Brightness</th><td>100&ndash;600 cd/m&sup2; (Adjustable)</td></tr>
+          <tr><th scope="row">Refresh Rate</th><td>3840 Hz</td></tr>
+          <tr><th scope="row">Scan Rate</th><td>1/40</td></tr>
+          <tr><th scope="row">Gray Scale</th><td>13-bit</td></tr>
+          <tr><th scope="row">Contrast Ratio</th><td>6500:1</td></tr>
+          <tr><th scope="row">Color Temperature</th><td>2300&ndash;9300 K (Adjustable)</td></tr>
+          <tr><th scope="row">Viewing Angle</th><td>Horizontal 160&deg;, Vertical 140&deg;</td></tr>
+
+          <tr class="category-row"><td colspan="2">Electrical</td></tr>
+          <tr><th scope="row">Input Voltage</th><td>100&ndash;240 VAC, 50/60 Hz</td></tr>
+          <tr><th scope="row">Standby Power</th><td>&le;0.5 W</td></tr>
+          <tr><th scope="row">Average Power</th><td>0.895 kW</td></tr>
+          <tr><th scope="row">Maximum Power</th><td>2.69 kW</td></tr>
+
+          <tr class="category-row"><td colspan="2">System / Control</td></tr>
+          <tr><th scope="row">Operating System</th><td>Android 13.0</td></tr>
+          <tr><th scope="row">CPU / RAM / Storage</th><td>A76+A55 2.4GHz / 4GB / 64GB</td></tr>
+          <tr><th scope="row">Wireless</th><td>Wi-Fi 6 (AP/STA), Bluetooth 5.3</td></tr>
+          <tr><th scope="row">Remote Control</th><td>RS232 (3.5mm) &amp; LAN (UDP, eXconfig)</td></tr>
+
+          <tr class="category-row"><td colspan="2">I/O Ports</td></tr>
+          <tr><th scope="row">HDMI / USB 3.0</th><td>2 / 2 (2.5W out)</td></tr>
+          <tr><th scope="row">Audio / RS232 / LAN</th><td>1 / 1 / 1</td></tr>
+
+          <tr class="category-row"><td colspan="2">Environmental</td></tr>
+          <tr><th scope="row">Operating Range</th><td>-10&deg;C&ndash;40&deg;C, 10&ndash;80%RH</td></tr>
+
+          <tr class="category-row"><td colspan="2">Certifications</td></tr>
+          <tr><th scope="row">Certifications</th><td>RoHS, CE, FCC</td></tr>
+
+          <tr class="category-row"><td colspan="2">Accessories &amp; Packing</td></tr>
+          <tr><th scope="row">Stand/Trolley Accessory</th><td>Available (optional)</td></tr>
+          <tr><th scope="row">Wooden Case Packing</th><td>1980 &times; 1250 &times; 1100 mm</td></tr>
+          <tr><th scope="row">Cabinet Carton</th><td>1160 &times; 705 &times; 240 mm &times; 6</td></tr>
+          <tr><th scope="row">Module Carton</th><td>795 &times; 445 &times; 165 mm &times; 7</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </article>
+
+    <article class="model-card" id="model-190">
+      <div class="model-card__head">
+        <div class="grid-diagram" style="--n:7; --w:64px;" aria-hidden="true"></div>
+        <div>
+          <h3 class="model-card__title">190&Prime;</h3>
+          <p class="model-card__meta">V1.0 &middot; 2026-07-02 &middot; 7&times;7 grid, 49 cabinets</p>
+        </div>
+      </div>
+      <div class="model-card__body">
+      <table class="model-table">
+        <tbody>
+          <tr class="category-row"><td colspan="2">Display / Dimensions</td></tr>
+          <tr><th scope="row">Resolution</th><td>2240 &times; 1260</td></tr>
+          <tr><th scope="row">Pixel Pitch</th><td>1.875 mm</td></tr>
+          <tr><th scope="row">Overall Size (L&times;H)</th><td>4212 &times; 2374.5 mm</td></tr>
+          <tr><th scope="row">Display Area (L&times;H)</th><td>4200 &times; 2362.5 mm</td></tr>
+          <tr><th scope="row">Thickness (Screen / Overall)</th><td>31 mm / 48.1 mm</td></tr>
+          <tr><th scope="row">Net Weight</th><td>196 kg (4 kg &times; 49 cabinets) <span class="tag tag-rev">REV</span></td></tr>
+          <tr><th scope="row">Bezel Width</th><td>6 mm (T/B/L/R)</td></tr>
+          <tr><th scope="row">Viewing Distance</th><td>&ge;4 m</td></tr>
+          <tr><th scope="row">Maintenance</th><td>Front Access, hot-swappable</td></tr>
+          <tr><th scope="row">Installation Mode</th><td>Wall-mounting</td></tr>
+
+          <tr class="category-row"><td colspan="2">Optical</td></tr>
+          <tr><th scope="row">Brightness</th><td>100&ndash;600 cd/m&sup2; (Adjustable)</td></tr>
+          <tr><th scope="row">Refresh Rate</th><td>3840 Hz</td></tr>
+          <tr><th scope="row">Scan Rate</th><td>1/40</td></tr>
+          <tr><th scope="row">Gray Scale</th><td>13-bit</td></tr>
+          <tr><th scope="row">Contrast Ratio</th><td>6500:1</td></tr>
+          <tr><th scope="row">Color Temperature</th><td>2300&ndash;9300 K (Adjustable)</td></tr>
+          <tr><th scope="row">Viewing Angle</th><td>Horizontal 160&deg;, Vertical 140&deg;</td></tr>
+
+          <tr class="category-row"><td colspan="2">Electrical</td></tr>
+          <tr><th scope="row">Input Voltage</th><td>100&ndash;240 VAC, 50/60 Hz</td></tr>
+          <tr><th scope="row">Standby Power</th><td>&le;0.5 W</td></tr>
+          <tr><th scope="row">Average Power</th><td>1.17 kW <span class="tag tag-est">EST</span></td></tr>
+          <tr><th scope="row">Maximum Power</th><td>3.5 kW <span class="tag tag-est">EST</span></td></tr>
+
+          <tr class="category-row"><td colspan="2">System / Control</td></tr>
+          <tr><th scope="row">Operating System</th><td>Android 13.0</td></tr>
+          <tr><th scope="row">CPU / RAM / Storage</th><td>A76+A55 2.4GHz / 4GB / 64GB</td></tr>
+          <tr><th scope="row">Wireless</th><td>Wi-Fi 6 (AP/STA), Bluetooth 5.3</td></tr>
+          <tr><th scope="row">Remote Control</th><td>RS232 (3.5mm) &amp; LAN (UDP, eXconfig)</td></tr>
+
+          <tr class="category-row"><td colspan="2">I/O Ports</td></tr>
+          <tr><th scope="row">HDMI / USB 3.0</th><td>2 / 2 (2.5W out)</td></tr>
+          <tr><th scope="row">Audio / RS232 / LAN</th><td>1 / 1 / 1</td></tr>
+
+          <tr class="category-row"><td colspan="2">Environmental</td></tr>
+          <tr><th scope="row">Operating Range</th><td>-10&deg;C&ndash;40&deg;C, 10&ndash;80%RH</td></tr>
+
+          <tr class="category-row"><td colspan="2">Certifications</td></tr>
+          <tr><th scope="row">Certifications</th><td>RoHS, CE, FCC</td></tr>
+
+          <tr class="category-row"><td colspan="2">Accessories &amp; Packing</td></tr>
+          <tr><th scope="row">Stand/Trolley Accessory</th><td>Not offered</td></tr>
+          <tr><th scope="row">Packing Dimensions</th><td><span class="tag tag-tbd">TBD</span></td></tr>
+        </tbody>
+      </table>
+      </div>
+    </article>
+
+    <article class="model-card" id="model-216">
+      <div class="model-card__head">
+        <div class="grid-diagram" style="--n:8; --w:64px;" aria-hidden="true"></div>
+        <div>
+          <h3 class="model-card__title">216&Prime;</h3>
+          <p class="model-card__meta">V1.0 &middot; 2026-07-02 &middot; 8&times;8 grid, 64 cabinets</p>
+        </div>
+      </div>
+      <div class="model-card__body">
+      <table class="model-table">
+        <tbody>
+          <tr class="category-row"><td colspan="2">Display / Dimensions</td></tr>
+          <tr><th scope="row">Resolution</th><td>1920 &times; 1080</td></tr>
+          <tr><th scope="row">Pixel Pitch</th><td>2.5 mm</td></tr>
+          <tr><th scope="row">Overall Size (L&times;H)</th><td>4812 &times; 2712 mm</td></tr>
+          <tr><th scope="row">Display Area (L&times;H)</th><td>4800 &times; 2700 mm</td></tr>
+          <tr><th scope="row">Thickness (Screen / Overall)</th><td>31 mm / 48.1 mm</td></tr>
+          <tr><th scope="row">Net Weight</th><td>256 kg (4 kg &times; 64 cabinets) <span class="tag tag-rev">REV</span></td></tr>
+          <tr><th scope="row">Bezel Width</th><td>6 mm (T/B/L/R)</td></tr>
+          <tr><th scope="row">Viewing Distance</th><td>&ge;5 m</td></tr>
+          <tr><th scope="row">Maintenance</th><td>Front Access, hot-swappable</td></tr>
+          <tr><th scope="row">Installation Mode</th><td>Wall-mounting</td></tr>
+
+          <tr class="category-row"><td colspan="2">Optical</td></tr>
+          <tr><th scope="row">Brightness</th><td>100&ndash;600 cd/m&sup2; (Adjustable)</td></tr>
+          <tr><th scope="row">Refresh Rate</th><td>3840 Hz</td></tr>
+          <tr><th scope="row">Scan Rate</th><td>1/27</td></tr>
+          <tr><th scope="row">Gray Scale</th><td>13-bit</td></tr>
+          <tr><th scope="row">Contrast Ratio</th><td>6500:1</td></tr>
+          <tr><th scope="row">Color Temperature</th><td>2300&ndash;9300 K (Adjustable)</td></tr>
+          <tr><th scope="row">Viewing Angle</th><td>Horizontal 160&deg;, Vertical 140&deg;</td></tr>
+
+          <tr class="category-row"><td colspan="2">Electrical</td></tr>
+          <tr><th scope="row">Input Voltage</th><td>100&ndash;240 VAC, 50/60 Hz</td></tr>
+          <tr><th scope="row">Standby Power</th><td>&le;0.5 W</td></tr>
+          <tr><th scope="row">Average Power</th><td>1.53 kW <span class="tag tag-est">EST</span></td></tr>
+          <tr><th scope="row">Maximum Power</th><td>4.6 kW <span class="tag tag-est">EST</span></td></tr>
+
+          <tr class="category-row"><td colspan="2">System / Control</td></tr>
+          <tr><th scope="row">Operating System</th><td>Android 13.0</td></tr>
+          <tr><th scope="row">CPU / RAM / Storage</th><td>A76+A55 2.4GHz / 4GB / 64GB</td></tr>
+          <tr><th scope="row">Wireless</th><td>Wi-Fi 6 (AP/STA), Bluetooth 5.3</td></tr>
+          <tr><th scope="row">Remote Control</th><td>RS232 (3.5mm) &amp; LAN (UDP, eXconfig)</td></tr>
+
+          <tr class="category-row"><td colspan="2">I/O Ports</td></tr>
+          <tr><th scope="row">HDMI / USB 3.0</th><td>2 / 2 (2.5W out)</td></tr>
+          <tr><th scope="row">Audio / RS232 / LAN</th><td>1 / 1 / 1</td></tr>
+
+          <tr class="category-row"><td colspan="2">Environmental</td></tr>
+          <tr><th scope="row">Operating Range</th><td>-10&deg;C&ndash;40&deg;C, 10&ndash;80%RH</td></tr>
+
+          <tr class="category-row"><td colspan="2">Certifications</td></tr>
+          <tr><th scope="row">Certifications</th><td>RoHS, CE, FCC</td></tr>
+
+          <tr class="category-row"><td colspan="2">Accessories &amp; Packing</td></tr>
+          <tr><th scope="row">Stand/Trolley Accessory</th><td>Not offered</td></tr>
+          <tr><th scope="row">Packing Dimensions</th><td><span class="tag tag-tbd">TBD</span></td></tr>
+        </tbody>
+      </table>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section id="review-notes">
+  <div class="section-head">
+    <span class="section-index">03</span>
+    <h2>Data Review Notes</h2>
+  </div>
+  <p class="section-note">Open items still need factory input. Resolved items are logged here for traceability &mdash; each was a discrepancy caught during parsing and confirmed against the factory before this revision.</p>
+
+  <div class="review-block review-block--open">
+    <h3><span class="dot" aria-hidden="true"></span>Open</h3>
+    <ul class="review-list">
+      <li><strong>Packing dimensions for 190&Prime; and 216&Prime; are pending.</strong> Wooden case and carton packing data exist for 135&Prime;/162&Prime; only; the factory has confirmed this is still to be determined for the two largest models.</li>
+    </ul>
+  </div>
+
+  <div class="review-block review-block--resolved">
+    <h3><span class="dot" aria-hidden="true"></span>Resolved during this review</h3>
+    <ul class="review-list">
+      <li><strong>216&Prime; resolution/pixel pitch:</strong> confirmed as 1920&times;1080 at 2.5&nbsp;mm pitch. This matches the original source document and is consistent with its &ge;5&nbsp;m recommended viewing distance &mdash; coarser than the 1.875&nbsp;mm pitch shared by 162&Prime;/190&Prime;, not a copy-paste error as first suspected.</li>
+      <li><strong>Net weight for 190&Prime; and 216&Prime;:</strong> the factory confirmed the originally published totals (235&nbsp;kg and 305&nbsp;kg) were flawed engineering estimates. Recalculated using the confirmed 4&nbsp;kg/cabinet rate: <strong>196&nbsp;kg</strong> (190&Prime;, 49 cabinets) and <strong>256&nbsp;kg</strong> (216&Prime;, 64 cabinets).</li>
+      <li><strong>RS232 connector:</strong> confirmed 3.5&nbsp;mm jack. The source documents' feature-list wording &ldquo;RS232(RJ45)&rdquo; was imprecise &mdash; the RJ45 reference is the separate LAN port on the sending card, used for UDP-based remote control via eXconfig, not the RS232 port itself.</li>
+      <li><strong>Certifications:</strong> confirmed RoHS, CE, and FCC. Source documents mentioned RoHS only.</li>
+      <li><strong>Cabinet seam:</strong> confirmed there is none &mdash; the assembled display surface is seamless. The 6&nbsp;mm bezel is the outer frame only.</li>
+      <li><strong>Installation mode:</strong> confirmed no ceiling-mount option is offered. 135&Prime;/162&Prime; support Stand/Trolley plus wall-mounting; 190&Prime;/216&Prime; are wall-mount only, with no Stand/Trolley accessory available.</li>
+      <li><strong>Refresh rate and scan rate:</strong> source documents listed a single shared value (&ldquo;1920/3840 Hz&rdquo;) for all four models with no scan rate field. Confirmed per-model figures: 135&Prime; &mdash; 7680&nbsp;Hz refresh, 1/64 scan; 162&Prime; and 190&Prime; &mdash; 3840&nbsp;Hz refresh, 1/40 scan; 216&Prime; &mdash; 3840&nbsp;Hz refresh, 1/27 scan.</li>
+    </ul>
+  </div>
+
+  <p class="footnote">Methodology note: cabinet grid, cabinet size, and per-cabinet resolution are not literal fields in the source documents &mdash; they are derived from stated display dimensions, pixel pitch, and resolution, then cross-checked against net weight &divide; 4&nbsp;kg per cabinet for all four models. All four resolve to a consistent 600&nbsp;&times;&nbsp;337.5&nbsp;mm cabinet with no rounding error.</p>
+</section>
+
+</main>
+
+<footer class="page-footer">
+  <p>Compiled from internal product specification documents for each model size, version-dated as shown above.</p>
+  <p>Draft technical review document for internal comparison. No images, drawings, or marketing layout elements from the source documents are included.</p>
+</footer>
+
+</body>
+</html>

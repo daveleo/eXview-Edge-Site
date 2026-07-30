@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>eXview Edge — Electrical Quick Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:      #F5F6F3;
+    --paper-raised:#FFFFFF;
+    --ink:        #14181D;
+    --navy:       #0B1E27;
+    --steel:      #4B5760;
+    --hairline:   #DCE2E4;
+    --signal:     #0B7285;
+    --signal-dim: #E3F1F2;
+    --amber:      #B5650D;
+    --amber-dim:  #FBEFDD;
+    --content-w:  880px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.5;
+    font-size: 16px;
+  }
+  h1, h2, h3 { font-family: "Space Grotesk", "Segoe UI", sans-serif; font-weight: 600; margin: 0; color: var(--ink); }
+  code, .mono { font-family: "IBM Plex Mono", ui-monospace, "Courier New", monospace; }
+  a { color: var(--signal); }
+
+  .masthead { background: var(--navy); color: var(--paper); padding: 2.2rem 1.5rem; }
+  .masthead__inner { max-width: var(--content-w); margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; gap: 1.5rem; flex-wrap: wrap; }
+  .masthead__logo { background: var(--paper); border-radius: 6px; padding: 4px 12px; display: inline-flex; align-items: center; flex-shrink: 0; }
+  .masthead__logo img { width: 100px; height: auto; display: block; }
+  .eyebrow { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: #7FC4CC; margin: 0 0 0.6rem 0; }
+  .masthead h1 { color: var(--paper); font-size: clamp(1.5rem, 3.4vw, 2rem); letter-spacing: -0.01em; line-height: 1.15; max-width: 24ch; }
+  .masthead .subtitle { margin: 0.6rem 0 0 0; color: #C4CCD1; font-size: 0.98rem; max-width: 52ch; }
+  .masthead .full-link { display: inline-block; margin-top: 1rem; font-family: "IBM Plex Mono", monospace; font-size: 0.78rem; color: #7FC4CC; text-decoration: none; border-bottom: 1px dotted #7FC4CC; }
+  .masthead .full-link:hover { color: var(--paper); border-color: var(--paper); }
+
+  main { max-width: var(--content-w); margin: 0 auto; padding: 2.2rem 1.5rem 3rem; }
+
+  section { margin: 0 0 2.4rem 0; }
+  section h2 { font-size: 1.1rem; margin-bottom: 0.9rem; }
+  section h2 .n { font-family: "IBM Plex Mono", monospace; color: var(--signal); margin-right: 0.5rem; }
+
+  /* ---------- Headline number cards ---------- */
+  .card-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; }
+  .num-card { background: var(--paper-raised); border: 1px solid var(--hairline); border-radius: 8px; padding: 1rem 0.9rem; text-align: center; }
+  .num-card .size { font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 1.15rem; }
+  .num-card .inlets { font-family: "IBM Plex Mono", monospace; font-size: 2rem; font-weight: 600; color: var(--signal); margin: 0.35rem 0 0.1rem; line-height: 1; }
+  .num-card .inlets-label { font-size: 0.68rem; color: var(--steel); text-transform: uppercase; letter-spacing: 0.06em; }
+  .num-card .power { font-family: "IBM Plex Mono", monospace; font-size: 0.86rem; margin-top: 0.6rem; border-top: 1px dashed var(--hairline); padding-top: 0.5rem; }
+  .num-card .est { color: var(--amber); }
+
+  /* ---------- Spec strip ---------- */
+  .facts { background: var(--paper-raised); border: 1px solid var(--hairline); border-radius: 8px; padding: 0.9rem 1.2rem; display: flex; flex-wrap: wrap; gap: 0.4rem 2rem; font-size: 0.88rem; }
+  .facts div { white-space: nowrap; }
+  .facts b { font-family: "IBM Plex Mono", monospace; font-weight: 600; }
+
+  /* ---------- Do/Don't ---------- */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .split-card { border-radius: 8px; padding: 1.1rem 1.2rem; }
+  .split-card.do { background: var(--signal-dim); border-left: 4px solid var(--signal); }
+  .split-card.dont { background: var(--amber-dim); border-left: 4px solid var(--amber); }
+  .split-card h3 { font-size: 0.92rem; margin-bottom: 0.6rem; }
+  .split-card.do h3 { color: var(--signal); }
+  .split-card.dont h3 { color: var(--amber); }
+  .split-card ul { margin: 0; padding-left: 1.1rem; font-size: 0.88rem; }
+  .split-card li { margin-bottom: 0.4rem; }
+  .split-card li:last-child { margin-bottom: 0; }
+
+  /* ---------- Numbered checklist ---------- */
+  ol.checklist { margin: 0; padding: 0; list-style: none; counter-reset: step; }
+  ol.checklist li { counter-increment: step; display: grid; grid-template-columns: 34px 1fr; gap: 0.8rem; padding: 0.75rem 0; border-bottom: 1px solid var(--hairline); font-size: 0.94rem; }
+  ol.checklist li:last-child { border-bottom: none; }
+  ol.checklist li::before {
+    content: counter(step);
+    font-family: "IBM Plex Mono", monospace; font-weight: 600; font-size: 0.92rem;
+    background: var(--ink); color: var(--paper); border-radius: 50%;
+    width: 26px; height: 26px; display: flex; align-items: center; justify-content: center;
+  }
+
+  .callout { background: var(--paper-raised); border: 1px solid var(--hairline); border-left: 4px solid var(--signal); border-radius: 0 8px 8px 0; padding: 1rem 1.2rem; font-size: 0.9rem; }
+  .callout strong { color: var(--ink); }
+
+  .next-step { background: var(--navy); color: var(--paper); border-radius: 10px; padding: 1.4rem 1.5rem; text-align: center; }
+  .next-step p { margin: 0 0 0.8rem 0; color: #C4CCD1; font-size: 0.92rem; }
+  .next-step a.btn { display: inline-block; background: var(--signal); color: #fff; font-family: "Space Grotesk", sans-serif; font-weight: 600; font-size: 0.92rem; text-decoration: none; padding: 0.65rem 1.4rem; border-radius: 24px; }
+  .next-step a.btn:hover { background: #0a5f6d; }
+
+  footer.page-footer { max-width: var(--content-w); margin: 0 auto; padding: 0 1.5rem 2.5rem; font-size: 0.78rem; color: var(--steel); }
+
+  @media (max-width: 720px) {
+    .card-row { grid-template-columns: repeat(2, 1fr); }
+    .split { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) {
+    .card-row { grid-template-columns: 1fr; }
+  }
+  @media print {
+    .masthead { background: none; color: #000; border-bottom: 2px solid #000; }
+    .masthead h1, .masthead .subtitle, .eyebrow { color: #000 !important; }
+    .masthead .full-link { display: none; }
+    .next-step { background: none; border: 1px solid #000; color: #000; }
+    .next-step p, .next-step a.btn { color: #000 !important; background: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead__inner">
+    <div>
+      <p class="eyebrow">For the installing electrician &middot; 2-minute read</p>
+      <h1>eXview Edge — Electrical Quick Reference</h1>
+      <p class="subtitle">The numbers you need before you quote or wire the circuit. For diagrams, cabinet numbering and troubleshooting, see the full guide.</p>
+      <a class="full-link" href="exview-edge-electrical-installation-guide.html">&rarr; Full installation guide</a>
+    </div>
+    <span class="masthead__logo"><img src="assets/expromo-logo.jpg" alt="Expromo"></span>
+  </div>
+</header>
+
+<main>
+
+<section>
+  <h2><span class="n">01</span>The 4 numbers you need</h2>
+  <div class="card-row">
+    <div class="num-card">
+      <div class="size">135&Prime;</div>
+      <div class="inlets">1</div>
+      <div class="inlets-label">main inlet</div>
+      <div class="power">1.87&nbsp;kW max<br>0.623&nbsp;kW typical</div>
+    </div>
+    <div class="num-card">
+      <div class="size">162&Prime;</div>
+      <div class="inlets">2</div>
+      <div class="inlets-label">main inlets</div>
+      <div class="power">2.69&nbsp;kW max<br>0.895&nbsp;kW typical</div>
+    </div>
+    <div class="num-card">
+      <div class="size">190&Prime;</div>
+      <div class="inlets">3</div>
+      <div class="inlets-label">main inlets</div>
+      <div class="power">3.5&nbsp;kW max <span class="est">(est.)</span><br>1.17&nbsp;kW typical <span class="est">(est.)</span></div>
+    </div>
+    <div class="num-card">
+      <div class="size">216&Prime;</div>
+      <div class="inlets">3</div>
+      <div class="inlets-label">main inlets</div>
+      <div class="power">4.6&nbsp;kW max <span class="est">(est.)</span><br>1.53&nbsp;kW typical <span class="est">(est.)</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">02</span>Common to all four sizes</h2>
+  <div class="facts">
+    <div>Input: <b>100&ndash;240&nbsp;VAC, 50/60&nbsp;Hz</b></div>
+    <div>Screen-side inlet: <b>IEC&nbsp;60320&nbsp;C20</b> (male, unpowered)</div>
+    <div>Cordset end: <b>C19</b> (female, powered)</div>
+    <div>Standby draw: <b>14&nbsp;W</b> default &middot; <b>0.5&nbsp;W</b> Eco (no network)</div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">03</span>What Expromo specifies &mdash; and what's yours to decide</h2>
+  <div class="split">
+    <div class="split-card do">
+      <h3>We tell you</h3>
+      <ul>
+        <li>How many PSUs / main inlets each size has</li>
+        <li>The connector type on the screen (C20)</li>
+        <li>Power draw, from the official datasheet</li>
+        <li>That each main inlet is a fully independent AC supply entry</li>
+      </ul>
+    </div>
+    <div class="split-card dont">
+      <h3>You decide</h3>
+      <ul>
+        <li>Breaker type, curve and rating</li>
+        <li>RCD/RCBO selection</li>
+        <li>How many circuits/phases to use across the inlets</li>
+        <li>Cable sizing, per local regulations</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">04</span>Before you start</h2>
+  <ol class="checklist">
+    <li>Each main inlet can be wired to its own circuit and phase, or not &mdash; that split is your call, based on the power figures above and local code.</li>
+    <li>The PSUs use zero-cross relays, which limit inrush at switch-on &mdash; a normal factor to weigh in your own device selection.</li>
+    <li>Mount the cabinets, wire the mains, and connect the low-voltage 12&nbsp;V PSU control harness <em>before</em> any LED module is fitted. Power on and confirm the screen switches correctly first.</li>
+    <li>Removing the C20 inlet and landing phase conductors directly on the PSU screw terminals is supported &mdash; certified electrician only.</li>
+  </ol>
+</section>
+
+<section>
+  <div class="callout">
+    <strong>Not sure which of the above applies to your specific unit?</strong> Cabinet numbering, per-PSU cabinet counts, the exact 3-pin/5-pin harness rules, and the factory wiring diagrams for all four sizes are in the full guide &mdash; linked below.
+  </div>
+</section>
+
+<div class="next-step">
+  <p>Need cabinet numbering, wiring diagrams, or troubleshooting steps?</p>
+  <a class="btn" href="exview-edge-electrical-installation-guide.html">Open the full installation guide &rarr;</a>
+</div>
+
+</main>
+
+<footer class="page-footer">
+  <p>eXview Edge family &mdash; 135&Prime;, 162&Prime;, 190&Prime;, 216&Prime;. Summarized from the full <a href="exview-edge-electrical-installation-guide.html">Electrical &amp; Power Architecture Installation Guide</a>. Circuit sizing, protective devices and phase allocation remain the responsibility of the installing electrician.</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>eXview Edge — Documentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F5F6F3; --paper-raised: #FFFFFF; --ink: #14181D; --navy: #0B1E27;
+    --steel: #4B5760; --hairline: #DCE2E4; --signal: #0B7285; --signal-dim: #E3F1F2;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif; line-height: 1.5; }
+  h1, h2 { font-family: "Space Grotesk", "Segoe UI", sans-serif; font-weight: 600; margin: 0; color: var(--ink); }
+  a { color: var(--signal); }
+
+  .masthead { background: var(--navy); color: var(--paper); padding: 2.4rem 1.5rem; }
+  .masthead__inner { max-width: 900px; margin: 0 auto; }
+  .eyebrow { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: #7FC4CC; margin: 0 0 0.6rem 0; }
+  .masthead h1 { color: var(--paper); font-size: clamp(1.7rem, 3.4vw, 2.3rem); letter-spacing: -0.01em; }
+  .masthead p.subtitle { margin: 0.6rem 0 0 0; color: #C4CCD1; font-size: 1rem; max-width: 60ch; }
+
+  main { max-width: 900px; margin: 0 auto; padding: 2.4rem 1.5rem 3rem; }
+  section { margin-bottom: 2.4rem; }
+  section h2 { font-size: 1.1rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--ink); }
+
+  .doc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .doc-card { display: block; background: var(--paper-raised); border: 1px solid var(--hairline); border-radius: 8px; padding: 1.1rem 1.3rem; text-decoration: none; color: inherit; transition: border-color 0.15s; }
+  .doc-card:hover { border-color: var(--signal); }
+  .doc-card .tag { display: inline-block; font-family: "IBM Plex Mono", monospace; font-size: 0.66rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--signal); background: var(--signal-dim); padding: 0.15rem 0.5rem; border-radius: 3px; margin-bottom: 0.5rem; }
+  .doc-card h3 { font-family: "Space Grotesk", sans-serif; font-weight: 600; font-size: 1.02rem; margin: 0 0 0.35rem 0; color: var(--ink); }
+  .doc-card p { margin: 0; font-size: 0.86rem; color: var(--steel); }
+
+  footer { max-width: 900px; margin: 0 auto; padding: 0 1.5rem 2.5rem; font-size: 0.8rem; color: var(--steel); }
+
+  @media (max-width: 640px) { .doc-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead__inner">
+    <p class="eyebrow">Expromo &middot; Product Data</p>
+    <h1>eXview Edge — Documentation</h1>
+    <p class="subtitle">Specifications, datasheet and electrical installation guides for the eXview Edge family (135&Prime;, 162&Prime;, 190&Prime;, 216&Prime;).</p>
+  </div>
+</header>
+
+<main>
+
+<section>
+  <h2>Electrical &amp; power installation</h2>
+  <div class="doc-grid">
+    <a class="doc-card" href="installation/exview-edge-electrical-quick-reference.html">
+      <span class="tag">2-min read</span>
+      <h3>Electrical Quick Reference</h3>
+      <p>The numbers an electrician needs before quoting or wiring the circuit — one page, no diagrams.</p>
+    </a>
+    <a class="doc-card" href="installation/exview-edge-electrical-installation-guide.html">
+      <span class="tag">Full guide</span>
+      <h3>Electrical &amp; Power Architecture Installation Guide</h3>
+      <p>Cabinet numbering, power domains, PSU harness rules, per-model power breakdown and factory wiring diagrams.</p>
+    </a>
+  </div>
+</section>
+
+<section>
+  <h2>Specifications &amp; datasheet</h2>
+  <div class="doc-grid">
+    <a class="doc-card" href="specs/exview-edge-specification-comparison.html">
+      <span class="tag">Technical reference</span>
+      <h3>Specification Comparison</h3>
+      <p>Full side-by-side spec table and per-model detail across all four sizes, with a data review log.</p>
+    </a>
+    <a class="doc-card" href="marketing/exview-edge-datasheet.html">
+      <span class="tag">Customer-facing</span>
+      <h3>Product Datasheet</h3>
+      <p>Printable A4 datasheet with EN/DA/DE/ZH language switching and PDF export.</p>
+    </a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>eXview Edge family &mdash; Product Department, Expromo.</p>
+</footer>
+
+</body>
+</html>
