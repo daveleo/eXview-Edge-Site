@@ -544,7 +544,6 @@
   <a href="#model-162">162&Prime;</a>
   <a href="#model-190">190&Prime;</a>
   <a href="#model-216">216&Prime;</a>
-  <a href="#review-notes" data-i18n="tocReview">Data review notes</a>
 </nav>
 
 <section id="comparison">
@@ -552,7 +551,7 @@
     <span class="section-index">01</span>
     <h2 data-i18n="s01Title">Main Comparison Table</h2>
   </div>
-  <p class="section-note" data-i18n="s01Note">All four models side-by-side, grouped by category. <span class="tag tag-est">EST</span> marks estimated/not-tested values. <span class="tag tag-tbd">TBD</span> marks data pending from the factory. <span class="tag tag-rev">REV</span> marks a value corrected during this review &mdash; see <a href="#review-notes">Data Review Notes</a>.</p>
+  <p class="section-note" data-i18n="s01Note">All four models side-by-side, grouped by category. <span class="tag tag-est">EST</span> marks estimated/not-tested values. <span class="tag tag-tbd">TBD</span> marks data pending from the factory. <span class="tag tag-rev">REV</span> marks a value corrected during data review.</p>
 
   <div class="table-scroll">
   <table class="comparison-table">
@@ -905,36 +904,6 @@
   </div>
 </section>
 
-<section id="review-notes">
-  <div class="section-head">
-    <span class="section-index">03</span>
-    <h2 data-i18n="s03Title">Data Review Notes</h2>
-  </div>
-  <p class="section-note" data-i18n="s03Note">Open items still need factory input. Resolved items are logged here for traceability &mdash; each was a discrepancy caught during parsing and confirmed against the factory before this revision.</p>
-
-  <div class="review-block review-block--open">
-    <h3><span class="dot" aria-hidden="true"></span><span data-i18n="openHeading">Open</span></h3>
-    <ul class="review-list">
-      <li data-i18n="openItem1"><strong>Packing dimensions for 190&Prime; and 216&Prime; are pending.</strong> Wooden case and carton packing data exist for 135&Prime;/162&Prime; only; the factory has confirmed this is still to be determined for the two largest models.</li>
-    </ul>
-  </div>
-
-  <div class="review-block review-block--resolved">
-    <h3><span class="dot" aria-hidden="true"></span><span data-i18n="resolvedHeading">Resolved during this review</span></h3>
-    <ul class="review-list">
-      <li data-i18n="resolved1"><strong>216&Prime; resolution/pixel pitch:</strong> confirmed as 1920&times;1080 at 2.5&nbsp;mm pitch. This matches the original source document and is consistent with its &ge;5&nbsp;m recommended viewing distance &mdash; coarser than the 1.875&nbsp;mm pitch shared by 162&Prime;/190&Prime;, not a copy-paste error as first suspected.</li>
-      <li data-i18n="resolved2"><strong>Net weight for 190&Prime; and 216&Prime;:</strong> the factory confirmed the originally published totals (235&nbsp;kg and 305&nbsp;kg) were flawed engineering estimates. Recalculated using the confirmed 4&nbsp;kg/cabinet rate: <strong>196&nbsp;kg</strong> (190&Prime;, 49 cabinets) and <strong>256&nbsp;kg</strong> (216&Prime;, 64 cabinets).</li>
-      <li data-i18n="resolved3"><strong>RS232 connector:</strong> confirmed 3.5&nbsp;mm jack. The source documents' feature-list wording &ldquo;RS232(RJ45)&rdquo; was imprecise &mdash; the RJ45 reference is the separate LAN port on the sending card, used for UDP-based remote control via eXconfig, not the RS232 port itself.</li>
-      <li data-i18n="resolved4"><strong>Certifications:</strong> confirmed RoHS, CE, and FCC. Source documents mentioned RoHS only.</li>
-      <li data-i18n="resolved5"><strong>Cabinet seam:</strong> confirmed there is none &mdash; the assembled display surface is seamless. The 6&nbsp;mm bezel is the outer frame only.</li>
-      <li data-i18n="resolved6"><strong>Installation mode:</strong> confirmed no ceiling-mount option is offered. 135&Prime;/162&Prime; support Stand/Trolley plus wall-mounting; 190&Prime;/216&Prime; are wall-mount only, with no Stand/Trolley accessory available.</li>
-      <li data-i18n="resolved7"><strong>Refresh rate and scan rate:</strong> source documents listed a single shared value (&ldquo;1920/3840 Hz&rdquo;) for all four models with no scan rate field. Confirmed per-model figures: 135&Prime; &mdash; 7680&nbsp;Hz refresh, 1/64 scan; 162&Prime; and 190&Prime; &mdash; 3840&nbsp;Hz refresh, 1/40 scan; 216&Prime; &mdash; 3840&nbsp;Hz refresh, 1/27 scan.</li>
-    </ul>
-  </div>
-
-  <p class="footnote" data-i18n="methodologyNote">Methodology note: cabinet grid, cabinet size, and per-cabinet resolution are not literal fields in the source documents &mdash; they are derived from stated display dimensions, pixel pitch, and resolution, then cross-checked against net weight &divide; 4&nbsp;kg per cabinet for all four models. All four resolve to a consistent 600&nbsp;&times;&nbsp;337.5&nbsp;mm cabinet with no rounding error.</p>
-</section>
-
 </main>
 
 <footer class="page-footer">
@@ -956,9 +925,8 @@
       scaleMeta190: `7&nbsp;&times;&nbsp;7 &middot; 49 cabinets<br>1.875&nbsp;mm pitch<br>2240&nbsp;&times;&nbsp;1260`,
       scaleMeta216: `8&nbsp;&times;&nbsp;8 &middot; 64 cabinets<br>2.5&nbsp;mm pitch<br>1920&nbsp;&times;&nbsp;1080`,
       tocComparison: `Comparison table`,
-      tocReview: `Data review notes`,
       s01Title: `Main Comparison Table`,
-      s01Note: `All four models side-by-side, grouped by category. <span class="tag tag-est">EST</span> marks estimated/not-tested values. <span class="tag tag-tbd">TBD</span> marks data pending from the factory. <span class="tag tag-rev">REV</span> marks a value corrected during this review &mdash; see <a href="#review-notes">Data Review Notes</a>.`,
+      s01Note: `All four models side-by-side, grouped by category. <span class="tag tag-est">EST</span> marks estimated/not-tested values. <span class="tag tag-tbd">TBD</span> marks data pending from the factory. <span class="tag tag-rev">REV</span> marks a value corrected during data review.`,
       catGeneral: `General / Identification`,
       lblLEDTech: `LED Technology`,
       valSMD: `SMD (Surface Mount Device)`,
@@ -1069,19 +1037,6 @@
       lblPackingDims: `Packing Dimensions`,
       lblCabCartonShort: `Cabinet Carton`,
       lblModCartonShort: `Module Carton`,
-      s03Title: `Data Review Notes`,
-      s03Note: `Open items still need factory input. Resolved items are logged here for traceability &mdash; each was a discrepancy caught during parsing and confirmed against the factory before this revision.`,
-      openHeading: `Open`,
-      openItem1: `<strong>Packing dimensions for 190&Prime; and 216&Prime; are pending.</strong> Wooden case and carton packing data exist for 135&Prime;/162&Prime; only; the factory has confirmed this is still to be determined for the two largest models.`,
-      resolvedHeading: `Resolved during this review`,
-      resolved1: `<strong>216&Prime; resolution/pixel pitch:</strong> confirmed as 1920&times;1080 at 2.5&nbsp;mm pitch. This matches the original source document and is consistent with its &ge;5&nbsp;m recommended viewing distance &mdash; coarser than the 1.875&nbsp;mm pitch shared by 162&Prime;/190&Prime;, not a copy-paste error as first suspected.`,
-      resolved2: `<strong>Net weight for 190&Prime; and 216&Prime;:</strong> the factory confirmed the originally published totals (235&nbsp;kg and 305&nbsp;kg) were flawed engineering estimates. Recalculated using the confirmed 4&nbsp;kg/cabinet rate: <strong>196&nbsp;kg</strong> (190&Prime;, 49 cabinets) and <strong>256&nbsp;kg</strong> (216&Prime;, 64 cabinets).`,
-      resolved3: `<strong>RS232 connector:</strong> confirmed 3.5&nbsp;mm jack. The source documents' feature-list wording &ldquo;RS232(RJ45)&rdquo; was imprecise &mdash; the RJ45 reference is the separate LAN port on the sending card, used for UDP-based remote control via eXconfig, not the RS232 port itself.`,
-      resolved4: `<strong>Certifications:</strong> confirmed RoHS, CE, and FCC. Source documents mentioned RoHS only.`,
-      resolved5: `<strong>Cabinet seam:</strong> confirmed there is none &mdash; the assembled display surface is seamless. The 6&nbsp;mm bezel is the outer frame only.`,
-      resolved6: `<strong>Installation mode:</strong> confirmed no ceiling-mount option is offered. 135&Prime;/162&Prime; support Stand/Trolley plus wall-mounting; 190&Prime;/216&Prime; are wall-mount only, with no Stand/Trolley accessory available.`,
-      resolved7: `<strong>Refresh rate and scan rate:</strong> source documents listed a single shared value (&ldquo;1920/3840 Hz&rdquo;) for all four models with no scan rate field. Confirmed per-model figures: 135&Prime; &mdash; 7680&nbsp;Hz refresh, 1/64 scan; 162&Prime; and 190&Prime; &mdash; 3840&nbsp;Hz refresh, 1/40 scan; 216&Prime; &mdash; 3840&nbsp;Hz refresh, 1/27 scan.`,
-      methodologyNote: `Methodology note: cabinet grid, cabinet size, and per-cabinet resolution are not literal fields in the source documents &mdash; they are derived from stated display dimensions, pixel pitch, and resolution, then cross-checked against net weight &divide; 4&nbsp;kg per cabinet for all four models. All four resolve to a consistent 600&nbsp;&times;&nbsp;337.5&nbsp;mm cabinet with no rounding error.`,
       footerNote1: `Compiled from internal product specification documents for each model size, version-dated as shown above.`,
       footerNote2: `Draft technical review document for internal comparison. No images, drawings, or marketing layout elements from the source documents are included.`
     },
@@ -1096,9 +1051,8 @@
       scaleMeta190: `7&nbsp;&times;&nbsp;7 &middot; 49 kabinetter<br>1,875&nbsp;mm pixelafstand<br>2240&nbsp;&times;&nbsp;1260`,
       scaleMeta216: `8&nbsp;&times;&nbsp;8 &middot; 64 kabinetter<br>2,5&nbsp;mm pixelafstand<br>1920&nbsp;&times;&nbsp;1080`,
       tocComparison: `Sammenligningstabel`,
-      tocReview: `Datagennemgangsnoter`,
       s01Title: `Hovedsammenligningstabel`,
-      s01Note: `Alle fire modeller side om side, grupperet efter kategori. <span class="tag tag-est">EST</span> markerer estimerede/utestede v&aelig;rdier. <span class="tag tag-tbd">TBD</span> markerer data, der afventer fra fabrikken. <span class="tag tag-rev">REV</span> markerer en v&aelig;rdi, der er rettet under denne gennemgang &mdash; se <a href="#review-notes">Datagennemgangsnoter</a>.`,
+      s01Note: `Alle fire modeller side om side, grupperet efter kategori. <span class="tag tag-est">EST</span> markerer estimerede/utestede v&aelig;rdier. <span class="tag tag-tbd">TBD</span> markerer data, der afventer fra fabrikken. <span class="tag tag-rev">REV</span> markerer en v&aelig;rdi, der er rettet under datagennemgangen.`,
       catGeneral: `Generelt / Identifikation`,
       lblLEDTech: `LED-teknologi`,
       valSMD: `SMD (overflademonteret komponent)`,
@@ -1209,19 +1163,6 @@
       lblPackingDims: `Emballagem&aring;l`,
       lblCabCartonShort: `Kabinetkarton`,
       lblModCartonShort: `Modulkarton`,
-      s03Title: `Datagennemgangsnoter`,
-      s03Note: `&Aring;bne punkter afventer stadig fabriksinput. L&oslash;ste punkter er logget her af hensyn til sporbarhed &mdash; hver enkelt var en uoverensstemmelse fundet under databehandlingen og bekr&aelig;ftet f&oslash;r denne revision.`,
-      openHeading: `&Aring;ben`,
-      openItem1: `<strong>Emballagem&aring;l for 190&Prime; og 216&Prime; afventer.</strong> Data for tr&aelig;emballage og kartonemballage findes kun for 135&Prime;/162&Prime;; det er bekr&aelig;ftet, at dette stadig skal fastl&aelig;gges for de to st&oslash;rste modeller.`,
-      resolvedHeading: `L&oslash;st under denne gennemgang`,
-      resolved1: `<strong>216&Prime; opl&oslash;sning/pixelafstand:</strong> bekr&aelig;ftet som 1920&times;1080 ved 2,5&nbsp;mm pixelafstand. Dette stemmer overens med det oprindelige kildedokument og er i tr&aring;d med den anbefalede synsafstand p&aring; &ge;5&nbsp;m &mdash; grovere end den 1,875&nbsp;mm pixelafstand, der deles af 162&Prime;/190&Prime;, og ikke en kopi&eacute;r-inds&aelig;t-fejl som f&oslash;rst antaget.`,
-      resolved2: `<strong>Nettov&aelig;gt for 190&Prime; og 216&Prime;:</strong> det er bekr&aelig;ftet, at de oprindeligt offentliggjorte totaler (235&nbsp;kg og 305&nbsp;kg) var fejlbeh&aelig;ftede tekniske estimater. Genberegnet med den bekr&aelig;ftede sats p&aring; 4&nbsp;kg/kabinet: <strong>196&nbsp;kg</strong> (190&Prime;, 49 kabinetter) og <strong>256&nbsp;kg</strong> (216&Prime;, 64 kabinetter).`,
-      resolved3: `<strong>RS232-stik:</strong> bekr&aelig;ftet som 3,5&nbsp;mm jackstik. Kildedokumenternes funktionslisteformulering &ldquo;RS232(RJ45)&rdquo; var upr&aelig;cis &mdash; RJ45-henvisningen er den separate LAN-port p&aring; sendekortet, der bruges til UDP-baseret fjernstyring via eXconfig, ikke selve RS232-porten.`,
-      resolved4: `<strong>Certificeringer:</strong> bekr&aelig;ftet RoHS, CE og FCC. Kildedokumenterne n&aelig;vnte kun RoHS.`,
-      resolved5: `<strong>Kabinetsamling:</strong> bekr&aelig;ftet, at der ikke er nogen &mdash; den samlede sk&aelig;rmflade er s&oslash;ml&oslash;s. Den 6&nbsp;mm kant er kun den ydre ramme.`,
-      resolved6: `<strong>Installationstype:</strong> bekr&aelig;ftet, at der ikke tilbydes loftmontering. 135&Prime;/162&Prime; underst&oslash;tter stativ/trolley plus v&aelig;gmontering; 190&Prime;/216&Prime; er kun til v&aelig;gmontering, uden stativ/trolley-tilbeh&oslash;r.`,
-      resolved7: `<strong>Opdaterings- og scanningsfrekvens:</strong> kildedokumenterne angav &eacute;n f&aelig;lles v&aelig;rdi (&ldquo;1920/3840 Hz&rdquo;) for alle fire modeller uden separat scanningsfrekvensfelt. Bekr&aelig;ftede tal pr. model: 135&Prime; &mdash; 7680&nbsp;Hz opdatering, 1/64 scanning; 162&Prime; og 190&Prime; &mdash; 3840&nbsp;Hz opdatering, 1/40 scanning; 216&Prime; &mdash; 3840&nbsp;Hz opdatering, 1/27 scanning.`,
-      methodologyNote: `Metodenote: kabinetgitter, kabinetst&oslash;rrelse og opl&oslash;sning pr. kabinet er ikke direkte felter i kildedokumenterne &mdash; de er udledt af de angivne sk&aelig;rmm&aring;l, pixelafstand og opl&oslash;sning, og derefter krydstjekket mod nettov&aelig;gt &divide; 4&nbsp;kg pr. kabinet for alle fire modeller. Alle fire giver et konsistent 600&nbsp;&times;&nbsp;337,5&nbsp;mm kabinet uden afrundingsfejl.`,
       footerNote1: `Sammensat ud fra interne produktspecifikationsdokumenter for hver modelst&oslash;rrelse, versionsdateret som vist ovenfor.`,
       footerNote2: `Teknisk gennemgangsdokument (udkast) til intern sammenligning. Ingen billeder, tegninger eller marketingelementer fra kildedokumenterne er medtaget.`
     },
@@ -1236,9 +1177,8 @@
       scaleMeta190: `7&nbsp;&times;&nbsp;7 &middot; 49 Kabinette<br>1,875&nbsp;mm Pixelabstand<br>2240&nbsp;&times;&nbsp;1260`,
       scaleMeta216: `8&nbsp;&times;&nbsp;8 &middot; 64 Kabinette<br>2,5&nbsp;mm Pixelabstand<br>1920&nbsp;&times;&nbsp;1080`,
       tocComparison: `Vergleichstabelle`,
-      tocReview: `Datenpr&uuml;fungshinweise`,
       s01Title: `Haupt-Vergleichstabelle`,
-      s01Note: `Alle vier Modelle im direkten Vergleich, nach Kategorie gruppiert. <span class="tag tag-est">EST</span> kennzeichnet gesch&auml;tzte/ungetestete Werte. <span class="tag tag-tbd">TBD</span> kennzeichnet noch ausstehende Daten vom Werk. <span class="tag tag-rev">REV</span> kennzeichnet einen im Rahmen dieser Pr&uuml;fung korrigierten Wert &mdash; siehe <a href="#review-notes">Datenpr&uuml;fungshinweise</a>.`,
+      s01Note: `Alle vier Modelle im direkten Vergleich, nach Kategorie gruppiert. <span class="tag tag-est">EST</span> kennzeichnet gesch&auml;tzte/ungetestete Werte. <span class="tag tag-tbd">TBD</span> kennzeichnet noch ausstehende Daten vom Werk. <span class="tag tag-rev">REV</span> kennzeichnet einen im Rahmen der Datenpr&uuml;fung korrigierten Wert.`,
       catGeneral: `Allgemein / Kennzeichnung`,
       lblLEDTech: `LED-Technologie`,
       valSMD: `SMD (oberfl&auml;chenmontiertes Bauteil)`,
@@ -1349,19 +1289,6 @@
       lblPackingDims: `Verpackungsabmessungen`,
       lblCabCartonShort: `Kabinettkarton`,
       lblModCartonShort: `Modulkarton`,
-      s03Title: `Datenpr&uuml;fungshinweise`,
-      s03Note: `Offene Punkte ben&ouml;tigen noch Informationen vom Werk. Gel&ouml;ste Punkte werden hier zur Nachverfolgbarkeit dokumentiert &mdash; jeder war eine bei der Datenaufbereitung entdeckte Abweichung, die vor dieser Revision best&auml;tigt wurde.`,
-      openHeading: `Offen`,
-      openItem1: `<strong>Verpackungsabmessungen f&uuml;r 190&Prime; und 216&Prime; stehen noch aus.</strong> Daten zu Holzkisten- und Kartonverpackung liegen nur f&uuml;r 135&Prime;/162&Prime; vor; f&uuml;r die beiden gr&ouml;&szlig;ten Modelle ist dies best&auml;tigt noch offen.`,
-      resolvedHeading: `In dieser Pr&uuml;fung gel&ouml;st`,
-      resolved1: `<strong>Aufl&ouml;sung/Pixelabstand bei 216&Prime;:</strong> best&auml;tigt als 1920&times;1080 bei 2,5&nbsp;mm Pixelabstand. Dies stimmt mit dem Original-Quelldokument &uuml;berein und passt zum empfohlenen Betrachtungsabstand von &ge;5&nbsp;m &mdash; gr&ouml;ber als der 1,875&nbsp;mm-Pixelabstand von 162&Prime;/190&Prime;, kein Kopierfehler wie zun&auml;chst vermutet.`,
-      resolved2: `<strong>Nettogewicht f&uuml;r 190&Prime; und 216&Prime;:</strong> best&auml;tigt wurde, dass die urspr&uuml;nglich ver&ouml;ffentlichten Gesamtwerte (235&nbsp;kg und 305&nbsp;kg) fehlerhafte technische Sch&auml;tzungen waren. Neu berechnet mit dem best&auml;tigten Satz von 4&nbsp;kg/Kabinett: <strong>196&nbsp;kg</strong> (190&Prime;, 49 Kabinette) und <strong>256&nbsp;kg</strong> (216&Prime;, 64 Kabinette).`,
-      resolved3: `<strong>RS232-Anschluss:</strong> best&auml;tigt als 3,5&nbsp;mm-Klinke. Die Formulierung &ldquo;RS232(RJ45)&rdquo; in der Funktionsliste der Quelldokumente war ungenau &mdash; der RJ45-Verweis bezieht sich auf den separaten LAN-Port an der Sendekarte, der f&uuml;r die UDP-basierte Fernsteuerung &uuml;ber eXconfig genutzt wird, nicht auf den RS232-Anschluss selbst.`,
-      resolved4: `<strong>Zertifizierungen:</strong> best&auml;tigt RoHS, CE und FCC. Die Quelldokumente nannten nur RoHS.`,
-      resolved5: `<strong>Kabinettnaht:</strong> best&auml;tigt, dass keine vorhanden ist &mdash; die zusammengesetzte Bildschirmfl&auml;che ist nahtlos. Der 6&nbsp;mm-Rahmen ist nur der &auml;u&szlig;ere Rand.`,
-      resolved6: `<strong>Installationsart:</strong> best&auml;tigt, dass keine Deckenmontage angeboten wird. 135&Prime;/162&Prime; unterst&uuml;tzen Standfu&szlig;/Trolley zus&auml;tzlich zur Wandmontage; 190&Prime;/216&Prime; sind ausschlie&szlig;lich f&uuml;r Wandmontage, ohne Standfu&szlig;/Trolley-Zubeh&ouml;r.`,
-      resolved7: `<strong>Bildwiederhol- und Scanrate:</strong> die Quelldokumente gaben einen einzigen gemeinsamen Wert (&ldquo;1920/3840 Hz&rdquo;) f&uuml;r alle vier Modelle an, ohne separates Scanraten-Feld. Best&auml;tigte modellbezogene Werte: 135&Prime; &mdash; 7680&nbsp;Hz Bildwiederholrate, 1/64 Scanrate; 162&Prime; und 190&Prime; &mdash; 3840&nbsp;Hz Bildwiederholrate, 1/40 Scanrate; 216&Prime; &mdash; 3840&nbsp;Hz Bildwiederholrate, 1/27 Scanrate.`,
-      methodologyNote: `Methodikhinweis: Kabinettraster, Kabinettgr&ouml;&szlig;e und Aufl&ouml;sung pro Kabinett sind keine w&ouml;rtlichen Felder in den Quelldokumenten &mdash; sie werden aus den angegebenen Bildschirmabmessungen, dem Pixelabstand und der Aufl&ouml;sung abgeleitet und anschlie&szlig;end gegen das Nettogewicht &divide; 4&nbsp;kg pro Kabinett f&uuml;r alle vier Modelle gegengepr&uuml;ft. Alle vier ergeben ein konsistentes 600&nbsp;&times;&nbsp;337,5&nbsp;mm-Kabinett ohne Rundungsfehler.`,
       footerNote1: `Zusammengestellt aus internen Produktspezifikationsdokumenten f&uuml;r jede Modellgr&ouml;&szlig;e, versionsdatiert wie oben angegeben.`,
       footerNote2: `Technisches Pr&uuml;fdokument (Entwurf) f&uuml;r den internen Vergleich. Es sind keine Bilder, Zeichnungen oder Marketinglayout-Elemente aus den Quelldokumenten enthalten.`
     },
@@ -1376,9 +1303,8 @@
       scaleMeta190: `7&nbsp;&times;&nbsp;7 &middot; 49个机柜<br>1.875&nbsp;mm 点间距<br>2240&nbsp;&times;&nbsp;1260`,
       scaleMeta216: `8&nbsp;&times;&nbsp;8 &middot; 64个机柜<br>2.5&nbsp;mm 点间距<br>1920&nbsp;&times;&nbsp;1080`,
       tocComparison: `对比表`,
-      tocReview: `数据审核记录`,
       s01Title: `主对比表`,
-      s01Note: `四款型号并列对比，按类别分组。<span class="tag tag-est">EST</span>表示预估/未测试数值。<span class="tag tag-tbd">TBD</span>表示待工厂提供的数据。<span class="tag tag-rev">REV</span>表示本次审核中已更正的数值&mdash;&mdash;详见<a href="#review-notes">数据审核记录</a>。`,
+      s01Note: `四款型号并列对比，按类别分组。<span class="tag tag-est">EST</span>表示预估/未测试数值。<span class="tag tag-tbd">TBD</span>表示待工厂提供的数据。<span class="tag tag-rev">REV</span>表示数据审核中已更正的数值。`,
       catGeneral: `基本信息 / 型号识别`,
       lblLEDTech: `LED技术`,
       valSMD: `SMD（表面贴装器件）`,
@@ -1489,19 +1415,6 @@
       lblPackingDims: `包装尺寸`,
       lblCabCartonShort: `机柜纸箱`,
       lblModCartonShort: `模组纸箱`,
-      s03Title: `数据审核记录`,
-      s03Note: `待处理项目仍需工厂提供信息。已解决项目在此记录以便追溯&mdash;&mdash;每一项都是在数据整理过程中发现的差异，并已在本次修订前得到确认。`,
-      openHeading: `待处理`,
-      openItem1: `<strong>190&Prime;与216&Prime;的包装尺寸尚待确认。</strong> 木箱与纸箱包装数据目前仅有135&Prime;/162&Prime;；已确认这两款最大尺寸的相关数据仍待确定。`,
-      resolvedHeading: `本次审核中已解决的问题`,
-      resolved1: `<strong>216&Prime;分辨率/点间距：</strong>已确认为1920&times;1080，点间距2.5&nbsp;mm。这与原始来源文档一致，并与其&ge;5&nbsp;m的建议观看距离相符&mdash;&mdash;比162&Prime;/190&Prime;共用的1.875&nbsp;mm点间距更粗，并非最初怀疑的复制粘贴错误。`,
-      resolved2: `<strong>190&Prime;与216&Prime;的净重：</strong>已确认原先公布的总重（235&nbsp;kg与305&nbsp;kg）为有误的工程估算值。按已确认的每机柜4&nbsp;kg重新计算：<strong>196&nbsp;kg</strong>（190&Prime;，49个机柜）与<strong>256&nbsp;kg</strong>（216&Prime;，64个机柜）。`,
-      resolved3: `<strong>RS232接口：</strong>已确认为3.5&nbsp;mm插孔。来源文档功能列表中&ldquo;RS232(RJ45)&rdquo;的表述不够准确&mdash;&mdash;RJ45指的是发送卡上用于通过eXconfig进行UDP远程控制的独立LAN接口，而非RS232接口本身。`,
-      resolved4: `<strong>认证：</strong>已确认为RoHS、CE与FCC。来源文档仅提及RoHS。`,
-      resolved5: `<strong>机柜拼缝：</strong>已确认无拼缝&mdash;&mdash;组装后的显示表面为无缝拼接。6&nbsp;mm边框仅为外部边框。`,
-      resolved6: `<strong>安装方式：</strong>已确认不提供吊装选项。135&Prime;/162&Prime;支持支架/推车及壁挂安装；190&Prime;/216&Prime;仅支持壁挂，不提供支架/推车配件。`,
-      resolved7: `<strong>刷新率与扫描率：</strong>来源文档对四种尺寸仅给出单一共用数值（&ldquo;1920/3840 Hz&rdquo;），未单独列出扫描率。已确认各型号数值：135&Prime;&mdash;刷新率7680&nbsp;Hz，扫描率1/64；162&Prime;与190&Prime;&mdash;刷新率3840&nbsp;Hz，扫描率1/40；216&Prime;&mdash;刷新率3840&nbsp;Hz，扫描率1/27。`,
-      methodologyNote: `方法说明：机柜网格、机柜尺寸及单机柜分辨率并非来源文档中的直接字段&mdash;&mdash;均由所标示的屏幕尺寸、点间距与分辨率推算得出，并与净重&divide;每机柜4&nbsp;kg进行交叉核对，四种尺寸均适用。四款型号最终均对应一致的600&nbsp;&times;&nbsp;337.5&nbsp;mm机柜，无舍入误差。`,
       footerNote1: `根据各型号尺寸的内部产品规格文档整理，版本日期如上所示。`,
       footerNote2: `内部对比用技术审核文档（草案）。不包含来源文档中的图片、图纸或营销版式元素。`
     }
