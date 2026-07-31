@@ -6,22 +6,32 @@
 <title>eXview Edge — Documentation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --paper: #F5F6F3; --paper-raised: #FFFFFF; --ink: #14181D; --navy: #0B1E27;
     --steel: #4B5760; --hairline: #DCE2E4; --signal: #0B7285; --signal-dim: #E3F1F2;
+    --cyan: #22C7DB;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--paper); color: var(--ink); font-family: "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif; line-height: 1.5; }
-  h1, h2 { font-family: "Space Grotesk", "Segoe UI", sans-serif; font-weight: 600; margin: 0; color: var(--ink); }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: "IBM Plex Sans", "Noto Sans SC", -apple-system, "Segoe UI", sans-serif; line-height: 1.5; }
+  h1, h2 { font-family: "Space Grotesk", "Noto Sans SC", "Segoe UI", sans-serif; font-weight: 600; margin: 0; color: var(--ink); }
   a { color: var(--signal); }
 
   .masthead { background: var(--navy); color: var(--paper); padding: 2.4rem 1.5rem; }
-  .masthead__inner { max-width: 900px; margin: 0 auto; }
+  .masthead__inner { max-width: 900px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; gap: 1.5rem; flex-wrap: wrap; }
   .eyebrow { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: #7FC4CC; margin: 0 0 0.6rem 0; }
   .masthead h1 { color: var(--paper); font-size: clamp(1.7rem, 3.4vw, 2.3rem); letter-spacing: -0.01em; }
   .masthead p.subtitle { margin: 0.6rem 0 0 0; color: #C4CCD1; font-size: 1rem; max-width: 60ch; }
+
+  .lang-switch { display: flex; gap: 2px; background: rgba(255,255,255,0.06); padding: 4px; border-radius: 20px; flex-shrink: 0; }
+  .lang-switch button {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; border: none; background: transparent;
+    color: #9FB4BB; padding: 6px 12px; border-radius: 16px; cursor: pointer; white-space: nowrap; transition: background 0.15s, color 0.15s;
+  }
+  .lang-switch button:hover { color: #fff; }
+  .lang-switch button.active { background: var(--cyan); color: var(--navy); }
+  .lang-switch button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
 
   main { max-width: 900px; margin: 0 auto; padding: 2.4rem 1.5rem 3rem; }
   section { margin-bottom: 2.4rem; }
@@ -31,54 +41,62 @@
   .doc-card { display: block; background: var(--paper-raised); border: 1px solid var(--hairline); border-radius: 8px; padding: 1.1rem 1.3rem; text-decoration: none; color: inherit; transition: border-color 0.15s; }
   .doc-card:hover { border-color: var(--signal); }
   .doc-card .tag { display: inline-block; font-family: "IBM Plex Mono", monospace; font-size: 0.66rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--signal); background: var(--signal-dim); padding: 0.15rem 0.5rem; border-radius: 3px; margin-bottom: 0.5rem; }
-  .doc-card h3 { font-family: "Space Grotesk", sans-serif; font-weight: 600; font-size: 1.02rem; margin: 0 0 0.35rem 0; color: var(--ink); }
+  .doc-card h3 { font-family: "Space Grotesk", "Noto Sans SC", sans-serif; font-weight: 600; font-size: 1.02rem; margin: 0 0 0.35rem 0; color: var(--ink); }
   .doc-card p { margin: 0; font-size: 0.86rem; color: var(--steel); }
 
   footer { max-width: 900px; margin: 0 auto; padding: 0 1.5rem 2.5rem; font-size: 0.8rem; color: var(--steel); }
 
-  @media (max-width: 640px) { .doc-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 640px) { .doc-grid { grid-template-columns: 1fr; } .masthead__inner { flex-direction: column; } }
 </style>
 </head>
 <body>
 
 <header class="masthead">
   <div class="masthead__inner">
-    <p class="eyebrow">Expromo &middot; Product Data</p>
-    <h1>eXview Edge — Documentation</h1>
-    <p class="subtitle">Specifications, datasheet and electrical installation guides for the eXview Edge family (135&Prime;, 162&Prime;, 190&Prime;, 216&Prime;).</p>
+    <div>
+      <p class="eyebrow" data-i18n="eyebrow">Expromo &middot; Product Data</p>
+      <h1 data-i18n="h1">eXview Edge — Documentation</h1>
+      <p class="subtitle" data-i18n="subtitle">Specifications, datasheet and electrical installation guides for the eXview Edge family (135&Prime;, 162&Prime;, 190&Prime;, 216&Prime;).</p>
+    </div>
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button type="button" data-lang="en" class="active" aria-pressed="true">EN</button>
+      <button type="button" data-lang="da" aria-pressed="false">DA</button>
+      <button type="button" data-lang="de" aria-pressed="false">DE</button>
+      <button type="button" data-lang="zh" aria-pressed="false">中文</button>
+    </div>
   </div>
 </header>
 
 <main>
 
 <section>
-  <h2>Electrical &amp; power installation</h2>
+  <h2 data-i18n="secElecTitle">Electrical &amp; power installation</h2>
   <div class="doc-grid">
     <a class="doc-card" href="installation/exview-edge-electrical-quick-reference.html">
-      <span class="tag">2-min read</span>
-      <h3>Electrical Quick Reference</h3>
-      <p>The numbers an electrician needs before quoting or wiring the circuit — one page, no diagrams.</p>
+      <span class="tag" data-i18n="tagQuick">2-min read</span>
+      <h3 data-i18n="titleQuick">Electrical Quick Reference</h3>
+      <p data-i18n="descQuick">The numbers an electrician needs before quoting or wiring the circuit &mdash; one page, no diagrams.</p>
     </a>
     <a class="doc-card" href="installation/exview-edge-electrical-installation-guide.html">
-      <span class="tag">Full guide</span>
-      <h3>Electrical &amp; Power Architecture Installation Guide</h3>
-      <p>Cabinet numbering, power domains, PSU harness rules, per-model power breakdown and factory wiring diagrams.</p>
+      <span class="tag" data-i18n="tagGuide">Full guide</span>
+      <h3 data-i18n="titleGuide">Electrical &amp; Power Architecture Installation Guide</h3>
+      <p data-i18n="descGuide">Cabinet numbering, power domains, PSU harness rules, per-model power breakdown and factory wiring diagrams.</p>
     </a>
   </div>
 </section>
 
 <section>
-  <h2>Specifications &amp; datasheet</h2>
+  <h2 data-i18n="secSpecTitle">Specifications &amp; datasheet</h2>
   <div class="doc-grid">
     <a class="doc-card" href="specs/exview-edge-specification-comparison.html">
-      <span class="tag">Technical reference</span>
-      <h3>Specification Comparison</h3>
-      <p>Full side-by-side spec table and per-model detail across all four sizes, with a data review log.</p>
+      <span class="tag" data-i18n="tagSpec">Technical reference</span>
+      <h3 data-i18n="titleSpec">Specification Comparison</h3>
+      <p data-i18n="descSpec">Full side-by-side spec table and per-model detail across all four sizes, with a data review log.</p>
     </a>
     <a class="doc-card" href="marketing/exview-edge-datasheet.html">
-      <span class="tag">Customer-facing</span>
-      <h3>Product Datasheet</h3>
-      <p>Printable A4 datasheet with EN/DA/DE/ZH language switching and PDF export.</p>
+      <span class="tag" data-i18n="tagDatasheet">Customer-facing</span>
+      <h3 data-i18n="titleDatasheet">Product Datasheet</h3>
+      <p data-i18n="descDatasheet">Printable A4 datasheet with EN/DA/DE/ZH language switching and PDF export.</p>
     </a>
   </div>
 </section>
@@ -86,8 +104,125 @@
 </main>
 
 <footer>
-  <p>eXview Edge family &mdash; Product Department, Expromo.</p>
+  <p data-i18n="footer">eXview Edge family &mdash; Product Department, Expromo.</p>
 </footer>
+
+<script>
+(function () {
+  var STRINGS = {
+    en: {
+      eyebrow: `Expromo &middot; Product Data`,
+      h1: `eXview Edge &mdash; Documentation`,
+      subtitle: `Specifications, datasheet and electrical installation guides for the eXview Edge family (135&Prime;, 162&Prime;, 190&Prime;, 216&Prime;).`,
+      secElecTitle: `Electrical &amp; power installation`,
+      tagQuick: `2-min read`,
+      titleQuick: `Electrical Quick Reference`,
+      descQuick: `The numbers an electrician needs before quoting or wiring the circuit &mdash; one page, no diagrams.`,
+      tagGuide: `Full guide`,
+      titleGuide: `Electrical &amp; Power Architecture Installation Guide`,
+      descGuide: `Cabinet numbering, power domains, PSU harness rules, per-model power breakdown and factory wiring diagrams.`,
+      secSpecTitle: `Specifications &amp; datasheet`,
+      tagSpec: `Technical reference`,
+      titleSpec: `Specification Comparison`,
+      descSpec: `Full side-by-side spec table and per-model detail across all four sizes, with a data review log.`,
+      tagDatasheet: `Customer-facing`,
+      titleDatasheet: `Product Datasheet`,
+      descDatasheet: `Printable A4 datasheet with EN/DA/DE/ZH language switching and PDF export.`,
+      footer: `eXview Edge family &mdash; Product Department, Expromo.`
+    },
+    da: {
+      eyebrow: `Expromo &middot; Produktdata`,
+      h1: `eXview Edge &mdash; Dokumentation`,
+      subtitle: `Specifikationer, datablad og el-installationsvejledninger til eXview Edge-serien (135&Prime;, 162&Prime;, 190&Prime;, 216&Prime;).`,
+      secElecTitle: `El- og strømforsyningsinstallation`,
+      tagQuick: `2 min. l&aelig;sning`,
+      titleQuick: `El &mdash; hurtig oversigt`,
+      descQuick: `De tal en elektriker skal bruge, f&oslash;r der afgives tilbud eller tr&aelig;kkes kabler &mdash; &eacute;n side, ingen diagrammer.`,
+      tagGuide: `Fuld vejledning`,
+      titleGuide: `El- og str&oslash;markitektur &mdash; installationsvejledning`,
+      descGuide: `Kabinetnummerering, str&oslash;mdom&aelig;ner, PSU-kabelregler, effektfordeling pr. model og fabriksdiagrammer.`,
+      secSpecTitle: `Specifikationer &amp; datablad`,
+      tagSpec: `Teknisk reference`,
+      titleSpec: `Specifikationssammenligning`,
+      descSpec: `Fuld sammenligningstabel og modeldetaljer for alle fire st&oslash;rrelser, med log over datagennemgang.`,
+      tagDatasheet: `Kundevendt`,
+      titleDatasheet: `Produktdatablad`,
+      descDatasheet: `Printbart A4-datablad med sprogvalg EN/DA/DE/ZH og PDF-eksport.`,
+      footer: `eXview Edge-serien &mdash; Produktafdelingen, Expromo.`
+    },
+    de: {
+      eyebrow: `Expromo &middot; Produktdaten`,
+      h1: `eXview Edge &mdash; Dokumentation`,
+      subtitle: `Spezifikationen, Datenblatt und Anleitungen zur Elektroinstallation f&uuml;r die eXview&nbsp;Edge&nbsp;Baureihe (135&Prime;, 162&Prime;, 190&Prime;, 216&Prime;).`,
+      secElecTitle: `Elektro- und Stromversorgungsinstallation`,
+      tagQuick: `2 Min. Lesezeit`,
+      titleQuick: `Elektro-Kurz&uuml;bersicht`,
+      descQuick: `Die Werte, die ein Elektriker vor dem Angebot oder der Verkabelung ben&ouml;tigt &mdash; eine Seite, keine Diagramme.`,
+      tagGuide: `Vollst&auml;ndiger Leitfaden`,
+      titleGuide: `Installationsanleitung Elektro- und Stromarchitektur`,
+      descGuide: `Kabinettnummerierung, Stromdom&auml;nen, PSU-Verkabelungsregeln, Leistungsaufteilung pro Modell und Werkschaltpl&auml;ne.`,
+      secSpecTitle: `Spezifikationen &amp; Datenblatt`,
+      tagSpec: `Technische Referenz`,
+      titleSpec: `Spezifikationsvergleich`,
+      descSpec: `Vollst&auml;ndige Vergleichstabelle und Modelldetails f&uuml;r alle vier Gr&ouml;&szlig;en, mit Daten&uuml;berpr&uuml;fungsprotokoll.`,
+      tagDatasheet: `Kundenorientiert`,
+      titleDatasheet: `Produktdatenblatt`,
+      descDatasheet: `Druckbares A4-Datenblatt mit Sprachumschaltung EN/DA/DE/ZH und PDF-Export.`,
+      footer: `eXview Edge Baureihe &mdash; Product Department, Expromo.`
+    },
+    zh: {
+      eyebrow: `Expromo &middot; 产品数据`,
+      h1: `eXview Edge &mdash; 文档中心`,
+      subtitle: `eXview Edge系列（135&Prime;、162&Prime;、190&Prime;、216&Prime;）的规格、产品资料与电气安装指南。`,
+      secElecTitle: `电气与电源安装`,
+      tagQuick: `2分钟阅读`,
+      titleQuick: `电气快速参考`,
+      descQuick: `电工在报价或接线前需要了解的关键数据&mdash;&mdash;单页，无图纸。`,
+      tagGuide: `完整指南`,
+      titleGuide: `电气与电源架构安装指南`,
+      descGuide: `机柜编号、电源域、PSU线束规则、各型号功耗分配及工厂接线图。`,
+      secSpecTitle: `规格与产品资料`,
+      tagSpec: `技术参考`,
+      titleSpec: `规格对比`,
+      descSpec: `四种尺寸的完整对比表与各型号详情，附数据审核记录。`,
+      tagDatasheet: `面向客户`,
+      titleDatasheet: `产品资料`,
+      descDatasheet: `可打印的A4产品资料，支持EN/DA/DE/ZH语言切换及PDF导出。`,
+      footer: `eXview Edge系列 &mdash; Expromo产品部门。`
+    }
+  };
+
+  var HTML_LANG = { en: 'en', da: 'da', de: 'de', zh: 'zh-CN' };
+  var STORAGE_KEY = 'exview-edge-lang';
+
+  function applyLang(lang) {
+    var currentLang = STRINGS[lang] ? lang : 'en';
+    var dict = STRINGS[currentLang];
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var key = nodes[i].getAttribute('data-i18n');
+      if (dict[key] !== undefined) { nodes[i].innerHTML = dict[key]; }
+    }
+    document.documentElement.lang = HTML_LANG[currentLang] || 'en';
+    var btns = document.querySelectorAll('.lang-switch button');
+    for (var j = 0; j < btns.length; j++) {
+      var isActive = btns[j].getAttribute('data-lang') === currentLang;
+      btns[j].classList.toggle('active', isActive);
+      btns[j].setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    }
+    try { localStorage.setItem(STORAGE_KEY, currentLang); } catch (e) {}
+  }
+
+  var switchBtns = document.querySelectorAll('.lang-switch button');
+  for (var k = 0; k < switchBtns.length; k++) {
+    switchBtns[k].addEventListener('click', function () { applyLang(this.getAttribute('data-lang')); });
+  }
+
+  var saved = null;
+  try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+  applyLang(saved && STRINGS[saved] ? saved : 'en');
+})();
+</script>
 
 </body>
 </html>

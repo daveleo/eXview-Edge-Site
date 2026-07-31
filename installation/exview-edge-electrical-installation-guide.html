@@ -6,7 +6,7 @@
 <title>eXview Edge — Electrical &amp; Power Architecture Installation Guide</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --paper:      #F5F6F3;
@@ -31,6 +31,7 @@
     --w-3pin:     #2255D6;
     --w-5pin:     #B93FC1;
     --w-ac:       #E23B3B;
+    --cyan:       #22C7DB;
   }
 
   * { box-sizing: border-box; }
@@ -44,13 +45,13 @@
     margin: 0;
     background: var(--paper);
     color: var(--ink);
-    font-family: "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
+    font-family: "IBM Plex Sans", "Noto Sans SC", -apple-system, "Segoe UI", sans-serif;
     line-height: 1.5;
     font-size: 15px;
   }
 
   h1, h2, h3, h4 {
-    font-family: "Space Grotesk", "Segoe UI", sans-serif;
+    font-family: "Space Grotesk", "Noto Sans SC", "Segoe UI", sans-serif;
     font-weight: 600;
     margin: 0;
     color: var(--ink);
@@ -72,6 +73,16 @@
   .masthead .doc-meta { margin: 1.3rem 0 0 0; font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; color: #889299; letter-spacing: 0.03em; }
   .masthead .quick-link { display: inline-block; margin-top: 0.9rem; font-family: "IBM Plex Mono", monospace; font-size: 0.78rem; color: #7FC4CC; text-decoration: none; border-bottom: 1px dotted #7FC4CC; }
   .masthead .quick-link:hover { color: var(--paper); border-color: var(--paper); }
+
+  .masthead__side { display: flex; flex-direction: column; align-items: flex-end; gap: 0.8rem; flex-shrink: 0; }
+  .lang-switch { display: flex; gap: 2px; background: rgba(255,255,255,0.06); padding: 4px; border-radius: 20px; }
+  .lang-switch button {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; border: none; background: transparent;
+    color: #9FB4BB; padding: 6px 12px; border-radius: 16px; cursor: pointer; white-space: nowrap; transition: background 0.15s, color 0.15s;
+  }
+  .lang-switch button:hover { color: #fff; }
+  .lang-switch button.active { background: var(--cyan); color: var(--navy); }
+  .lang-switch button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
 
   main { max-width: var(--content-w); margin: 0 auto; padding: 0 1.5rem; }
 
@@ -185,159 +196,167 @@
 <header class="masthead">
   <div class="masthead__inner">
     <div>
-      <p class="eyebrow">Installation Reference</p>
-      <h1>Electrical &amp; Power Architecture Installation Guide</h1>
-      <p class="subtitle">eXview Edge family &mdash; 135&Prime;, 162&Prime;, 190&Prime; and 216&Prime;. How the screens are supplied, switched and interconnected, and what your electrician needs to plan the circuit.</p>
+      <p class="eyebrow" data-i18n="eyebrow">Installation Reference</p>
+      <h1 data-i18n="h1">Electrical &amp; Power Architecture Installation Guide</h1>
+      <p class="subtitle" data-i18n="subtitle">eXview Edge family &mdash; 135&Prime;, 162&Prime;, 190&Prime; and 216&Prime;. How the screens are supplied, switched and interconnected, and what your electrician needs to plan the circuit.</p>
       <p class="doc-meta">DOC EDGE&#8209;ELEC&#8209;INSTALL&#8209;01 &middot; REV 1 &middot; 2026&#8209;07&#8209;30 &middot; Related: EDGE&#8209;SPEC&#8209;COMPARE&#8209;01</p>
-      <a class="quick-link" href="exview-edge-electrical-quick-reference.html">&larr; In a hurry? Read the 2-minute quick reference</a>
+      <a class="quick-link" href="exview-edge-electrical-quick-reference.html" data-i18n="quickLink">&larr; In a hurry? Read the 2-minute quick reference</a>
     </div>
-    <span class="masthead__logo"><img src="assets/expromo-logo.jpg" alt="Expromo"></span>
+    <div class="masthead__side">
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" data-lang="en" class="active" aria-pressed="true">EN</button>
+        <button type="button" data-lang="da" aria-pressed="false">DA</button>
+        <button type="button" data-lang="de" aria-pressed="false">DE</button>
+        <button type="button" data-lang="zh" aria-pressed="false">中文</button>
+      </div>
+      <span class="masthead__logo"><img src="assets/expromo-logo.jpg" alt="Expromo"></span>
+    </div>
   </div>
 </header>
 
 <main>
 
-<div class="summary-strip">
+<div class="summary-strip" data-i18n="summaryStrip">
   <strong>In short:</strong> all four sizes run on 100&ndash;240&nbsp;VAC, 50/60&nbsp;Hz. 135&Prime; has 1 main power inlet, 162&Prime; has 2, and 190&Prime; and 216&Prime; each have 3 &mdash; every inlet is an independent AC supply entry that can be placed on its own circuit and phase. Expromo does not specify circuit breakers, RCDs or phase allocation: <strong>circuit sizing and protective device selection are entirely the responsibility of the installing electrician</strong>, based on the power figures in this guide and local regulations.
 </div>
 
 <nav class="toc" aria-label="Table of contents">
-  <a href="#terminology">Terminology</a>
-  <a href="#power-domains">Power domains &amp; standby</a>
-  <a href="#numbering">Cabinet numbering</a>
-  <a href="#placement">Component placement</a>
-  <a href="#model-matrix">Per-model electrical summary</a>
-  <a href="#harness">PSU interconnect (3-pin / 5-pin)</a>
-  <a href="#sequence">Installation sequence</a>
-  <a href="#drawings">Reference drawings</a>
-  <a href="#notes">Installation notes</a>
+  <a href="#terminology" data-i18n="toc1">Terminology</a>
+  <a href="#power-domains" data-i18n="toc2">Power domains &amp; standby</a>
+  <a href="#numbering" data-i18n="toc3">Cabinet numbering</a>
+  <a href="#placement" data-i18n="toc4">Component placement</a>
+  <a href="#model-matrix" data-i18n="toc5">Per-model electrical summary</a>
+  <a href="#harness" data-i18n="toc6">PSU interconnect (3-pin / 5-pin)</a>
+  <a href="#sequence" data-i18n="toc7">Installation sequence</a>
+  <a href="#drawings" data-i18n="toc8">Reference drawings</a>
+  <a href="#notes" data-i18n="toc9">Installation notes</a>
 </nav>
 
 <section id="terminology">
-  <div class="section-head"><span class="section-index">01</span><h2>Terminology</h2></div>
-  <p class="section-note">All four models share one <strong>600 &times; 337.5&nbsp;mm cabinet</strong>. Larger sizes are built by adding a row and a column of the same cabinet &mdash; nothing changes inside the cabinet itself.</p>
+  <div class="section-head"><span class="section-index">01</span><h2 data-i18n="s1h2">Terminology</h2></div>
+  <p class="section-note" data-i18n="s1note">All four models share one <strong>600 &times; 337.5&nbsp;mm cabinet</strong>. Larger sizes are built by adding a row and a column of the same cabinet &mdash; nothing changes inside the cabinet itself.</p>
 
   <div class="table-scroll">
   <table>
-    <thead><tr><th scope="col">Term</th><th scope="col">What it means</th></tr></thead>
+    <thead><tr><th scope="col" data-i18n="s1thTerm">Term</th><th scope="col" data-i18n="s1thMeans">What it means</th></tr></thead>
     <tbody>
-      <tr><th scope="row">Cabinet</th><td>One 600 &times; 337.5&nbsp;mm panel, 4&nbsp;kg excl. mounting bar, individually numbered (see &sect;03).</td></tr>
-      <tr><th scope="row">3-in-1 board</th><td>The board inside every cabinet combining power supply, receiving card and HUB. <strong>This is the screen's real power supply</strong> &mdash; one per cabinet.</td></tr>
-      <tr><th scope="row">&ldquo;PSU&rdquo;</th><td>The AC switching module(s) at the bottom of the screen. Functionally a <strong>relay</strong>, not a power supply &mdash; see the note below.</td></tr>
-      <tr><th scope="row">Main PSU</th><td>The one PSU that carries the AC&#8209;DC (12&nbsp;V) converter. It is the only source of 12&nbsp;V for the whole screen.</td></tr>
-      <tr><th scope="row">Secondary PSU</th><td>Any additional PSU. It has no AC&#8209;DC converter of its own &mdash; it receives 12&nbsp;V from the main PSU.</td></tr>
-      <tr><th scope="row">Sending card</th><td>The video/control processor. Powered from the main PSU and stays alive in standby.</td></tr>
-      <tr><th scope="row">Distribution board</th><td>The point each secondary PSU connects to for power and standby signalling.</td></tr>
-      <tr><th scope="row">Main inlet</th><td>One AC supply entry point. There is exactly one per PSU.</td></tr>
+      <tr><th scope="row" data-i18n="s1rCabinet">Cabinet</th><td data-i18n="s1dCabinet">One 600 &times; 337.5&nbsp;mm panel, 4&nbsp;kg excl. mounting bar, individually numbered (see &sect;03).</td></tr>
+      <tr><th scope="row" data-i18n="s1r3in1">3-in-1 board</th><td data-i18n="s1d3in1">The board inside every cabinet combining power supply, receiving card and HUB. <strong>This is the screen's real power supply</strong> &mdash; one per cabinet.</td></tr>
+      <tr><th scope="row" data-i18n="s1rPSU">&ldquo;PSU&rdquo;</th><td data-i18n="s1dPSU">The AC switching module(s) at the bottom of the screen. Functionally a <strong>relay</strong>, not a power supply &mdash; see the note below.</td></tr>
+      <tr><th scope="row" data-i18n="s1rMainPSU">Main PSU</th><td data-i18n="s1dMainPSU">The one PSU that carries the AC&#8209;DC (12&nbsp;V) converter. It is the only source of 12&nbsp;V for the whole screen.</td></tr>
+      <tr><th scope="row" data-i18n="s1rSecPSU">Secondary PSU</th><td data-i18n="s1dSecPSU">Any additional PSU. It has no AC&#8209;DC converter of its own &mdash; it receives 12&nbsp;V from the main PSU.</td></tr>
+      <tr><th scope="row" data-i18n="s1rSendCard">Sending card</th><td data-i18n="s1dSendCard">The video/control processor. Powered from the main PSU and stays alive in standby.</td></tr>
+      <tr><th scope="row" data-i18n="s1rDistBoard">Distribution board</th><td data-i18n="s1dDistBoard">The point each secondary PSU connects to for power and standby signalling.</td></tr>
+      <tr><th scope="row" data-i18n="s1rMainInlet">Main inlet</th><td data-i18n="s1dMainInlet">One AC supply entry point. There is exactly one per PSU.</td></tr>
     </tbody>
   </table>
   </div>
 
   <div class="callout callout--amber">
-    <h4>Why the relay module is still called &ldquo;PSU&rdquo;</h4>
-    <p>The modules labelled <em>PSU</em> in the drawings and in this guide are used as <strong>relays</strong>: the actual power supplies are the per-cabinet 3-in-1 boards. The term <em>PSU</em> is kept deliberately, in drawings, documentation and service communication, because it is the name your service contact and the factory both already use &mdash; renaming it would create confusion, not remove it.</p>
+    <h4 data-i18n="s1calloutH">Why the relay module is still called &ldquo;PSU&rdquo;</h4>
+    <p data-i18n="s1calloutP">The modules labelled <em>PSU</em> in the drawings and in this guide are used as <strong>relays</strong>: the actual power supplies are the per-cabinet 3-in-1 boards. The term <em>PSU</em> is kept deliberately, in drawings, documentation and service communication, because it is the name your service contact and the factory both already use &mdash; renaming it would create confusion, not remove it.</p>
   </div>
 </section>
 
 <section id="power-domains">
-  <div class="section-head"><span class="section-index">02</span><h2>Power domains &amp; standby</h2></div>
-  <p class="section-note">The main PSU's AC&#8209;DC converter is the only source of 12&nbsp;V in the screen. That 12&nbsp;V feeds the AC&nbsp;OUT relay coil in every PSU, the sending card, and &mdash; via the inter-PSU link &mdash; every secondary PSU. Everything else in the screen only receives power once a relay switches AC through to it.</p>
+  <div class="section-head"><span class="section-index">02</span><h2 data-i18n="s2h2">Power domains &amp; standby</h2></div>
+  <p class="section-note" data-i18n="s2note1">The main PSU's AC&#8209;DC converter is the only source of 12&nbsp;V in the screen. That 12&nbsp;V feeds the AC&nbsp;OUT relay coil in every PSU, the sending card, and &mdash; via the inter-PSU link &mdash; every secondary PSU. Everything else in the screen only receives power once a relay switches AC through to it.</p>
 
   <div class="table-scroll">
   <table>
-    <thead><tr><th scope="col">Domain</th><th scope="col">Live in standby?</th><th scope="col">Contains</th></tr></thead>
+    <thead><tr><th scope="col" data-i18n="s2thDomain">Domain</th><th scope="col" data-i18n="s2thLive">Live in standby?</th><th scope="col" data-i18n="s2thContains">Contains</th></tr></thead>
     <tbody>
-      <tr><th scope="row">Always-on (12&nbsp;V)</th><td>Yes</td><td>AC&#8209;DC converter, all AC&nbsp;OUT relay coils, the sending card</td></tr>
-      <tr><th scope="row">Switched (AC&nbsp;OUT)</th><td>No</td><td>Every 3-in-1 board (power/receiving/HUB) and every LED IC driver</td></tr>
+      <tr><th scope="row" data-i18n="s2rAlwaysOn">Always-on (12&nbsp;V)</th><td data-i18n="yesWord">Yes</td><td data-i18n="s2dAlwaysOn">AC&#8209;DC converter, all AC&nbsp;OUT relay coils, the sending card</td></tr>
+      <tr><th scope="row" data-i18n="s2rSwitched">Switched (AC&nbsp;OUT)</th><td data-i18n="noWord">No</td><td data-i18n="s2dSwitched">Every 3-in-1 board (power/receiving/HUB) and every LED IC driver</td></tr>
     </tbody>
   </table>
   </div>
-  <p class="section-note">The family has no fans; the always-on domain contains nothing beyond the items above &mdash; HDMI detect, IR receive and the physical button are all handled by the sending card itself.</p>
+  <p class="section-note" data-i18n="s2note2">The family has no fans; the always-on domain contains nothing beyond the items above &mdash; HDMI detect, IR receive and the physical button are all handled by the sending card itself.</p>
 
-  <h3 style="font-size:1rem; margin-bottom:0.6rem;">Standby modes</h3>
+  <h3 style="font-size:1rem; margin-bottom:0.6rem;" data-i18n="s2h3">Standby modes</h3>
   <div class="table-scroll">
   <table>
-    <thead><tr><th scope="col"></th><th scope="col">Active standby (Expromo default)</th><th scope="col">Eco standby</th></tr></thead>
+    <thead><tr><th scope="col"></th><th scope="col" data-i18n="s2thActive">Active standby (Expromo default)</th><th scope="col" data-i18n="s2thEco">Eco standby</th></tr></thead>
     <tbody>
-      <tr><th scope="row">Measured consumption</th><td><strong>14&nbsp;W</strong></td><td><strong>0.5&nbsp;W</strong></td></tr>
-      <tr><th scope="row">LAN / UDP control</th><td>Yes</td><td>No</td></tr>
-      <tr><th scope="row">RS232</th><td>Yes</td><td>Yes</td></tr>
-      <tr><th scope="row">Physical button / IR remote</th><td>Yes</td><td>Yes</td></tr>
+      <tr><th scope="row" data-i18n="s2rMeasured">Measured consumption</th><td><strong>14&nbsp;W</strong></td><td><strong>0.5&nbsp;W</strong></td></tr>
+      <tr><th scope="row" data-i18n="s2rLAN">LAN / UDP control</th><td data-i18n="yesWord">Yes</td><td data-i18n="noWord">No</td></tr>
+      <tr><th scope="row">RS232</th><td data-i18n="yesWord">Yes</td><td data-i18n="yesWord">Yes</td></tr>
+      <tr><th scope="row" data-i18n="s2rButton">Physical button / IR remote</th><td data-i18n="yesWord">Yes</td><td data-i18n="yesWord">Yes</td></tr>
     </tbody>
   </table>
   </div>
 
   <div class="callout">
-    <h4>Which figure will your screen actually draw in standby?</h4>
-    <p>The &le;0.5&nbsp;W standby figure quoted on the datasheet is the <strong>Eco</strong> standby value, not the delivered default. Expromo ships screens in <strong>Active standby</strong> so that LAN/UDP wake, remote monitoring and control-system polling keep working &mdash; so budget <strong>14&nbsp;W</strong> for standby consumption unless Eco mode has been deliberately configured. Eco mode drops network connectivity entirely and should not be used on a screen driven by a network control system.</p>
+    <h4 data-i18n="s2callout1H">Which figure will your screen actually draw in standby?</h4>
+    <p data-i18n="s2callout1P">The &le;0.5&nbsp;W standby figure quoted on the datasheet is the <strong>Eco</strong> standby value, not the delivered default. Expromo ships screens in <strong>Active standby</strong> so that LAN/UDP wake, remote monitoring and control-system polling keep working &mdash; so budget <strong>14&nbsp;W</strong> for standby consumption unless Eco mode has been deliberately configured. Eco mode drops network connectivity entirely and should not be used on a screen driven by a network control system.</p>
   </div>
 
   <div class="callout">
-    <h4>Standby switching</h4>
-    <p>In either mode, the entire switched domain is fully de-energised &mdash; every 3-in-1 board and LED driver loses AC, not just video. The PSUs use <strong>zero-cross relays</strong> to minimise inrush current when the switched domain is re-energised.</p>
+    <h4 data-i18n="s2callout2H">Standby switching</h4>
+    <p data-i18n="s2callout2P">In either mode, the entire switched domain is fully de-energised &mdash; every 3-in-1 board and LED driver loses AC, not just video. The PSUs use <strong>zero-cross relays</strong> to minimise inrush current when the switched domain is re-energised.</p>
   </div>
 </section>
 
 <section id="numbering">
-  <div class="section-head"><span class="section-index">03</span><h2>Cabinet numbering</h2></div>
-  <p class="section-note">Cabinet 1 is always the <strong>top-left</strong> cabinet, viewed from the front of the screen. Numbering is <strong>column-major</strong>: it runs top&rarr;bottom down the leftmost column, then continues top&rarr;bottom in the next column to the right, and so on across the screen.</p>
+  <div class="section-head"><span class="section-index">03</span><h2 data-i18n="s3h2">Cabinet numbering</h2></div>
+  <p class="section-note" data-i18n="s3note">Cabinet 1 is always the <strong>top-left</strong> cabinet, viewed from the front of the screen. Numbering is <strong>column-major</strong>: it runs top&rarr;bottom down the leftmost column, then continues top&rarr;bottom in the next column to the right, and so on across the screen.</p>
 
   <div class="callout">
-    <h4>General formula</h4>
-    <p>For an <em>n&times;n</em> grid with total cabinet count <code>N = n&sup2;</code>, and 1-based <code>row</code>/<code>column</code> counted from the top-left, front view:</p>
+    <h4 data-i18n="s3calloutH">General formula</h4>
+    <p data-i18n="s3calloutP">For an <em>n&times;n</em> grid with total cabinet count <code>N = n&sup2;</code>, and 1-based <code>row</code>/<code>column</code> counted from the top-left, front view:</p>
     <p class="mono">cabinet_number&nbsp;=&nbsp;((column&nbsp;&minus;&nbsp;1)&nbsp;&times;&nbsp;n)&nbsp;+&nbsp;row</p>
   </div>
 
   <div class="table-scroll">
   <table>
-    <caption>Verified example &mdash; 135&Prime; (5&times;5 = 25 cabinets), front view</caption>
-    <thead><tr><th scope="col"></th><th scope="col">Col 1</th><th scope="col">Col 2</th><th scope="col">Col 3</th><th scope="col">Col 4</th><th scope="col">Col 5</th></tr></thead>
+    <caption data-i18n="s3caption">Verified example &mdash; 135&Prime; (5&times;5 = 25 cabinets), front view</caption>
+    <thead><tr><th scope="col"></th><th scope="col" data-i18n="s3col1">Col 1</th><th scope="col" data-i18n="s3col2">Col 2</th><th scope="col" data-i18n="s3col3">Col 3</th><th scope="col" data-i18n="s3col4">Col 4</th><th scope="col" data-i18n="s3col5">Col 5</th></tr></thead>
     <tbody>
-      <tr><th scope="row">Row 1</th><td class="anchor-cell">1</td><td>6</td><td>11</td><td>16</td><td class="anchor-cell">21</td></tr>
-      <tr><th scope="row">Row 2</th><td>2</td><td>7</td><td>12</td><td>17</td><td>22</td></tr>
-      <tr><th scope="row">Row 3</th><td>3</td><td>8</td><td>13</td><td>18</td><td>23</td></tr>
-      <tr><th scope="row">Row 4</th><td>4</td><td>9</td><td>14</td><td>19</td><td>24</td></tr>
-      <tr><th scope="row">Row 5</th><td class="anchor-cell">5</td><td>10</td><td>15</td><td>20</td><td class="anchor-cell">25</td></tr>
+      <tr><th scope="row" data-i18n="s3row1">Row 1</th><td class="anchor-cell">1</td><td>6</td><td>11</td><td>16</td><td class="anchor-cell">21</td></tr>
+      <tr><th scope="row" data-i18n="s3row2">Row 2</th><td>2</td><td>7</td><td>12</td><td>17</td><td>22</td></tr>
+      <tr><th scope="row" data-i18n="s3row3">Row 3</th><td>3</td><td>8</td><td>13</td><td>18</td><td>23</td></tr>
+      <tr><th scope="row" data-i18n="s3row4">Row 4</th><td>4</td><td>9</td><td>14</td><td>19</td><td>24</td></tr>
+      <tr><th scope="row" data-i18n="s3row5">Row 5</th><td class="anchor-cell">5</td><td>10</td><td>15</td><td>20</td><td class="anchor-cell">25</td></tr>
     </tbody>
   </table>
   </div>
-  <p class="diagram-caption">Anchors, for any size: top-left = <code>1</code>, bottom-left = <code>n</code>, top-right = <code>N&minus;n+1</code>, bottom-right = <code>N</code>.</p>
+  <p class="diagram-caption" data-i18n="s3anchors">Anchors, for any size: top-left = <code>1</code>, bottom-left = <code>n</code>, top-right = <code>N&minus;n+1</code>, bottom-right = <code>N</code>.</p>
 </section>
 
 <section id="placement">
-  <div class="section-head"><span class="section-index">04</span><h2>Fixed component placement</h2></div>
-  <p class="section-note">These placements are identical across the whole family &mdash; no exceptions.</p>
+  <div class="section-head"><span class="section-index">04</span><h2 data-i18n="s4h2">Fixed component placement</h2></div>
+  <p class="section-note" data-i18n="s4note">These placements are identical across the whole family &mdash; no exceptions.</p>
 
   <div class="table-scroll">
   <table>
-    <thead><tr><th scope="col">Model</th><th scope="col">Sending card + main PSU</th><th scope="col">Supply cable entry cabinet</th></tr></thead>
+    <thead><tr><th scope="col" data-i18n="modelWord">Model</th><th scope="col" data-i18n="s4thSendMain">Sending card + main PSU</th><th scope="col" data-i18n="s4thCable">Supply cable entry cabinet</th></tr></thead>
     <tbody>
-      <tr><th scope="row">135&Prime;</th><td>Cabinet 25 (bottom-right)</td><td>Cabinet 24</td></tr>
-      <tr><th scope="row">162&Prime;</th><td>Cabinet 36 (bottom-right)</td><td>Cabinet 35</td></tr>
-      <tr><th scope="row">190&Prime;</th><td>Cabinet 49 (bottom-right)</td><td>Cabinet 48</td></tr>
-      <tr><th scope="row">216&Prime;</th><td>Cabinet 64 (bottom-right)</td><td>Cabinet 63</td></tr>
+      <tr><th scope="row">135&Prime;</th><td data-i18n="s4c135">Cabinet 25 (bottom-right)</td><td data-i18n="s4e135">Cabinet 24</td></tr>
+      <tr><th scope="row">162&Prime;</th><td data-i18n="s4c162">Cabinet 36 (bottom-right)</td><td data-i18n="s4e162">Cabinet 35</td></tr>
+      <tr><th scope="row">190&Prime;</th><td data-i18n="s4c190">Cabinet 49 (bottom-right)</td><td data-i18n="s4e190">Cabinet 48</td></tr>
+      <tr><th scope="row">216&Prime;</th><td data-i18n="s4c216">Cabinet 64 (bottom-right)</td><td data-i18n="s4e216">Cabinet 63</td></tr>
     </tbody>
   </table>
   </div>
 
   <dl class="rules" style="margin-top:1.2rem;">
-    <div><dt>Sending card</dt><dd>Always in the bottom-right cabinet (cabinet <code>N</code>). No exceptions across the family.</dd></div>
-    <div><dt>Main PSU</dt><dd>Always alongside the sending card, in the same bottom-right cabinet.</dd></div>
-    <div><dt>Cable entry</dt><dd>The main supply cable enters through the cabinet directly above the bottom-right one (cabinet <code>N&minus;1</code>) and runs down to the main PSU's AC&nbsp;IN.</dd></div>
-    <div><dt>Inlet connector</dt><dd>The screen's main power inlet is an <strong>IEC&nbsp;60320&nbsp;C20</strong> appliance inlet (male pins) &mdash; unpowered until connected. The mating supply cordset terminates in a <strong>C19</strong> connector (female), which is the powered end that connects to the screen.</dd></div>
-    <div><dt>Direct wiring</dt><dd>The C20 appliance inlet can be removed and the phase conductors landed directly on the PSU's screw terminals. <strong>Certified electrician only</strong> &mdash; see &sect;09.</dd></div>
+    <div><dt data-i18n="s4r1t">Sending card</dt><dd data-i18n="s4r1d">Always in the bottom-right cabinet (cabinet <code>N</code>). No exceptions across the family.</dd></div>
+    <div><dt data-i18n="s4r2t">Main PSU</dt><dd data-i18n="s4r2d">Always alongside the sending card, in the same bottom-right cabinet.</dd></div>
+    <div><dt data-i18n="s4r3t">Cable entry</dt><dd data-i18n="s4r3d">The main supply cable enters through the cabinet directly above the bottom-right one (cabinet <code>N&minus;1</code>) and runs down to the main PSU's AC&nbsp;IN.</dd></div>
+    <div><dt data-i18n="s4r4t">Inlet connector</dt><dd data-i18n="s4r4d">The screen's main power inlet is an <strong>IEC&nbsp;60320&nbsp;C20</strong> appliance inlet (male pins) &mdash; unpowered until connected. The mating supply cordset terminates in a <strong>C19</strong> connector (female), which is the powered end that connects to the screen.</dd></div>
+    <div><dt data-i18n="s4r5t">Direct wiring</dt><dd data-i18n="s4r5d">The C20 appliance inlet can be removed and the phase conductors landed directly on the PSU's screw terminals. <strong>Certified electrician only</strong> &mdash; see &sect;09.</dd></div>
   </dl>
 </section>
 
 <section id="model-matrix">
-  <div class="section-head"><span class="section-index">05</span><h2>Per-model electrical summary</h2></div>
-  <p class="section-note">These are the fixed hardware facts for each size: how many PSUs/main inlets it has, and its power draw from the official datasheet. Circuit sizing, protective devices and phase allocation are not specified by Expromo &mdash; that is the installing electrician's decision, made for the specific site. <span class="tag tag-est">EST</span> marks a figure still pending final production test.</p>
+  <div class="section-head"><span class="section-index">05</span><h2 data-i18n="s5h2">Per-model electrical summary</h2></div>
+  <p class="section-note" data-i18n="s5note">These are the fixed hardware facts for each size: how many PSUs/main inlets it has, and its power draw from the official datasheet. Circuit sizing, protective devices and phase allocation are not specified by Expromo &mdash; that is the installing electrician's decision, made for the specific site. <span class="tag tag-est">EST</span> marks a figure still pending final production test.</p>
 
   <div class="table-scroll">
   <table>
     <thead>
       <tr>
-        <th scope="col">Specification</th>
+        <th scope="col" data-i18n="specWord">Specification</th>
         <th scope="col">135&Prime;</th>
         <th scope="col">162&Prime;</th>
         <th scope="col">190&Prime;</th>
@@ -345,30 +364,30 @@
       </tr>
     </thead>
     <tbody>
-      <tr><th scope="row">Cabinet grid</th><td>5&times;5 (25)</td><td>6&times;6 (36)</td><td>7&times;7 (49)</td><td>8&times;8 (64)</td></tr>
-      <tr><th scope="row">PSU count / main inlets</th><td>1</td><td>2</td><td>3</td><td>3</td></tr>
-      <tr><th scope="row">Maximum power</th><td>1.87&nbsp;kW</td><td>2.69&nbsp;kW</td><td>3.5&nbsp;kW <span class="tag tag-est">EST</span></td><td>4.6&nbsp;kW <span class="tag tag-est">EST</span></td></tr>
-      <tr><th scope="row">Typical power</th><td>0.623&nbsp;kW</td><td>0.895&nbsp;kW</td><td>1.17&nbsp;kW <span class="tag tag-est">EST</span></td><td>1.53&nbsp;kW <span class="tag tag-est">EST</span></td></tr>
-      <tr><th scope="row">Standby (Active default / Eco)</th><td colspan="4">14&nbsp;W / 0.5&nbsp;W</td></tr>
-      <tr><th scope="row">Input voltage</th><td colspan="4">100&ndash;240&nbsp;VAC, 50/60&nbsp;Hz</td></tr>
-      <tr><th scope="row">Circuit design</th><td colspan="4">By installing electrician &mdash; not specified by Expromo</td></tr>
+      <tr><th scope="row" data-i18n="s5rGrid">Cabinet grid</th><td>5&times;5 (25)</td><td>6&times;6 (36)</td><td>7&times;7 (49)</td><td>8&times;8 (64)</td></tr>
+      <tr><th scope="row" data-i18n="s5rPSU">PSU count / main inlets</th><td>1</td><td>2</td><td>3</td><td>3</td></tr>
+      <tr><th scope="row" data-i18n="s5rMax">Maximum power</th><td>1.87&nbsp;kW</td><td>2.69&nbsp;kW</td><td>3.5&nbsp;kW <span class="tag tag-est">EST</span></td><td>4.6&nbsp;kW <span class="tag tag-est">EST</span></td></tr>
+      <tr><th scope="row" data-i18n="s5rTypical">Typical power</th><td>0.623&nbsp;kW</td><td>0.895&nbsp;kW</td><td>1.17&nbsp;kW <span class="tag tag-est">EST</span></td><td>1.53&nbsp;kW <span class="tag tag-est">EST</span></td></tr>
+      <tr><th scope="row" data-i18n="s5rStandby">Standby (Active default / Eco)</th><td colspan="4">14&nbsp;W / 0.5&nbsp;W</td></tr>
+      <tr><th scope="row" data-i18n="s5rVoltage">Input voltage</th><td colspan="4">100&ndash;240&nbsp;VAC, 50/60&nbsp;Hz</td></tr>
+      <tr><th scope="row" data-i18n="s5rCircuit">Circuit design</th><td colspan="4" data-i18n="s5dCircuit">By installing electrician &mdash; not specified by Expromo</td></tr>
     </tbody>
   </table>
   </div>
-  <p class="diagram-caption">Power figures are per screen, from the official datasheet. Each main inlet is an independent AC supply entry and can be placed on its own circuit and phase; how many circuits/phases to use, and which breakers and RCDs to fit, is a decision for the installing electrician based on the site's supply and local regulations &mdash; see &sect;09.</p>
+  <p class="diagram-caption" data-i18n="s5caption1">Power figures are per screen, from the official datasheet. Each main inlet is an independent AC supply entry and can be placed on its own circuit and phase; how many circuits/phases to use, and which breakers and RCDs to fit, is a decision for the installing electrician based on the site's supply and local regulations &mdash; see &sect;09.</p>
 
-  <h3 style="font-size:1rem; margin:2rem 0 0.6rem;">Estimated power per PSU group, at 600 nits</h3>
-  <p class="section-note">The datasheet figures above cover the whole screen and are the correct ones for electrical planning. This breakdown instead shows where that load actually falls, PSU by PSU, using each PSU's real cabinet count &mdash; useful context for the electrician when deciding how to split circuits across the main inlets, without Expromo prescribing the split itself.</p>
+  <h3 style="font-size:1rem; margin:2rem 0 0.6rem;" data-i18n="s5h3">Estimated power per PSU group, at 600 nits</h3>
+  <p class="section-note" data-i18n="s5note2">The datasheet figures above cover the whole screen and are the correct ones for electrical planning. This breakdown instead shows where that load actually falls, PSU by PSU, using each PSU's real cabinet count &mdash; useful context for the electrician when deciding how to split circuits across the main inlets, without Expromo prescribing the split itself.</p>
 
   <div class="callout">
-    <h4>Method</h4>
+    <h4 data-i18n="s5methodH">Method</h4>
     <p class="mono">Estimated power @ 600 nits&nbsp;=&nbsp;(cabinets served &times; measured cabinet power @ 600 nits)&nbsp;+&nbsp;24&nbsp;W sending-card/control overhead (Main PSU only)</p>
-    <p>The 24&nbsp;W overhead is the sending card/control draw measured during factory testing; it only applies once per screen, on the Main PSU, because there is only one sending card. Cabinet power @ 600 nits is normalized from measured samples of the closest-pitch cabinet:</p>
+    <p data-i18n="s5methodP">The 24&nbsp;W overhead is the sending card/control draw measured during factory testing; it only applies once per screen, on the Main PSU, because there is only one sending card. Cabinet power @ 600 nits is normalized from measured samples of the closest-pitch cabinet:</p>
   </div>
 
   <div class="table-scroll">
   <table style="min-width:0;">
-    <thead><tr><th scope="col">Model</th><th scope="col">Cabinet power @ 600 nits</th></tr></thead>
+    <thead><tr><th scope="col" data-i18n="modelWord">Model</th><th scope="col" data-i18n="s5thCabPower">Cabinet power @ 600 nits</th></tr></thead>
     <tbody>
       <tr><th scope="row">135&Prime;</th><td class="num">63.0&nbsp;W</td></tr>
       <tr><th scope="row">162&Prime;</th><td class="num">57.8&nbsp;W</td></tr>
@@ -380,48 +399,48 @@
 
   <div class="table-scroll" style="margin-top:1rem;">
   <table>
-    <caption>Cabinets served and estimated power per PSU group, at 600 nits</caption>
-    <thead><tr><th scope="col">Model</th><th scope="col">PSU</th><th scope="col">Cabinets served</th><th scope="col">Est. power @ 600 nits</th></tr></thead>
+    <caption data-i18n="s5caption2">Cabinets served and estimated power per PSU group, at 600 nits</caption>
+    <thead><tr><th scope="col" data-i18n="modelWord">Model</th><th scope="col">PSU</th><th scope="col" data-i18n="s5thCabsServed">Cabinets served</th><th scope="col" data-i18n="s5thEstPower">Est. power @ 600 nits</th></tr></thead>
     <tbody>
-      <tr><th scope="row">135&Prime;</th><td>Main PSU (+ sending card)</td><td class="num">25</td><td class="num">1,599&nbsp;W</td></tr>
-      <tr class="subtotal-row"><th scope="row">135&Prime; screen total</th><td colspan="2"></td><td class="num">&asymp;1.60&nbsp;kW</td></tr>
+      <tr><th scope="row">135&Prime;</th><td data-i18n="mainPsuSend">Main PSU (+ sending card)</td><td class="num">25</td><td class="num">1,599&nbsp;W</td></tr>
+      <tr class="subtotal-row"><th scope="row" data-i18n="s5total135">135&Prime; screen total</th><td colspan="2"></td><td class="num">&asymp;1.60&nbsp;kW</td></tr>
 
-      <tr><th scope="row">162&Prime;</th><td>Main PSU (+ sending card)</td><td class="num">18</td><td class="num">1,064&nbsp;W</td></tr>
-      <tr><th scope="row">162&Prime;</th><td>Secondary PSU</td><td class="num">18</td><td class="num">1,040&nbsp;W</td></tr>
-      <tr class="subtotal-row"><th scope="row">162&Prime; screen total</th><td colspan="2"></td><td class="num">&asymp;2.11&nbsp;kW</td></tr>
+      <tr><th scope="row">162&Prime;</th><td data-i18n="mainPsuSend">Main PSU (+ sending card)</td><td class="num">18</td><td class="num">1,064&nbsp;W</td></tr>
+      <tr><th scope="row">162&Prime;</th><td data-i18n="secPsuWord">Secondary PSU</td><td class="num">18</td><td class="num">1,040&nbsp;W</td></tr>
+      <tr class="subtotal-row"><th scope="row" data-i18n="s5total162">162&Prime; screen total</th><td colspan="2"></td><td class="num">&asymp;2.11&nbsp;kW</td></tr>
 
-      <tr><th scope="row">190&Prime;</th><td>Main PSU (+ sending card)</td><td class="num">21</td><td class="num">1,238&nbsp;W</td></tr>
-      <tr><th scope="row">190&Prime;</th><td>Secondary PSU 1</td><td class="num">14</td><td class="num">809&nbsp;W</td></tr>
-      <tr><th scope="row">190&Prime;</th><td>Secondary PSU 2</td><td class="num">14</td><td class="num">809&nbsp;W</td></tr>
-      <tr class="subtotal-row"><th scope="row">190&Prime; screen total</th><td colspan="2"></td><td class="num">&asymp;2.86&nbsp;kW</td></tr>
+      <tr><th scope="row">190&Prime;</th><td data-i18n="mainPsuSend">Main PSU (+ sending card)</td><td class="num">21</td><td class="num">1,238&nbsp;W</td></tr>
+      <tr><th scope="row">190&Prime;</th><td data-i18n="secPsu1Word">Secondary PSU 1</td><td class="num">14</td><td class="num">809&nbsp;W</td></tr>
+      <tr><th scope="row">190&Prime;</th><td data-i18n="secPsu2Word">Secondary PSU 2</td><td class="num">14</td><td class="num">809&nbsp;W</td></tr>
+      <tr class="subtotal-row"><th scope="row" data-i18n="s5total190">190&Prime; screen total</th><td colspan="2"></td><td class="num">&asymp;2.86&nbsp;kW</td></tr>
 
-      <tr><th scope="row">216&Prime;</th><td>Main PSU (+ sending card)</td><td class="num">24</td><td class="num">1,296&nbsp;W</td></tr>
-      <tr><th scope="row">216&Prime;</th><td>Secondary PSU 1</td><td class="num">24</td><td class="num">1,272&nbsp;W</td></tr>
-      <tr><th scope="row">216&Prime;</th><td>Secondary PSU 2</td><td class="num">16</td><td class="num">848&nbsp;W</td></tr>
-      <tr class="subtotal-row"><th scope="row">216&Prime; screen total</th><td colspan="2"></td><td class="num">&asymp;3.41&nbsp;kW</td></tr>
+      <tr><th scope="row">216&Prime;</th><td data-i18n="mainPsuSend">Main PSU (+ sending card)</td><td class="num">24</td><td class="num">1,296&nbsp;W</td></tr>
+      <tr><th scope="row">216&Prime;</th><td data-i18n="secPsu1Word">Secondary PSU 1</td><td class="num">24</td><td class="num">1,272&nbsp;W</td></tr>
+      <tr><th scope="row">216&Prime;</th><td data-i18n="secPsu2Word">Secondary PSU 2</td><td class="num">16</td><td class="num">848&nbsp;W</td></tr>
+      <tr class="subtotal-row"><th scope="row" data-i18n="s5total216">216&Prime; screen total</th><td colspan="2"></td><td class="num">&asymp;3.41&nbsp;kW</td></tr>
     </tbody>
   </table>
   </div>
-  <p class="diagram-caption">These are realistic operating estimates at 600 nits, not the conservative datasheet maximum &mdash; see the eXview power-consumption snapshot for the full measurement basis. They are provided for operational/discussion purposes; the official datasheet maximum power in the table above remains the correct figure for electrical planning.</p>
+  <p class="diagram-caption" data-i18n="s5caption3">These are realistic operating estimates at 600 nits, not the conservative datasheet maximum &mdash; see the eXview power-consumption snapshot for the full measurement basis. They are provided for operational/discussion purposes; the official datasheet maximum power in the table above remains the correct figure for electrical planning.</p>
 </section>
 
 <section id="harness">
-  <div class="section-head"><span class="section-index">06</span><h2>PSU interconnect &mdash; 3-pin &amp; 5-pin harness</h2></div>
-  <p class="section-note">Every PSU &mdash; main and secondary &mdash; carries the same two low-voltage ports, always in the same position.</p>
+  <div class="section-head"><span class="section-index">06</span><h2 data-i18n="s6h2">PSU interconnect &mdash; 3-pin &amp; 5-pin harness</h2></div>
+  <p class="section-note" data-i18n="s6note">Every PSU &mdash; main and secondary &mdash; carries the same two low-voltage ports, always in the same position.</p>
 
   <div class="table-scroll">
   <table>
-    <thead><tr><th scope="col">Port</th><th scope="col">Position on PSU</th><th scope="col">Function</th></tr></thead>
+    <thead><tr><th scope="col" data-i18n="s6thPort">Port</th><th scope="col" data-i18n="s6thPosition">Position on PSU</th><th scope="col" data-i18n="s6thFunction">Function</th></tr></thead>
     <tbody>
-      <tr><th scope="row">3-pin</th><td>Bottom-left</td><td><strong>12&nbsp;V link between PSUs</strong> &mdash; distributes the main PSU's 12&nbsp;V to every secondary PSU</td></tr>
-      <tr><th scope="row">5-pin</th><td>Bottom-right</td><td><strong>12&nbsp;V + standby activate/deactivate</strong> &mdash; from the main PSU to the sending card, and from each secondary PSU to its distribution board</td></tr>
+      <tr><th scope="row">3-pin</th><td data-i18n="bottomLeft">Bottom-left</td><td data-i18n="s6d3pin"><strong>12&nbsp;V link between PSUs</strong> &mdash; distributes the main PSU's 12&nbsp;V to every secondary PSU</td></tr>
+      <tr><th scope="row">5-pin</th><td data-i18n="bottomRight">Bottom-right</td><td data-i18n="s6d5pin"><strong>12&nbsp;V + standby activate/deactivate</strong> &mdash; from the main PSU to the sending card, and from each secondary PSU to its distribution board</td></tr>
     </tbody>
   </table>
   </div>
 
   <div class="diagram-card" style="margin-top:1.4rem;">
     <svg viewBox="0 0 1000 380" role="img" aria-labelledby="harness-diagram-title">
-      <title id="harness-diagram-title">Conceptual power and control signal flow for a three-PSU eXview Edge screen</title>
+      <title id="harness-diagram-title" data-i18n="svgTitle">Conceptual power and control signal flow for a three-PSU eXview Edge screen</title>
       <defs>
         <marker id="arrowRed" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="#E23B3B"/>
@@ -433,16 +452,16 @@
       <!-- Cabinet groups -->
       <g>
         <rect x="50" y="14" width="200" height="56" rx="6" fill="#C8E6A0" stroke="#5B8C1A"/>
-        <text x="150" y="38" text-anchor="middle" font-family="IBM Plex Sans" font-size="12" font-weight="600" fill="#2B3B0F">Cabinets</text>
-        <text x="150" y="54" text-anchor="middle" font-family="IBM Plex Mono" font-size="9.5" fill="#3E5015">Secondary PSU 2 group</text>
+        <text x="150" y="38" text-anchor="middle" font-family="IBM Plex Sans, Noto Sans SC" font-size="12" font-weight="600" fill="#2B3B0F" data-i18n="svgCabinets">Cabinets</text>
+        <text x="150" y="54" text-anchor="middle" font-family="IBM Plex Mono" font-size="9.5" fill="#3E5015" data-i18n="svgSec2Group">Secondary PSU 2 group</text>
 
         <rect x="400" y="14" width="200" height="56" rx="6" fill="#C8E6A0" stroke="#5B8C1A"/>
-        <text x="500" y="38" text-anchor="middle" font-family="IBM Plex Sans" font-size="12" font-weight="600" fill="#2B3B0F">Cabinets</text>
-        <text x="500" y="54" text-anchor="middle" font-family="IBM Plex Mono" font-size="9.5" fill="#3E5015">Secondary PSU 1 group</text>
+        <text x="500" y="38" text-anchor="middle" font-family="IBM Plex Sans, Noto Sans SC" font-size="12" font-weight="600" fill="#2B3B0F" data-i18n="svgCabinets">Cabinets</text>
+        <text x="500" y="54" text-anchor="middle" font-family="IBM Plex Mono" font-size="9.5" fill="#3E5015" data-i18n="svgSec1Group">Secondary PSU 1 group</text>
 
         <rect x="750" y="14" width="200" height="56" rx="6" fill="#C8E6A0" stroke="#5B8C1A"/>
-        <text x="850" y="38" text-anchor="middle" font-family="IBM Plex Sans" font-size="12" font-weight="600" fill="#2B3B0F">Cabinets</text>
-        <text x="850" y="54" text-anchor="middle" font-family="IBM Plex Mono" font-size="9.5" fill="#3E5015">Main PSU group</text>
+        <text x="850" y="38" text-anchor="middle" font-family="IBM Plex Sans, Noto Sans SC" font-size="12" font-weight="600" fill="#2B3B0F" data-i18n="svgCabinets">Cabinets</text>
+        <text x="850" y="54" text-anchor="middle" font-family="IBM Plex Mono" font-size="9.5" fill="#3E5015" data-i18n="svgMainGroup">Main PSU group</text>
       </g>
 
       <!-- AC OUT arrows up to cabinets -->
@@ -454,16 +473,16 @@
       <!-- PSU boxes -->
       <g>
         <rect x="50" y="95" width="200" height="90" rx="6" fill="#F6C6C6" stroke="#B33939" stroke-width="1.4"/>
-        <text x="150" y="122" text-anchor="middle" font-family="Space Grotesk" font-size="13" font-weight="700" fill="#5C1414">Secondary PSU 2</text>
-        <text x="150" y="140" text-anchor="middle" font-family="IBM Plex Mono" font-size="9.5" fill="#7A2323">AC IN &larr; main inlet #3</text>
+        <text x="150" y="122" text-anchor="middle" font-family="Space Grotesk, Noto Sans SC" font-size="13" font-weight="700" fill="#5C1414" data-i18n="svgSec2">Secondary PSU 2</text>
+        <text x="150" y="140" text-anchor="middle" font-family="IBM Plex Mono" font-size="9.5" fill="#7A2323" data-i18n="svgIn3">AC IN &larr; main inlet #3</text>
 
         <rect x="400" y="95" width="200" height="90" rx="6" fill="#F6C6C6" stroke="#B33939" stroke-width="1.4"/>
-        <text x="500" y="122" text-anchor="middle" font-family="Space Grotesk" font-size="13" font-weight="700" fill="#5C1414">Secondary PSU 1</text>
-        <text x="500" y="140" text-anchor="middle" font-family="IBM Plex Mono" font-size="9.5" fill="#7A2323">AC IN &larr; main inlet #2</text>
+        <text x="500" y="122" text-anchor="middle" font-family="Space Grotesk, Noto Sans SC" font-size="13" font-weight="700" fill="#5C1414" data-i18n="svgSec1">Secondary PSU 1</text>
+        <text x="500" y="140" text-anchor="middle" font-family="IBM Plex Mono" font-size="9.5" fill="#7A2323" data-i18n="svgIn2">AC IN &larr; main inlet #2</text>
 
         <rect x="750" y="95" width="200" height="90" rx="6" fill="#F6C6C6" stroke="#B33939" stroke-width="1.4"/>
-        <text x="850" y="118" text-anchor="middle" font-family="Space Grotesk" font-size="13" font-weight="700" fill="#5C1414">Main PSU</text>
-        <text x="850" y="134" text-anchor="middle" font-family="IBM Plex Mono" font-size="9.5" fill="#7A2323">AC IN &larr; main inlet #1</text>
+        <text x="850" y="118" text-anchor="middle" font-family="Space Grotesk, Noto Sans SC" font-size="13" font-weight="700" fill="#5C1414" data-i18n="svgMain">Main PSU</text>
+        <text x="850" y="134" text-anchor="middle" font-family="IBM Plex Mono" font-size="9.5" fill="#7A2323" data-i18n="svgIn1">AC IN &larr; main inlet #1</text>
         <rect x="800" y="145" width="100" height="24" rx="4" fill="#FBEFDD" stroke="#B8960C"/>
         <text x="850" y="161" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" font-weight="600" fill="#7A5A08">AC-DC (12V)</text>
       </g>
@@ -473,66 +492,66 @@
       <line x1="500" y1="185" x2="500" y2="210" stroke="#2255D6" stroke-width="3"/>
       <line x1="850" y1="185" x2="850" y2="210" stroke="#2255D6" stroke-width="3"/>
       <line x1="150" y1="210" x2="850" y2="210" stroke="#2255D6" stroke-width="3"/>
-      <text x="500" y="228" text-anchor="middle" font-family="IBM Plex Mono" font-size="10.5" fill="#2255D6">3-pin &middot; 12V link, main PSU &rarr; every secondary</text>
+      <text x="500" y="228" text-anchor="middle" font-family="IBM Plex Mono, Noto Sans SC" font-size="10.5" fill="#2255D6" data-i18n="svg3pinLine">3-pin &middot; 12V link, main PSU &rarr; every secondary</text>
 
       <!-- 5-pin drops -->
       <line x1="190" y1="185" x2="190" y2="270" stroke="#B93FC1" stroke-width="3"/>
       <line x1="540" y1="185" x2="540" y2="270" stroke="#B93FC1" stroke-width="3"/>
       <line x1="890" y1="185" x2="890" y2="270" stroke="#B93FC1" stroke-width="3"/>
-      <text x="890" y="255" text-anchor="end" font-family="IBM Plex Mono" font-size="10.5" fill="#B93FC1">5-pin &middot; 12V + standby control</text>
+      <text x="890" y="255" text-anchor="end" font-family="IBM Plex Mono, Noto Sans SC" font-size="10.5" fill="#B93FC1" data-i18n="svg5pinLine">5-pin &middot; 12V + standby control</text>
 
       <!-- Downstream boxes -->
       <rect x="60" y="270" width="180" height="50" rx="6" fill="#F5E27A" stroke="#B8960C"/>
-      <text x="150" y="300" text-anchor="middle" font-family="IBM Plex Sans" font-size="12" font-weight="600" fill="#5C4A05">Distribution board</text>
+      <text x="150" y="300" text-anchor="middle" font-family="IBM Plex Sans, Noto Sans SC" font-size="12" font-weight="600" fill="#5C4A05" data-i18n="svgDistBoard">Distribution board</text>
 
       <rect x="410" y="270" width="180" height="50" rx="6" fill="#F5E27A" stroke="#B8960C"/>
-      <text x="500" y="300" text-anchor="middle" font-family="IBM Plex Sans" font-size="12" font-weight="600" fill="#5C4A05">Distribution board</text>
+      <text x="500" y="300" text-anchor="middle" font-family="IBM Plex Sans, Noto Sans SC" font-size="12" font-weight="600" fill="#5C4A05" data-i18n="svgDistBoard">Distribution board</text>
 
       <rect x="760" y="270" width="180" height="50" rx="6" fill="#FFFFFF" stroke="#0B1E27" stroke-width="1.6"/>
-      <text x="850" y="300" text-anchor="middle" font-family="IBM Plex Sans" font-size="12" font-weight="600" fill="#0B1E27">Sending card</text>
+      <text x="850" y="300" text-anchor="middle" font-family="IBM Plex Sans, Noto Sans SC" font-size="12" font-weight="600" fill="#0B1E27" data-i18n="svgSendCard">Sending card</text>
 
-      <text x="500" y="352" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#4B5760">Conceptual signal flow, not to scale. On 162&Prime;, drop Secondary PSU 2. On 135&Prime;, only the Main PSU exists &mdash; no 3-pin link applies.</text>
+      <text x="500" y="352" text-anchor="middle" font-family="IBM Plex Mono, Noto Sans SC" font-size="10" fill="#4B5760" data-i18n="svgFootnote">Conceptual signal flow, not to scale. On 162&Prime;, drop Secondary PSU 2. On 135&Prime;, only the Main PSU exists &mdash; no 3-pin link applies.</text>
     </svg>
   </div>
 
   <dl class="rules" style="margin-top:1.4rem;">
-    <div><dt>3-pin link</dt><dd>The main PSU's 3-pin port links to the 3-pin port of every secondary PSU, distributing the 12&nbsp;V the main PSU's AC&#8209;DC converter produces. The 135&Prime; has a single PSU, so no 3-pin link cable applies.</dd></div>
-    <div><dt>5-pin path</dt><dd>The sending card is powered from the main PSU's <strong>5-pin</strong> port, not the 3-pin. If a sending card appears dead, trace the 5-pin run from the main PSU &mdash; the inter-PSU 12&nbsp;V chain is a separate fault domain.</dd></div>
-    <div><dt>Custom cables</dt><dd>On 162&Prime;, 190&Prime; and 216&Prime;, both the 3-pin and 5-pin cables are <strong>custom-made per model</strong> and are not interchangeable between sizes. Order by model, not by length.</dd></div>
-    <div><dt>Pinouts</dt><dd>The 3-pin and 5-pin pinouts are proprietary and not published. Do not fabricate substitute cables &mdash; order factory cables through Expromo.</dd></div>
-    <div><dt>Direct wiring</dt><dd>If the C20 appliance inlet is removed and phase conductors are landed directly on the PSU screw terminals, all 3-pin/5-pin wiring is unaffected.</dd></div>
+    <div><dt data-i18n="s6r1t">3-pin link</dt><dd data-i18n="s6r1d">The main PSU's 3-pin port links to the 3-pin port of every secondary PSU, distributing the 12&nbsp;V the main PSU's AC&#8209;DC converter produces. The 135&Prime; has a single PSU, so no 3-pin link cable applies.</dd></div>
+    <div><dt data-i18n="s6r2t">5-pin path</dt><dd data-i18n="s6r2d">The sending card is powered from the main PSU's <strong>5-pin</strong> port, not the 3-pin. If a sending card appears dead, trace the 5-pin run from the main PSU &mdash; the inter-PSU 12&nbsp;V chain is a separate fault domain.</dd></div>
+    <div><dt data-i18n="s6r3t">Custom cables</dt><dd data-i18n="s6r3d">On 162&Prime;, 190&Prime; and 216&Prime;, both the 3-pin and 5-pin cables are <strong>custom-made per model</strong> and are not interchangeable between sizes. Order by model, not by length.</dd></div>
+    <div><dt data-i18n="s6r4t">Pinouts</dt><dd data-i18n="s6r4d">The 3-pin and 5-pin pinouts are proprietary and not published. Do not fabricate substitute cables &mdash; order factory cables through Expromo.</dd></div>
+    <div><dt data-i18n="s4r5t">Direct wiring</dt><dd data-i18n="s6r5d">If the C20 appliance inlet is removed and phase conductors are landed directly on the PSU screw terminals, all 3-pin/5-pin wiring is unaffected.</dd></div>
   </dl>
 
   <div class="callout" style="margin-top:1rem;">
-    <h4>Troubleshooting tip: partial standby</h4>
-    <p>If one group of columns shows no content coming out of standby, but its 3-in-1 boards and LED drivers stay warm, that group's PSU relay is not being driven. Check first that both the <strong>3-pin (12&nbsp;V link)</strong> and <strong>5-pin (power + standby control)</strong> connections to that secondary PSU are fitted and fully seated &mdash; this is the expected symptom of a loose or missing harness connection, not a firmware fault. Checking both connectors also confirms which one needs reseating before you look any further.</p>
+    <h4 data-i18n="s6troubleH">Troubleshooting tip: partial standby</h4>
+    <p data-i18n="s6troubleP">If one group of columns shows no content coming out of standby, but its 3-in-1 boards and LED drivers stay warm, that group's PSU relay is not being driven. Check first that both the <strong>3-pin (12&nbsp;V link)</strong> and <strong>5-pin (power + standby control)</strong> connections to that secondary PSU are fitted and fully seated &mdash; this is the expected symptom of a loose or missing harness connection, not a firmware fault. Checking both connectors also confirms which one needs reseating before you look any further.</p>
   </div>
 </section>
 
 <section id="sequence">
-  <div class="section-head"><span class="section-index">07</span><h2>Recommended installation sequence</h2></div>
-  <p class="section-note">The screen's front-access, tool-less design means the LED modules go in last, after the electrical backbone is proven to be correct &mdash; not before. This avoids energising freshly-fitted modules against a mis-wired or incomplete power/control chain.</p>
+  <div class="section-head"><span class="section-index">07</span><h2 data-i18n="s7h2">Recommended installation sequence</h2></div>
+  <p class="section-note" data-i18n="s7note">The screen's front-access, tool-less design means the LED modules go in last, after the electrical backbone is proven to be correct &mdash; not before. This avoids energising freshly-fitted modules against a mis-wired or incomplete power/control chain.</p>
   <ol class="sequence">
-    <li>Mount and align all cabinets on the wall-mounting bar (or stand/trolley, where offered) before any wiring.</li>
-    <li>Route and land the mains AC supply to each main inlet, per the circuit design agreed for the model (&sect;05).</li>
-    <li>Connect the 3-pin (12&nbsp;V link) harness between the main PSU and every secondary PSU, and the 5-pin (power + standby control) harness from the main PSU to the sending card and from each secondary PSU to its distribution board. Factory cables only (&sect;06).</li>
-    <li>Power on and confirm correct behaviour before fitting any modules: all AC&nbsp;OUT groups should energise together, and the sending card should respond to control/standby commands.</li>
-    <li>Only then install the LED modules into the cabinets from the front, cabinet by cabinet.</li>
+    <li data-i18n="s7step1">Mount and align all cabinets on the wall-mounting bar (or stand/trolley, where offered) before any wiring.</li>
+    <li data-i18n="s7step2">Route and land the mains AC supply to each main inlet, per the circuit design agreed for the model (&sect;05).</li>
+    <li data-i18n="s7step3">Connect the 3-pin (12&nbsp;V link) harness between the main PSU and every secondary PSU, and the 5-pin (power + standby control) harness from the main PSU to the sending card and from each secondary PSU to its distribution board. Factory cables only (&sect;06).</li>
+    <li data-i18n="s7step4">Power on and confirm correct behaviour before fitting any modules: all AC&nbsp;OUT groups should energise together, and the sending card should respond to control/standby commands.</li>
+    <li data-i18n="s7step5">Only then install the LED modules into the cabinets from the front, cabinet by cabinet.</li>
   </ol>
 </section>
 
 <section id="drawings">
-  <div class="section-head"><span class="section-index">08</span><h2>Reference wiring diagrams</h2></div>
-  <p class="section-note">Factory harness drawings for all four models. Grid lines are for reference only &mdash; the assembled screen surface is seamless. Click any drawing to open it full-size.</p>
+  <div class="section-head"><span class="section-index">08</span><h2 data-i18n="s8h2">Reference wiring diagrams</h2></div>
+  <p class="section-note" data-i18n="s8note">Factory harness drawings for all four models. Grid lines are for reference only &mdash; the assembled screen surface is seamless. Click any drawing to open it full-size.</p>
 
   <ul class="legend" style="margin-bottom:1.4rem;">
-    <li><span class="swatch" style="background:#C8E6A0;border-color:#5B8C1A;"></span>3-in-1 board (per-cabinet power/receiving/HUB)</li>
-    <li><span class="swatch" style="background:#F6C6C6;border-color:#B33939;"></span>PSU / relay module</li>
-    <li><span class="swatch" style="background:#F5E27A;border-color:#B8960C;"></span>Distribution board</li>
-    <li><span class="swatch" style="background:#FFFFFF;border:1.6px solid #0B1E27;"></span>Sending card</li>
-    <li><span class="line" style="background:#E23B3B;"></span>Switched AC bus (colour per PSU group)</li>
-    <li><span class="line" style="background:#2255D6;"></span>3-pin &middot; 12V link, PSU to PSU</li>
-    <li><span class="line" style="background:#B93FC1;"></span>5-pin &middot; power + standby control</li>
+    <li><span class="swatch" style="background:#C8E6A0;border-color:#5B8C1A;"></span><span data-i18n="s8leg1">3-in-1 board (per-cabinet power/receiving/HUB)</span></li>
+    <li><span class="swatch" style="background:#F6C6C6;border-color:#B33939;"></span><span data-i18n="s8leg2">PSU / relay module</span></li>
+    <li><span class="swatch" style="background:#F5E27A;border-color:#B8960C;"></span><span data-i18n="svgDistBoard">Distribution board</span></li>
+    <li><span class="swatch" style="background:#FFFFFF;border:1.6px solid #0B1E27;"></span><span data-i18n="svgSendCard">Sending card</span></li>
+    <li><span class="line" style="background:#E23B3B;"></span><span data-i18n="s8leg5">Switched AC bus (colour per PSU group)</span></li>
+    <li><span class="line" style="background:#2255D6;"></span><span data-i18n="s8leg6">3-pin &middot; 12V link, PSU to PSU</span></li>
+    <li><span class="line" style="background:#B93FC1;"></span><span data-i18n="s8leg7">5-pin &middot; power + standby control</span></li>
   </ul>
 
   <div class="figure-grid">
@@ -542,11 +561,11 @@
       <div class="figure-card__body">
         <figure>
           <a href="assets/135inch.png" target="_blank" rel="noopener"><img src="assets/135inch.png" alt="135 inch full cabinet and harness overview"></a>
-          <figcaption>Full harness overview &mdash; <code>135inch.png</code></figcaption>
+          <figcaption data-i18n="figFull135">Full harness overview &mdash; <code>135inch.png</code></figcaption>
         </figure>
         <figure>
           <a href="assets/135inch_Wire_Harness_Zoom.png" target="_blank" rel="noopener"><img src="assets/135inch_Wire_Harness_Zoom.png" alt="135 inch bottom-right detail: AC-DC module, sending card, 5-pin run"></a>
-          <figcaption>Bottom-right detail: AC&#8209;DC module, sending card, 5-pin run &mdash; <code>135inch_Wire_Harness_Zoom.png</code></figcaption>
+          <figcaption data-i18n="fig135zoom">Bottom-right detail: AC&#8209;DC module, sending card, 5-pin run &mdash; <code>135inch_Wire_Harness_Zoom.png</code></figcaption>
         </figure>
       </div>
     </article>
@@ -556,11 +575,11 @@
       <div class="figure-card__body">
         <figure>
           <a href="assets/162inch.png" target="_blank" rel="noopener"><img src="assets/162inch.png" alt="162 inch full cabinet and harness overview"></a>
-          <figcaption>Full harness overview &mdash; <code>162inch.png</code></figcaption>
+          <figcaption data-i18n="figFull162">Full harness overview &mdash; <code>162inch.png</code></figcaption>
         </figure>
         <figure>
           <a href="assets/162inch_Wire_Harness_Zoom.png" target="_blank" rel="noopener"><img src="assets/162inch_Wire_Harness_Zoom.png" alt="162 inch bottom-right detail: main and secondary PSU, 3-pin and 5-pin runs"></a>
-          <figcaption>Bottom-right detail: main + secondary PSU, 3-pin and 5-pin runs &mdash; <code>162inch_Wire_Harness_Zoom.png</code></figcaption>
+          <figcaption data-i18n="fig162zoom">Bottom-right detail: main + secondary PSU, 3-pin and 5-pin runs &mdash; <code>162inch_Wire_Harness_Zoom.png</code></figcaption>
         </figure>
       </div>
     </article>
@@ -570,11 +589,11 @@
       <div class="figure-card__body">
         <figure>
           <a href="assets/190inch.png" target="_blank" rel="noopener"><img src="assets/190inch.png" alt="190 inch full cabinet and harness overview"></a>
-          <figcaption>Full harness overview &mdash; <code>190inch.png</code></figcaption>
+          <figcaption data-i18n="figFull190">Full harness overview &mdash; <code>190inch.png</code></figcaption>
         </figure>
         <figure>
           <a href="assets/190inch_and_216inch_Wire_Harness_Zoom.png" target="_blank" rel="noopener"><img src="assets/190inch_and_216inch_Wire_Harness_Zoom.png" alt="190 and 216 inch bottom-right detail, three PSUs"></a>
-          <figcaption>Bottom-right detail, 3 PSUs (shared drawing with 216&Prime;) &mdash; <code>190inch_and_216inch_Wire_Harness_Zoom.png</code></figcaption>
+          <figcaption data-i18n="fig190zoom">Bottom-right detail, 3 PSUs (shared drawing with 216&Prime;) &mdash; <code>190inch_and_216inch_Wire_Harness_Zoom.png</code></figcaption>
         </figure>
       </div>
     </article>
@@ -584,11 +603,11 @@
       <div class="figure-card__body">
         <figure>
           <a href="assets/216inch.png" target="_blank" rel="noopener"><img src="assets/216inch.png" alt="216 inch full cabinet and harness overview"></a>
-          <figcaption>Full harness overview &mdash; <code>216inch.png</code></figcaption>
+          <figcaption data-i18n="figFull216">Full harness overview &mdash; <code>216inch.png</code></figcaption>
         </figure>
         <figure>
           <a href="assets/190inch_and_216inch_Wire_Harness_Zoom.png" target="_blank" rel="noopener"><img src="assets/190inch_and_216inch_Wire_Harness_Zoom.png" alt="190 and 216 inch bottom-right detail, three PSUs"></a>
-          <figcaption>Bottom-right detail, 3 PSUs (shared drawing with 190&Prime;) &mdash; <code>190inch_and_216inch_Wire_Harness_Zoom.png</code></figcaption>
+          <figcaption data-i18n="fig216zoom">Bottom-right detail, 3 PSUs (shared drawing with 190&Prime;) &mdash; <code>190inch_and_216inch_Wire_Harness_Zoom.png</code></figcaption>
         </figure>
       </div>
     </article>
@@ -597,26 +616,620 @@
 </section>
 
 <section id="notes">
-  <div class="section-head"><span class="section-index">09</span><h2>Installation electrical notes</h2></div>
+  <div class="section-head"><span class="section-index">09</span><h2 data-i18n="s9h2">Installation electrical notes</h2></div>
   <dl class="rules">
-    <div><dt>Responsibility</dt><dd>Circuit sizing, protective devices (breakers, RCDs) and phase allocation are entirely the responsibility of the installing electrician, per local regulations and the per-model power figures in &sect;05. Expromo does not specify or recommend a circuit breaker, RCD rating or curve type for these screens &mdash; we specify the number of PSUs/main inlets, and the electrician selects the protective device for each.</dd></div>
-    <div><dt>Inrush</dt><dd>The PSUs use zero-cross relays, which limit inrush current at switch-on. This is a hardware fact for the electrician to factor into their own device selection, not a substitute for it.</dd></div>
-    <div><dt>Multi-inlet screens</dt><dd>On 162&Prime;, 190&Prime; and 216&Prime;, each main inlet is a separate supply entry and may sit on its own phase and its own protective device. Because the inter-PSU link is 12&nbsp;V (not AC), separate inlets can be fed from different phases while the screen still switches standby as one unit.</dd></div>
-    <div><dt>Direct phase wiring</dt><dd>Removing the C20 appliance inlet and landing phase conductors directly on the PSU screw terminals is a supported option, and must be carried out by a <strong>certified electrician</strong>.</dd></div>
+    <div><dt data-i18n="s9r1t">Responsibility</dt><dd data-i18n="s9r1d">Circuit sizing, protective devices (breakers, RCDs) and phase allocation are entirely the responsibility of the installing electrician, per local regulations and the per-model power figures in &sect;05. Expromo does not specify or recommend a circuit breaker, RCD rating or curve type for these screens &mdash; we specify the number of PSUs/main inlets, and the electrician selects the protective device for each.</dd></div>
+    <div><dt data-i18n="s9r2t">Inrush</dt><dd data-i18n="s9r2d">The PSUs use zero-cross relays, which limit inrush current at switch-on. This is a hardware fact for the electrician to factor into their own device selection, not a substitute for it.</dd></div>
+    <div><dt data-i18n="s9r3t">Multi-inlet screens</dt><dd data-i18n="s9r3d">On 162&Prime;, 190&Prime; and 216&Prime;, each main inlet is a separate supply entry and may sit on its own phase and its own protective device. Because the inter-PSU link is 12&nbsp;V (not AC), separate inlets can be fed from different phases while the screen still switches standby as one unit.</dd></div>
+    <div><dt data-i18n="s9r4t">Direct phase wiring</dt><dd data-i18n="s9r4d">Removing the C20 appliance inlet and landing phase conductors directly on the PSU screw terminals is a supported option, and must be carried out by a <strong>certified electrician</strong>.</dd></div>
   </dl>
 </section>
 
 </main>
 
 <footer class="page-footer">
-  <p>Compiled from internal engineering documentation covering cabinet numbering, power architecture, the factory harness drawings referenced in &sect;08, and measured cabinet power data (used in &sect;05).</p>
-  <p>Related documents:</p>
+  <p data-i18n="footer1">Compiled from internal engineering documentation covering cabinet numbering, power architecture, the factory harness drawings referenced in &sect;08, and measured cabinet power data (used in &sect;05).</p>
+  <p data-i18n="footer2">Related documents:</p>
   <ul>
-    <li><a href="../specs/exview-edge-specification-comparison.html">eXview Edge Specification Comparison</a> &mdash; full technical spec reference</li>
-    <li><a href="../marketing/exview-edge-datasheet.html">eXview Edge Datasheet</a> &mdash; customer-facing product sheet</li>
+    <li><a href="../specs/exview-edge-specification-comparison.html" data-i18n="footerLink1">eXview Edge Specification Comparison</a> &mdash; <span data-i18n="footerLink1d">full technical spec reference</span></li>
+    <li><a href="../marketing/exview-edge-datasheet.html" data-i18n="footerLink2">eXview Edge Datasheet</a> &mdash; <span data-i18n="footerLink2d">customer-facing product sheet</span></li>
   </ul>
-  <p>Questions on a specific site's circuit design should be directed to Expromo project engineering before work begins.</p>
+  <p data-i18n="footer3">Questions on a specific site's circuit design should be directed to Expromo project engineering before work begins.</p>
 </footer>
+
+<script>
+(function () {
+  var STRINGS = {
+    en: {
+      eyebrow: `Installation Reference`,
+      h1: `Electrical &amp; Power Architecture Installation Guide`,
+      subtitle: `eXview Edge family &mdash; 135&Prime;, 162&Prime;, 190&Prime; and 216&Prime;. How the screens are supplied, switched and interconnected, and what your electrician needs to plan the circuit.`,
+      quickLink: `&larr; In a hurry? Read the 2-minute quick reference`,
+      summaryStrip: `<strong>In short:</strong> all four sizes run on 100&ndash;240&nbsp;VAC, 50/60&nbsp;Hz. 135&Prime; has 1 main power inlet, 162&Prime; has 2, and 190&Prime; and 216&Prime; each have 3 &mdash; every inlet is an independent AC supply entry that can be placed on its own circuit and phase. Expromo does not specify circuit breakers, RCDs or phase allocation: <strong>circuit sizing and protective device selection are entirely the responsibility of the installing electrician</strong>, based on the power figures in this guide and local regulations.`,
+      toc1: `Terminology`, toc2: `Power domains &amp; standby`, toc3: `Cabinet numbering`, toc4: `Component placement`,
+      toc5: `Per-model electrical summary`, toc6: `PSU interconnect (3-pin / 5-pin)`, toc7: `Installation sequence`,
+      toc8: `Reference drawings`, toc9: `Installation notes`,
+
+      s1h2: `Terminology`,
+      s1note: `All four models share one <strong>600 &times; 337.5&nbsp;mm cabinet</strong>. Larger sizes are built by adding a row and a column of the same cabinet &mdash; nothing changes inside the cabinet itself.`,
+      s1thTerm: `Term`, s1thMeans: `What it means`,
+      s1rCabinet: `Cabinet`, s1dCabinet: `One 600 &times; 337.5&nbsp;mm panel, 4&nbsp;kg excl. mounting bar, individually numbered (see &sect;03).`,
+      s1r3in1: `3-in-1 board`, s1d3in1: `The board inside every cabinet combining power supply, receiving card and HUB. <strong>This is the screen's real power supply</strong> &mdash; one per cabinet.`,
+      s1rPSU: `&ldquo;PSU&rdquo;`, s1dPSU: `The AC switching module(s) at the bottom of the screen. Functionally a <strong>relay</strong>, not a power supply &mdash; see the note below.`,
+      s1rMainPSU: `Main PSU`, s1dMainPSU: `The one PSU that carries the AC&#8209;DC (12&nbsp;V) converter. It is the only source of 12&nbsp;V for the whole screen.`,
+      s1rSecPSU: `Secondary PSU`, s1dSecPSU: `Any additional PSU. It has no AC&#8209;DC converter of its own &mdash; it receives 12&nbsp;V from the main PSU.`,
+      s1rSendCard: `Sending card`, s1dSendCard: `The video/control processor. Powered from the main PSU and stays alive in standby.`,
+      s1rDistBoard: `Distribution board`, s1dDistBoard: `The point each secondary PSU connects to for power and standby signalling.`,
+      s1rMainInlet: `Main inlet`, s1dMainInlet: `One AC supply entry point. There is exactly one per PSU.`,
+      s1calloutH: `Why the relay module is still called &ldquo;PSU&rdquo;`,
+      s1calloutP: `The modules labelled <em>PSU</em> in the drawings and in this guide are used as <strong>relays</strong>: the actual power supplies are the per-cabinet 3-in-1 boards. The term <em>PSU</em> is kept deliberately, in drawings, documentation and service communication, because it is the name your service contact and the factory both already use &mdash; renaming it would create confusion, not remove it.`,
+
+      s2h2: `Power domains &amp; standby`,
+      s2note1: `The main PSU's AC&#8209;DC converter is the only source of 12&nbsp;V in the screen. That 12&nbsp;V feeds the AC&nbsp;OUT relay coil in every PSU, the sending card, and &mdash; via the inter-PSU link &mdash; every secondary PSU. Everything else in the screen only receives power once a relay switches AC through to it.`,
+      s2thDomain: `Domain`, s2thLive: `Live in standby?`, s2thContains: `Contains`,
+      s2rAlwaysOn: `Always-on (12&nbsp;V)`, s2dAlwaysOn: `AC&#8209;DC converter, all AC&nbsp;OUT relay coils, the sending card`,
+      s2rSwitched: `Switched (AC&nbsp;OUT)`, s2dSwitched: `Every 3-in-1 board (power/receiving/HUB) and every LED IC driver`,
+      s2note2: `The family has no fans; the always-on domain contains nothing beyond the items above &mdash; HDMI detect, IR receive and the physical button are all handled by the sending card itself.`,
+      s2h3: `Standby modes`,
+      s2thActive: `Active standby (Expromo default)`, s2thEco: `Eco standby`,
+      s2rMeasured: `Measured consumption`, s2rLAN: `LAN / UDP control`, s2rButton: `Physical button / IR remote`,
+      s2callout1H: `Which figure will your screen actually draw in standby?`,
+      s2callout1P: `The &le;0.5&nbsp;W standby figure quoted on the datasheet is the <strong>Eco</strong> standby value, not the delivered default. Expromo ships screens in <strong>Active standby</strong> so that LAN/UDP wake, remote monitoring and control-system polling keep working &mdash; so budget <strong>14&nbsp;W</strong> for standby consumption unless Eco mode has been deliberately configured. Eco mode drops network connectivity entirely and should not be used on a screen driven by a network control system.`,
+      s2callout2H: `Standby switching`,
+      s2callout2P: `In either mode, the entire switched domain is fully de-energised &mdash; every 3-in-1 board and LED driver loses AC, not just video. The PSUs use <strong>zero-cross relays</strong> to minimise inrush current when the switched domain is re-energised.`,
+
+      s3h2: `Cabinet numbering`,
+      s3note: `Cabinet 1 is always the <strong>top-left</strong> cabinet, viewed from the front of the screen. Numbering is <strong>column-major</strong>: it runs top&rarr;bottom down the leftmost column, then continues top&rarr;bottom in the next column to the right, and so on across the screen.`,
+      s3calloutH: `General formula`,
+      s3calloutP: `For an <em>n&times;n</em> grid with total cabinet count <code>N = n&sup2;</code>, and 1-based <code>row</code>/<code>column</code> counted from the top-left, front view:`,
+      s3caption: `Verified example &mdash; 135&Prime; (5&times;5 = 25 cabinets), front view`,
+      s3col1: `Col 1`, s3col2: `Col 2`, s3col3: `Col 3`, s3col4: `Col 4`, s3col5: `Col 5`,
+      s3row1: `Row 1`, s3row2: `Row 2`, s3row3: `Row 3`, s3row4: `Row 4`, s3row5: `Row 5`,
+      s3anchors: `Anchors, for any size: top-left = <code>1</code>, bottom-left = <code>n</code>, top-right = <code>N&minus;n+1</code>, bottom-right = <code>N</code>.`,
+
+      s4h2: `Fixed component placement`,
+      s4note: `These placements are identical across the whole family &mdash; no exceptions.`,
+      modelWord: `Model`, s4thSendMain: `Sending card + main PSU`, s4thCable: `Supply cable entry cabinet`,
+      s4c135: `Cabinet 25 (bottom-right)`, s4e135: `Cabinet 24`,
+      s4c162: `Cabinet 36 (bottom-right)`, s4e162: `Cabinet 35`,
+      s4c190: `Cabinet 49 (bottom-right)`, s4e190: `Cabinet 48`,
+      s4c216: `Cabinet 64 (bottom-right)`, s4e216: `Cabinet 63`,
+      s4r1t: `Sending card`, s4r1d: `Always in the bottom-right cabinet (cabinet <code>N</code>). No exceptions across the family.`,
+      s4r2t: `Main PSU`, s4r2d: `Always alongside the sending card, in the same bottom-right cabinet.`,
+      s4r3t: `Cable entry`, s4r3d: `The main supply cable enters through the cabinet directly above the bottom-right one (cabinet <code>N&minus;1</code>) and runs down to the main PSU's AC&nbsp;IN.`,
+      s4r4t: `Inlet connector`, s4r4d: `The screen's main power inlet is an <strong>IEC&nbsp;60320&nbsp;C20</strong> appliance inlet (male pins) &mdash; unpowered until connected. The mating supply cordset terminates in a <strong>C19</strong> connector (female), which is the powered end that connects to the screen.`,
+      s4r5t: `Direct wiring`, s4r5d: `The C20 appliance inlet can be removed and the phase conductors landed directly on the PSU's screw terminals. <strong>Certified electrician only</strong> &mdash; see &sect;09.`,
+
+      s5h2: `Per-model electrical summary`,
+      s5note: `These are the fixed hardware facts for each size: how many PSUs/main inlets it has, and its power draw from the official datasheet. Circuit sizing, protective devices and phase allocation are not specified by Expromo &mdash; that is the installing electrician's decision, made for the specific site. <span class="tag tag-est">EST</span> marks a figure still pending final production test.`,
+      specWord: `Specification`,
+      s5rGrid: `Cabinet grid`, s5rPSU: `PSU count / main inlets`, s5rMax: `Maximum power`, s5rTypical: `Typical power`,
+      s5rStandby: `Standby (Active default / Eco)`, s5rVoltage: `Input voltage`, s5rCircuit: `Circuit design`,
+      s5dCircuit: `By installing electrician &mdash; not specified by Expromo`,
+      s5caption1: `Power figures are per screen, from the official datasheet. Each main inlet is an independent AC supply entry and can be placed on its own circuit and phase; how many circuits/phases to use, and which breakers and RCDs to fit, is a decision for the installing electrician based on the site's supply and local regulations &mdash; see &sect;09.`,
+      s5h3: `Estimated power per PSU group, at 600 nits`,
+      s5note2: `The datasheet figures above cover the whole screen and are the correct ones for electrical planning. This breakdown instead shows where that load actually falls, PSU by PSU, using each PSU's real cabinet count &mdash; useful context for the electrician when deciding how to split circuits across the main inlets, without Expromo prescribing the split itself.`,
+      s5methodH: `Method`,
+      s5methodP: `The 24&nbsp;W overhead is the sending card/control draw measured during factory testing; it only applies once per screen, on the Main PSU, because there is only one sending card. Cabinet power @ 600 nits is normalized from measured samples of the closest-pitch cabinet:`,
+      s5thCabPower: `Cabinet power @ 600 nits`,
+      s5caption2: `Cabinets served and estimated power per PSU group, at 600 nits`,
+      s5thCabsServed: `Cabinets served`, s5thEstPower: `Est. power @ 600 nits`,
+      mainPsuSend: `Main PSU (+ sending card)`, secPsuWord: `Secondary PSU`, secPsu1Word: `Secondary PSU 1`, secPsu2Word: `Secondary PSU 2`,
+      s5total135: `135&Prime; screen total`, s5total162: `162&Prime; screen total`, s5total190: `190&Prime; screen total`, s5total216: `216&Prime; screen total`,
+      s5caption3: `These are realistic operating estimates at 600 nits, not the conservative datasheet maximum &mdash; see the eXview power-consumption snapshot for the full measurement basis. They are provided for operational/discussion purposes; the official datasheet maximum power in the table above remains the correct figure for electrical planning.`,
+
+      s6h2: `PSU interconnect &mdash; 3-pin &amp; 5-pin harness`,
+      s6note: `Every PSU &mdash; main and secondary &mdash; carries the same two low-voltage ports, always in the same position.`,
+      s6thPort: `Port`, s6thPosition: `Position on PSU`, s6thFunction: `Function`,
+      bottomLeft: `Bottom-left`, bottomRight: `Bottom-right`,
+      s6d3pin: `<strong>12&nbsp;V link between PSUs</strong> &mdash; distributes the main PSU's 12&nbsp;V to every secondary PSU`,
+      s6d5pin: `<strong>12&nbsp;V + standby activate/deactivate</strong> &mdash; from the main PSU to the sending card, and from each secondary PSU to its distribution board`,
+      svgTitle: `Conceptual power and control signal flow for a three-PSU eXview Edge screen`,
+      svgCabinets: `Cabinets`, svgSec2Group: `Secondary PSU 2 group`, svgSec1Group: `Secondary PSU 1 group`, svgMainGroup: `Main PSU group`,
+      svgSec2: `Secondary PSU 2`, svgIn3: `AC IN &larr; main inlet #3`,
+      svgSec1: `Secondary PSU 1`, svgIn2: `AC IN &larr; main inlet #2`,
+      svgMain: `Main PSU`, svgIn1: `AC IN &larr; main inlet #1`,
+      svg3pinLine: `3-pin &middot; 12V link, main PSU &rarr; every secondary`,
+      svg5pinLine: `5-pin &middot; 12V + standby control`,
+      svgDistBoard: `Distribution board`, svgSendCard: `Sending card`,
+      svgFootnote: `Conceptual signal flow, not to scale. On 162&Prime;, drop Secondary PSU 2. On 135&Prime;, only the Main PSU exists &mdash; no 3-pin link applies.`,
+      s6r1t: `3-pin link`, s6r1d: `The main PSU's 3-pin port links to the 3-pin port of every secondary PSU, distributing the 12&nbsp;V the main PSU's AC&#8209;DC converter produces. The 135&Prime; has a single PSU, so no 3-pin link cable applies.`,
+      s6r2t: `5-pin path`, s6r2d: `The sending card is powered from the main PSU's <strong>5-pin</strong> port, not the 3-pin. If a sending card appears dead, trace the 5-pin run from the main PSU &mdash; the inter-PSU 12&nbsp;V chain is a separate fault domain.`,
+      s6r3t: `Custom cables`, s6r3d: `On 162&Prime;, 190&Prime; and 216&Prime;, both the 3-pin and 5-pin cables are <strong>custom-made per model</strong> and are not interchangeable between sizes. Order by model, not by length.`,
+      s6r4t: `Pinouts`, s6r4d: `The 3-pin and 5-pin pinouts are proprietary and not published. Do not fabricate substitute cables &mdash; order factory cables through Expromo.`,
+      s6r5d: `If the C20 appliance inlet is removed and phase conductors are landed directly on the PSU screw terminals, all 3-pin/5-pin wiring is unaffected.`,
+      s6troubleH: `Troubleshooting tip: partial standby`,
+      s6troubleP: `If one group of columns shows no content coming out of standby, but its 3-in-1 boards and LED drivers stay warm, that group's PSU relay is not being driven. Check first that both the <strong>3-pin (12&nbsp;V link)</strong> and <strong>5-pin (power + standby control)</strong> connections to that secondary PSU are fitted and fully seated &mdash; this is the expected symptom of a loose or missing harness connection, not a firmware fault. Checking both connectors also confirms which one needs reseating before you look any further.`,
+
+      s7h2: `Recommended installation sequence`,
+      s7note: `The screen's front-access, tool-less design means the LED modules go in last, after the electrical backbone is proven to be correct &mdash; not before. This avoids energising freshly-fitted modules against a mis-wired or incomplete power/control chain.`,
+      s7step1: `Mount and align all cabinets on the wall-mounting bar (or stand/trolley, where offered) before any wiring.`,
+      s7step2: `Route and land the mains AC supply to each main inlet, per the circuit design agreed for the model (&sect;05).`,
+      s7step3: `Connect the 3-pin (12&nbsp;V link) harness between the main PSU and every secondary PSU, and the 5-pin (power + standby control) harness from the main PSU to the sending card and from each secondary PSU to its distribution board. Factory cables only (&sect;06).`,
+      s7step4: `Power on and confirm correct behaviour before fitting any modules: all AC&nbsp;OUT groups should energise together, and the sending card should respond to control/standby commands.`,
+      s7step5: `Only then install the LED modules into the cabinets from the front, cabinet by cabinet.`,
+
+      s8h2: `Reference wiring diagrams`,
+      s8note: `Factory harness drawings for all four models. Grid lines are for reference only &mdash; the assembled screen surface is seamless. Click any drawing to open it full-size.`,
+      s8leg1: `3-in-1 board (per-cabinet power/receiving/HUB)`, s8leg2: `PSU / relay module`,
+      s8leg5: `Switched AC bus (colour per PSU group)`, s8leg6: `3-pin &middot; 12V link, PSU to PSU`, s8leg7: `5-pin &middot; power + standby control`,
+      figFull135: `Full harness overview &mdash; <code>135inch.png</code>`,
+      fig135zoom: `Bottom-right detail: AC&#8209;DC module, sending card, 5-pin run &mdash; <code>135inch_Wire_Harness_Zoom.png</code>`,
+      figFull162: `Full harness overview &mdash; <code>162inch.png</code>`,
+      fig162zoom: `Bottom-right detail: main + secondary PSU, 3-pin and 5-pin runs &mdash; <code>162inch_Wire_Harness_Zoom.png</code>`,
+      figFull190: `Full harness overview &mdash; <code>190inch.png</code>`,
+      fig190zoom: `Bottom-right detail, 3 PSUs (shared drawing with 216&Prime;) &mdash; <code>190inch_and_216inch_Wire_Harness_Zoom.png</code>`,
+      figFull216: `Full harness overview &mdash; <code>216inch.png</code>`,
+      fig216zoom: `Bottom-right detail, 3 PSUs (shared drawing with 190&Prime;) &mdash; <code>190inch_and_216inch_Wire_Harness_Zoom.png</code>`,
+
+      s9h2: `Installation electrical notes`,
+      s9r1t: `Responsibility`, s9r1d: `Circuit sizing, protective devices (breakers, RCDs) and phase allocation are entirely the responsibility of the installing electrician, per local regulations and the per-model power figures in &sect;05. Expromo does not specify or recommend a circuit breaker, RCD rating or curve type for these screens &mdash; we specify the number of PSUs/main inlets, and the electrician selects the protective device for each.`,
+      s9r2t: `Inrush`, s9r2d: `The PSUs use zero-cross relays, which limit inrush current at switch-on. This is a hardware fact for the electrician to factor into their own device selection, not a substitute for it.`,
+      s9r3t: `Multi-inlet screens`, s9r3d: `On 162&Prime;, 190&Prime; and 216&Prime;, each main inlet is a separate supply entry and may sit on its own phase and its own protective device. Because the inter-PSU link is 12&nbsp;V (not AC), separate inlets can be fed from different phases while the screen still switches standby as one unit.`,
+      s9r4t: `Direct phase wiring`, s9r4d: `Removing the C20 appliance inlet and landing phase conductors directly on the PSU screw terminals is a supported option, and must be carried out by a <strong>certified electrician</strong>.`,
+
+      yesWord: `Yes`, noWord: `No`,
+
+      footer1: `Compiled from internal engineering documentation covering cabinet numbering, power architecture, the factory harness drawings referenced in &sect;08, and measured cabinet power data (used in &sect;05).`,
+      footer2: `Related documents:`,
+      footerLink1: `eXview Edge Specification Comparison`, footerLink1d: `full technical spec reference`,
+      footerLink2: `eXview Edge Datasheet`, footerLink2d: `customer-facing product sheet`,
+      footer3: `Questions on a specific site's circuit design should be directed to Expromo project engineering before work begins.`
+    },
+    da: {
+      eyebrow: `Installationsreference`,
+      h1: `El- og str&oslash;markitektur &mdash; installationsvejledning`,
+      subtitle: `eXview Edge-serien &mdash; 135&Prime;, 162&Prime;, 190&Prime; og 216&Prime;. Hvordan sk&aelig;rmene forsynes, kobles og forbindes internt, og hvad din elektriker skal bruge for at planl&aelig;gge kredsen.`,
+      quickLink: `&larr; Har du travlt? L&aelig;s den 2-minutters hurtige oversigt`,
+      summaryStrip: `<strong>Kort fortalt:</strong> alle fire st&oslash;rrelser k&oslash;rer p&aring; 100&ndash;240&nbsp;VAC, 50/60&nbsp;Hz. 135&Prime; har 1 hovedindgang, 162&Prime; har 2, og 190&Prime; og 216&Prime; har hver 3 &mdash; hver indgang er en uafh&aelig;ngig AC-forsyningsindgang, der kan placeres p&aring; sin egen kreds og fase. Expromo angiver ikke afbrydere, HFI/HPFI-rel&aelig;er eller faseallokering: <strong>dimensionering af kredse og valg af beskyttelsesudstyr er alene den installerende elektrikers ansvar</strong>, baseret p&aring; effekttallene i denne vejledning og lokale regler.`,
+      toc1: `Terminologi`, toc2: `Str&oslash;mdom&aelig;ner &amp; standby`, toc3: `Kabinetnummerering`, toc4: `Placering af komponenter`,
+      toc5: `El-oversigt pr. model`, toc6: `PSU-forbindelse (3-pin / 5-pin)`, toc7: `Installationsr&aelig;kkef&oslash;lge`,
+      toc8: `Referencediagrammer`, toc9: `Installationsnoter`,
+
+      s1h2: `Terminologi`,
+      s1note: `Alle fire modeller deler &eacute;t <strong>600 &times; 337,5&nbsp;mm kabinet</strong>. St&oslash;rre st&oslash;rrelser opbygges ved at tilf&oslash;je en r&aelig;kke og en kolonne af samme kabinet &mdash; selve kabinettet &aelig;ndres ikke.`,
+      s1thTerm: `Begreb`, s1thMeans: `Hvad det betyder`,
+      s1rCabinet: `Kabinet`, s1dCabinet: `Ét 600 &times; 337,5&nbsp;mm panel, 4&nbsp;kg ekskl. oph&aelig;ngningsskinne, individuelt nummereret (se &sect;03).`,
+      s1r3in1: `3-i-1-kort`, s1d3in1: `Kortet i hvert kabinet, der kombinerer str&oslash;mforsyning, modtagerkort og HUB. <strong>Dette er sk&aelig;rmens reelle str&oslash;mforsyning</strong> &mdash; ét pr. kabinet.`,
+      s1rPSU: `&ldquo;PSU&rdquo;`, s1dPSU: `AC-koblingsmodulet/-modulerne nederst i sk&aelig;rmen. Fungerer reelt som et <strong>rel&aelig;</strong>, ikke en str&oslash;mforsyning &mdash; se noten nedenfor.`,
+      s1rMainPSU: `Hoved-PSU`, s1dMainPSU: `Den ene PSU, der har AC&#8209;DC-konverteren (12&nbsp;V). Den er den eneste kilde til 12&nbsp;V for hele sk&aelig;rmen.`,
+      s1rSecPSU: `Sekund&aelig;r PSU`, s1dSecPSU: `Enhver yderligere PSU. Den har ingen egen AC&#8209;DC-konverter &mdash; den modtager 12&nbsp;V fra hoved-PSU'en.`,
+      s1rSendCard: `Sendekort`, s1dSendCard: `Video-/kontrolprocessoren. Forsynes fra hoved-PSU'en og forbliver aktiv i standby.`,
+      s1rDistBoard: `Fordelerkort`, s1dDistBoard: `Det punkt, hver sekund&aelig;r PSU forbindes til for str&oslash;m og standby-signalering.`,
+      s1rMainInlet: `Hovedindgang`, s1dMainInlet: `Ét AC-forsyningsindgangspunkt. Der er pr&aelig;cis ét pr. PSU.`,
+      s1calloutH: `Hvorfor rel&aelig;modulet stadig kaldes &ldquo;PSU&rdquo;`,
+      s1calloutP: `Modulerne, der er m&aelig;rket <em>PSU</em> i diagrammerne og i denne vejledning, bruges som <strong>rel&aelig;er</strong>: de reelle str&oslash;mforsyninger er 3-i-1-kortene i hvert kabinet. Betegnelsen <em>PSU</em> beholdes bevidst i diagrammer, dokumentation og servicekommunikation, fordi det er det navn, din servicekontakt og fabrikken allerede bruger &mdash; en omd&oslash;bning ville skabe forvirring, ikke fjerne den.`,
+
+      s2h2: `Str&oslash;mdom&aelig;ner &amp; standby`,
+      s2note1: `Hoved-PSU'ens AC&#8209;DC-konverter er den eneste kilde til 12&nbsp;V i sk&aelig;rmen. Denne 12&nbsp;V forsyner AC&nbsp;OUT-rel&aelig;spolen i hver PSU, sendekortet og &mdash; via PSU-forbindelsen &mdash; hver sekund&aelig;r PSU. Alt andet i sk&aelig;rmen modtager f&oslash;rst str&oslash;m, n&aring;r et rel&aelig; kobler AC igennem til det.`,
+      s2thDomain: `Dom&aelig;ne`, s2thLive: `Aktiv i standby?`, s2thContains: `Indeholder`,
+      s2rAlwaysOn: `Altid t&aelig;ndt (12&nbsp;V)`, s2dAlwaysOn: `AC&#8209;DC-konverter, alle AC&nbsp;OUT-rel&aelig;spoler, sendekortet`,
+      s2rSwitched: `Koblet (AC&nbsp;OUT)`, s2dSwitched: `Hvert 3-i-1-kort (str&oslash;m/modtager/HUB) og hver LED IC-driver`,
+      s2note2: `Serien har ingen bl&aelig;sere; det altid-t&aelig;ndte dom&aelig;ne indeholder intet ud over ovenst&aring;ende &mdash; HDMI-registrering, IR-modtagelse og den fysiske knap h&aring;ndteres alle af sendekortet selv.`,
+      s2h3: `Standbytilstande`,
+      s2thActive: `Aktiv standby (Expromo-standard)`, s2thEco: `Eco-standby`,
+      s2rMeasured: `M&aring;lt forbrug`, s2rLAN: `LAN/UDP-styring`, s2rButton: `Fysisk knap / IR-fjernbetjening`,
+      s2callout1H: `Hvilket tal bruger din sk&aelig;rm rent faktisk i standby?`,
+      s2callout1P: `Standbytallet p&aring; &le;0,5&nbsp;W p&aring; databladet er <strong>Eco</strong>-standbyv&aelig;rdien, ikke standardleverancen. Expromo leverer sk&aelig;rme i <strong>Aktiv standby</strong>, s&aring; LAN/UDP-opv&aring;gning, fjernoverv&aring;gning og styresystempolling bliver ved med at virke &mdash; s&aring; regn med <strong>14&nbsp;W</strong> i standbyforbrug, medmindre Eco-tilstand er bevidst konfigureret. Eco-tilstand slipper netv&aelig;rksforbindelsen helt og b&oslash;r ikke bruges p&aring; en sk&aelig;rm styret af et netv&aelig;rksbaseret styresystem.`,
+      s2callout2H: `Standbykobling`,
+      s2callout2P: `I begge tilstande er hele det koblede dom&aelig;ne fuldst&aelig;ndigt afbrudt &mdash; hvert 3-i-1-kort og hver LED-driver mister AC, ikke kun video. PSU'erne bruger <strong>nulgennemgangsrel&aelig;er</strong> til at minimere indkoblingsstr&oslash;mmen, n&aring;r det koblede dom&aelig;ne genaktiveres.`,
+
+      s3h2: `Kabinetnummerering`,
+      s3note: `Kabinet 1 er altid kabinettet <strong>&oslash;verst til venstre</strong>, set forfra p&aring; sk&aelig;rmen. Nummerering er <strong>kolonnevis</strong>: den l&oslash;ber top&rarr;bund ned gennem den yderste venstre kolonne, forts&aelig;tter derefter top&rarr;bund i n&aelig;ste kolonne til h&oslash;jre, og s&aring; videre hen over sk&aelig;rmen.`,
+      s3calloutH: `Generel formel`,
+      s3calloutP: `For et <em>n&times;n</em>-gitter med et samlet kabinetantal p&aring; <code>N = n&sup2;</code>, og 1-indekseret <code>r&aelig;kke</code>/<code>kolonne</code> talt fra &oslash;verst til venstre, set forfra:`,
+      s3caption: `Verificeret eksempel &mdash; 135&Prime; (5&times;5 = 25 kabinetter), set forfra`,
+      s3col1: `Kol. 1`, s3col2: `Kol. 2`, s3col3: `Kol. 3`, s3col4: `Kol. 4`, s3col5: `Kol. 5`,
+      s3row1: `R&aelig;kke 1`, s3row2: `R&aelig;kke 2`, s3row3: `R&aelig;kke 3`, s3row4: `R&aelig;kke 4`, s3row5: `R&aelig;kke 5`,
+      s3anchors: `Ankre, for enhver st&oslash;rrelse: &oslash;verst til venstre = <code>1</code>, nederst til venstre = <code>n</code>, &oslash;verst til h&oslash;jre = <code>N&minus;n+1</code>, nederst til h&oslash;jre = <code>N</code>.`,
+
+      s4h2: `Fast placering af komponenter`,
+      s4note: `Disse placeringer er ens p&aring; tv&aelig;rs af hele serien &mdash; ingen undtagelser.`,
+      modelWord: `Model`, s4thSendMain: `Sendekort + hoved-PSU`, s4thCable: `Kabinet med indgang for forsyningskabel`,
+      s4c135: `Kabinet 25 (nederst til h&oslash;jre)`, s4e135: `Kabinet 24`,
+      s4c162: `Kabinet 36 (nederst til h&oslash;jre)`, s4e162: `Kabinet 35`,
+      s4c190: `Kabinet 49 (nederst til h&oslash;jre)`, s4e190: `Kabinet 48`,
+      s4c216: `Kabinet 64 (nederst til h&oslash;jre)`, s4e216: `Kabinet 63`,
+      s4r1t: `Sendekort`, s4r1d: `Altid i kabinettet nederst til h&oslash;jre (kabinet <code>N</code>). Ingen undtagelser p&aring; tv&aelig;rs af serien.`,
+      s4r2t: `Hoved-PSU`, s4r2d: `Altid ved siden af sendekortet, i samme kabinet nederst til h&oslash;jre.`,
+      s4r3t: `Kabelindgang`, s4r3d: `Hovedforsyningskablet f&oslash;res ind gennem kabinettet lige over det nederste h&oslash;jre kabinet (kabinet <code>N&minus;1</code>) og l&oslash;ber ned til hoved-PSU'ens AC&nbsp;IN.`,
+      s4r4t: `Indgangsstik`, s4r4d: `Sk&aelig;rmens hovedindgang er et <strong>IEC&nbsp;60320&nbsp;C20</strong>-apparatstik (hanstik) &mdash; sp&aelig;ndingsl&oslash;st, indtil det tilsluttes. Det tilh&oslash;rende forsyningskabel afsluttes med et <strong>C19</strong>-stik (hunstik), som er den sp&aelig;ndingsf&oslash;rende ende, der forbindes til sk&aelig;rmen.`,
+      s4r5t: `Direkte tilslutning`, s4r5d: `C20-apparatstikket kan fjernes, og faselederne kan tilsluttes direkte p&aring; PSU'ens skrueterminaler. <strong>Kun autoriseret elektriker</strong> &mdash; se &sect;09.`,
+
+      s5h2: `El-oversigt pr. model`,
+      s5note: `Dette er de faste hardwarefakta for hver st&oslash;rrelse: hvor mange PSU'er/hovedindgange den har, og dens effektforbrug fra det officielle datablad. Dimensionering af kredse, beskyttelsesudstyr og faseallokering er ikke angivet af Expromo &mdash; det er den installerende elektrikers beslutning, truffet for det konkrete projekt. <span class="tag tag-est">EST</span> markerer et tal, der stadig afventer den endelige produktionstest.`,
+      specWord: `Specifikation`,
+      s5rGrid: `Kabinetgitter`, s5rPSU: `Antal PSU'er / hovedindgange`, s5rMax: `Maksimalt effektforbrug`, s5rTypical: `Typisk effektforbrug`,
+      s5rStandby: `Standby (Aktiv standard / Eco)`, s5rVoltage: `Indgangssp&aelig;nding`, s5rCircuit: `Kredsdesign`,
+      s5dCircuit: `Ved installerende elektriker &mdash; ikke angivet af Expromo`,
+      s5caption1: `Effekttallene er pr. sk&aelig;rm, fra det officielle datablad. Hver hovedindgang er en uafh&aelig;ngig AC-forsyningsindgang og kan placeres p&aring; sin egen kreds og fase; hvor mange kredse/faser der skal bruges, og hvilke afbrydere og HFI/HPFI-rel&aelig;er der skal monteres, er en beslutning for den installerende elektriker baseret p&aring; projektets forsyning og lokale regler &mdash; se &sect;09.`,
+      s5h3: `Estimeret effekt pr. PSU-gruppe, ved 600 nits`,
+      s5note2: `Databladstallene ovenfor d&aelig;kker hele sk&aelig;rmen og er de korrekte tal til el-planl&aelig;gning. Denne opdeling viser i stedet, hvor belastningen reelt ligger, PSU for PSU, ud fra hver PSU's reelle kabinetantal &mdash; nyttig kontekst for elektrikeren, n&aring;r kredse skal fordeles p&aring; hovedindgangene, uden at Expromo foreskriver selve fordelingen.`,
+      s5methodH: `Metode`,
+      s5methodP: `De 24&nbsp;W i overhead er sendekortets/styringens forbrug, m&aring;lt under fabrikstest; det g&aelig;lder kun &eacute;n gang pr. sk&aelig;rm, p&aring; hoved-PSU'en, fordi der kun er &eacute;t sendekort. Kabineteffekt ved 600 nits er normaliseret ud fra m&aring;lte pr&oslash;ver af det n&aelig;rmeste pixelafstandskabinet:`,
+      s5thCabPower: `Kabineteffekt ved 600 nits`,
+      s5caption2: `Kabinetter betjent og estimeret effekt pr. PSU-gruppe, ved 600 nits`,
+      s5thCabsServed: `Kabinetter betjent`, s5thEstPower: `Est. effekt ved 600 nits`,
+      mainPsuSend: `Hoved-PSU (+ sendekort)`, secPsuWord: `Sekund&aelig;r PSU`, secPsu1Word: `Sekund&aelig;r PSU 1`, secPsu2Word: `Sekund&aelig;r PSU 2`,
+      s5total135: `135&Prime; sk&aelig;rm i alt`, s5total162: `162&Prime; sk&aelig;rm i alt`, s5total190: `190&Prime; sk&aelig;rm i alt`, s5total216: `216&Prime; sk&aelig;rm i alt`,
+      s5caption3: `Dette er realistiske driftsestimater ved 600 nits, ikke det konservative databladsmaksimum &mdash; se eXview-effektforbrugsopsummeringen for det fulde m&aring;legrundlag. De er givet til drifts-/diskussionsform&aring;l; det officielle databladsmaksimum i tabellen ovenfor forbliver det korrekte tal til el-planl&aelig;gning.`,
+
+      s6h2: `PSU-forbindelse &mdash; 3-pin &amp; 5-pin kabels&aelig;t`,
+      s6note: `Hver PSU &mdash; hoved og sekund&aelig;r &mdash; har de samme to lavsp&aelig;ndingsporte, altid i samme position.`,
+      s6thPort: `Port`, s6thPosition: `Position p&aring; PSU`, s6thFunction: `Funktion`,
+      bottomLeft: `Nederst til venstre`, bottomRight: `Nederst til h&oslash;jre`,
+      s6d3pin: `<strong>12&nbsp;V-forbindelse mellem PSU'er</strong> &mdash; fordeler hoved-PSU'ens 12&nbsp;V til hver sekund&aelig;r PSU`,
+      s6d5pin: `<strong>12&nbsp;V + standby aktiver/deaktiver</strong> &mdash; fra hoved-PSU'en til sendekortet, og fra hver sekund&aelig;r PSU til dens fordelerkort`,
+      svgTitle: `Konceptuel str&oslash;m- og styresignalflow for en sk&aelig;rm med tre PSU'er`,
+      svgCabinets: `Kabinetter`, svgSec2Group: `Sekund&aelig;r PSU 2-gruppe`, svgSec1Group: `Sekund&aelig;r PSU 1-gruppe`, svgMainGroup: `Hoved-PSU-gruppe`,
+      svgSec2: `Sekund&aelig;r PSU 2`, svgIn3: `AC IN &larr; hovedindgang #3`,
+      svgSec1: `Sekund&aelig;r PSU 1`, svgIn2: `AC IN &larr; hovedindgang #2`,
+      svgMain: `Hoved-PSU`, svgIn1: `AC IN &larr; hovedindgang #1`,
+      svg3pinLine: `3-pin &middot; 12V-forbindelse, hoved-PSU &rarr; hver sekund&aelig;r`,
+      svg5pinLine: `5-pin &middot; 12V + standbystyring`,
+      svgDistBoard: `Fordelerkort`, svgSendCard: `Sendekort`,
+      svgFootnote: `Konceptuelt signalflow, ikke m&aring;lfast. P&aring; 162&Prime; udg&aring;r Sekund&aelig;r PSU 2. P&aring; 135&Prime; findes kun Hoved-PSU'en &mdash; ingen 3-pin-forbindelse g&aelig;lder.`,
+      s6r1t: `3-pin-forbindelse`, s6r1d: `Hoved-PSU'ens 3-pin-port forbindes til 3-pin-porten p&aring; hver sekund&aelig;r PSU og fordeler den 12&nbsp;V, som hoved-PSU'ens AC&#8209;DC-konverter producerer. 135&Prime; har kun &eacute;n PSU, s&aring; ingen 3-pin-forbindelseskabel g&aelig;lder.`,
+      s6r2t: `5-pin-vej`, s6r2d: `Sendekortet forsynes fra hoved-PSU'ens <strong>5-pin</strong>-port, ikke 3-pin. Hvis et sendekort virker d&oslash;dt, s&aring; sp&oslash;r 5-pin-forbindelsen fra hoved-PSU'en efter &mdash; PSU-forbindelsens 12&nbsp;V-k&aelig;de er et separat fejldom&aelig;ne.`,
+      s6r3t: `Specialkabler`, s6r3d: `P&aring; 162&Prime;, 190&Prime; og 216&Prime; er b&aring;de 3-pin- og 5-pin-kablerne <strong>specialfremstillet pr. model</strong> og kan ikke ombyttes mellem st&oslash;rrelser. Bestil efter model, ikke efter l&aelig;ngde.`,
+      s6r4t: `Stikbel&aelig;gninger`, s6r4d: `3-pin- og 5-pin-stikbel&aelig;gningerne er propriet&aelig;re og ikke offentliggjort. Fabrik&eacute;r ikke erstatningskabler &mdash; bestil fabrikskabler gennem Expromo.`,
+      s6r5d: `Hvis C20-apparatstikket fjernes, og faselederne tilsluttes direkte p&aring; PSU'ens skrueterminaler, p&aring;virkes al 3-pin/5-pin-ledningsf&oslash;ring ikke.`,
+      s6troubleH: `Fejlfindingstip: delvis standby`,
+      s6troubleP: `Hvis en gruppe kolonner ikke viser indhold, n&aring;r sk&aelig;rmen g&aring;r ud af standby, men gruppens 3-i-1-kort og LED-drivere forbliver varme, bliver den gruppes PSU-rel&aelig; ikke styret. Tjek f&oslash;rst, at b&aring;de <strong>3-pin (12&nbsp;V-forbindelsen)</strong> og <strong>5-pin (str&oslash;m + standbystyring)</strong> til den sekund&aelig;re PSU er monteret og sidder korrekt &mdash; dette er det forventede symptom p&aring; en l&oslash;s eller manglende kabelforbindelse, ikke en firmwarefejl. Ved at tjekke begge stik f&aring;r du ogs&aring; bekr&aelig;ftet, hvilket der skal genmonteres, f&oslash;r du unders&oslash;ger videre.`,
+
+      s7h2: `Anbefalet installationsr&aelig;kkef&oslash;lge`,
+      s7note: `Sk&aelig;rmens design med adgang forfra og uden brug af v&aelig;rkt&oslash;j betyder, at LED-modulerne monteres til sidst, efter det er bekr&aelig;ftet, at el-grundlaget er korrekt &mdash; ikke f&oslash;r. Dette forhindrer, at nymonterede moduler bliver sp&aelig;ndingssat mod en forkert forbundet eller ufuldst&aelig;ndig str&oslash;m-/styringsk&aelig;de.`,
+      s7step1: `Monter og juster alle kabinetter p&aring; oph&aelig;ngningsskinnen (eller stativ/rullevogn, hvor det tilbydes), f&oslash;r der tilsluttes noget.`,
+      s7step2: `F&oslash;r og tilslut lysnetforsyningen til hver hovedindgang, i henhold til det aftalte kredsdesign for modellen (&sect;05).`,
+      s7step3: `Tilslut 3-pin-kabels&aelig;ttet (12&nbsp;V-forbindelse) mellem hoved-PSU'en og hver sekund&aelig;r PSU, samt 5-pin-kabels&aelig;ttet (str&oslash;m + standbystyring) fra hoved-PSU'en til sendekortet og fra hver sekund&aelig;r PSU til dens fordelerkort. Kun fabrikskabler (&sect;06).`,
+      s7step4: `T&aelig;nd og bekr&aelig;ft korrekt opf&oslash;rsel, f&oslash;r nogen moduler monteres: alle AC&nbsp;OUT-grupper skal aktiveres samtidigt, og sendekortet skal reagere p&aring; styrings-/standbykommandoer.`,
+      s7step5: `F&oslash;rst derefter monteres LED-modulerne i kabinetterne forfra, kabinet for kabinet.`,
+
+      s8h2: `Referencediagrammer for ledningsf&oslash;ring`,
+      s8note: `Fabriksdiagrammer for kabels&aelig;t til alle fire modeller. Gitterlinjer er kun til reference &mdash; den samlede sk&aelig;rmoverflade er s&oslash;ml&oslash;s. Klik p&aring; et diagram for at &aring;bne det i fuld st&oslash;rrelse.`,
+      s8leg1: `3-i-1-kort (str&oslash;m/modtager/HUB pr. kabinet)`, s8leg2: `PSU-/rel&aelig;modul`,
+      s8leg5: `Koblet AC-bus (farve pr. PSU-gruppe)`, s8leg6: `3-pin &middot; 12V-forbindelse, PSU til PSU`, s8leg7: `5-pin &middot; str&oslash;m + standbystyring`,
+      figFull135: `Fuld kabels&aelig;toversigt &mdash; <code>135inch.png</code>`,
+      fig135zoom: `Detalje nederst til h&oslash;jre: AC&#8209;DC-modul, sendekort, 5-pin-forbindelse &mdash; <code>135inch_Wire_Harness_Zoom.png</code>`,
+      figFull162: `Fuld kabels&aelig;toversigt &mdash; <code>162inch.png</code>`,
+      fig162zoom: `Detalje nederst til h&oslash;jre: hoved- + sekund&aelig;r PSU, 3-pin- og 5-pin-forbindelser &mdash; <code>162inch_Wire_Harness_Zoom.png</code>`,
+      figFull190: `Fuld kabels&aelig;toversigt &mdash; <code>190inch.png</code>`,
+      fig190zoom: `Detalje nederst til h&oslash;jre, 3 PSU'er (delt diagram med 216&Prime;) &mdash; <code>190inch_and_216inch_Wire_Harness_Zoom.png</code>`,
+      figFull216: `Fuld kabels&aelig;toversigt &mdash; <code>216inch.png</code>`,
+      fig216zoom: `Detalje nederst til h&oslash;jre, 3 PSU'er (delt diagram med 190&Prime;) &mdash; <code>190inch_and_216inch_Wire_Harness_Zoom.png</code>`,
+
+      s9h2: `Installationsnoter, el`,
+      s9r1t: `Ansvar`, s9r1d: `Dimensionering af kredse, beskyttelsesudstyr (afbrydere, HFI/HPFI-rel&aelig;er) og faseallokering er alene den installerende elektrikers ansvar, i henhold til lokale regler og effekttallene pr. model i &sect;05. Expromo angiver eller anbefaler ikke en afbryder, HFI/HPFI-str&oslash;mstyrke eller karakteristik for disse sk&aelig;rme &mdash; vi angiver antallet af PSU'er/hovedindgange, og elektrikeren v&aelig;lger beskyttelsesudstyret for hver.`,
+      s9r2t: `Indkoblingsstr&oslash;m`, s9r2d: `PSU'erne bruger nulgennemgangsrel&aelig;er, som begr&aelig;nser indkoblingsstr&oslash;mmen ved t&aelig;nding. Dette er en hardwarekendsgerning, som elektrikeren skal inddrage i sit eget valg af udstyr, ikke en erstatning for det.`,
+      s9r3t: `Sk&aelig;rme med flere indgange`, s9r3d: `P&aring; 162&Prime;, 190&Prime; og 216&Prime; er hver hovedindgang en separat forsyningsindgang og kan sidde p&aring; sin egen fase og sit eget beskyttelsesudstyr. Fordi PSU-forbindelsen er 12&nbsp;V (ikke AC), kan separate indgange forsynes fra forskellige faser, mens sk&aelig;rmen stadig kobler standby som &eacute;n enhed.`,
+      s9r4t: `Direkte fasetilslutning`, s9r4d: `At fjerne C20-apparatstikket og tilslutte faselederne direkte p&aring; PSU'ens skrueterminaler er en underst&oslash;ttet mulighed og skal udf&oslash;res af en <strong>autoriseret elektriker</strong>.`,
+
+      yesWord: `Ja`, noWord: `Nej`,
+
+      footer1: `Sammensat af intern teknisk dokumentation om kabinetnummerering, str&oslash;markitektur, fabrikkens kabels&aelig;tdiagrammer refereret i &sect;08, samt m&aring;lte kabineteffektdata (brugt i &sect;05).`,
+      footer2: `Relaterede dokumenter:`,
+      footerLink1: `eXview Edge specifikationssammenligning`, footerLink1d: `fuld teknisk specifikationsreference`,
+      footerLink2: `eXview Edge datablad`, footerLink2d: `kundevendt produktark`,
+      footer3: `Sp&oslash;rgsm&aring;l om et konkret projekts kredsdesign skal rettes til Expromos projektingeni&oslash;rer, f&oslash;r arbejdet p&aring;begyndes.`
+    },
+    de: {
+      eyebrow: `Installationsreferenz`,
+      h1: `Installationsanleitung Elektro- und Stromarchitektur`,
+      subtitle: `eXview Edge Baureihe &mdash; 135&Prime;, 162&Prime;, 190&Prime; und 216&Prime;. Wie die Bildschirme versorgt, geschaltet und miteinander verbunden werden, und was Ihr Elektriker zur Planung des Stromkreises ben&ouml;tigt.`,
+      quickLink: `&larr; Keine Zeit? Lesen Sie die 2-Minuten-Kurz&uuml;bersicht`,
+      summaryStrip: `<strong>Kurz gesagt:</strong> alle vier Gr&ouml;&szlig;en laufen mit 100&ndash;240&nbsp;VAC, 50/60&nbsp;Hz. Die 135&Prime; hat 1 Haupteinspeisung, die 162&Prime; hat 2, und die 190&Prime; sowie die 216&Prime; haben je 3 &mdash; jede Einspeisung ist ein unabh&auml;ngiger Netzanschluss, der auf einen eigenen Stromkreis und eine eigene Phase gelegt werden kann. Expromo macht keine Vorgaben zu Sicherungen, FI-Schutzschaltern oder Phasenverteilung: <strong>Dimensionierung der Stromkreise und Auswahl der Schutzeinrichtungen liegen ausschlie&szlig;lich in der Verantwortung des ausf&uuml;hrenden Elektrikers</strong>, basierend auf den Leistungswerten in dieser Anleitung und den &ouml;rtlichen Vorschriften.`,
+      toc1: `Terminologie`, toc2: `Stromdom&auml;nen &amp; Standby`, toc3: `Kabinettnummerierung`, toc4: `Komponentenplatzierung`,
+      toc5: `Elektrische &Uuml;bersicht pro Modell`, toc6: `PSU-Verbindung (3-Pin / 5-Pin)`, toc7: `Installationsreihenfolge`,
+      toc8: `Referenzschaltpl&auml;ne`, toc9: `Installationshinweise`,
+
+      s1h2: `Terminologie`,
+      s1note: `Alle vier Modelle teilen sich ein <strong>600 &times; 337,5&nbsp;mm Kabinett</strong>. Gr&ouml;&szlig;ere Varianten entstehen durch Hinzuf&uuml;gen einer Zeile und einer Spalte desselben Kabinetts &mdash; das Kabinett selbst &auml;ndert sich nicht.`,
+      s1thTerm: `Begriff`, s1thMeans: `Bedeutung`,
+      s1rCabinet: `Kabinett`, s1dCabinet: `Ein 600 &times; 337,5&nbsp;mm Panel, 4&nbsp;kg ohne Montageschiene, einzeln nummeriert (siehe &sect;03).`,
+      s1r3in1: `3-in-1-Platine`, s1d3in1: `Die Platine in jedem Kabinett, die Netzteil, Empfangskarte und HUB vereint. <strong>Dies ist das eigentliche Netzteil des Bildschirms</strong> &mdash; eines pro Kabinett.`,
+      s1rPSU: `&bdquo;PSU&ldquo;`, s1dPSU: `Die AC-Schaltmodule am unteren Rand des Bildschirms. Funktional ein <strong>Relais</strong>, kein Netzteil &mdash; siehe Hinweis unten.`,
+      s1rMainPSU: `Haupt-PSU`, s1dMainPSU: `Die eine PSU mit dem AC&#8209;DC-Wandler (12&nbsp;V). Sie ist die einzige 12&nbsp;V-Quelle f&uuml;r den gesamten Bildschirm.`,
+      s1rSecPSU: `Sekund&auml;r-PSU`, s1dSecPSU: `Jede weitere PSU. Sie hat keinen eigenen AC&#8209;DC-Wandler &mdash; sie erh&auml;lt 12&nbsp;V von der Haupt-PSU.`,
+      s1rSendCard: `Sendekarte`, s1dSendCard: `Der Video-/Steuerungsprozessor. Wird von der Haupt-PSU versorgt und bleibt im Standby aktiv.`,
+      s1rDistBoard: `Verteilerplatine`, s1dDistBoard: `Der Punkt, mit dem jede Sekund&auml;r-PSU f&uuml;r Strom und Standby-Signalisierung verbunden ist.`,
+      s1rMainInlet: `Haupteinspeisung`, s1dMainInlet: `Ein Netzanschlusspunkt. Es gibt genau einen pro PSU.`,
+      s1calloutH: `Warum das Relaismodul weiterhin &bdquo;PSU&ldquo; hei&szlig;t`,
+      s1calloutP: `Die in den Zeichnungen und in dieser Anleitung als <em>PSU</em> bezeichneten Module werden als <strong>Relais</strong> eingesetzt: Die eigentlichen Netzteile sind die 3-in-1-Platinen in jedem Kabinett. Der Begriff <em>PSU</em> wird bewusst beibehalten &mdash; in Zeichnungen, Dokumentation und Servicekommunikation &mdash;, weil es der Name ist, den Ihr Servicekontakt und das Werk bereits verwenden; eine Umbenennung w&uuml;rde Verwirrung stiften, nicht beseitigen.`,
+
+      s2h2: `Stromdom&auml;nen &amp; Standby`,
+      s2note1: `Der AC&#8209;DC-Wandler der Haupt-PSU ist die einzige 12&nbsp;V-Quelle im Bildschirm. Diese 12&nbsp;V versorgen die AC&nbsp;OUT-Relaisspule in jeder PSU, die Sendekarte und &mdash; &uuml;ber die PSU-Verbindung &mdash; jede Sekund&auml;r-PSU. Alles andere im Bildschirm erh&auml;lt erst dann Strom, wenn ein Relais AC dorthin durchschaltet.`,
+      s2thDomain: `Dom&auml;ne`, s2thLive: `Im Standby aktiv?`, s2thContains: `Enth&auml;lt`,
+      s2rAlwaysOn: `Dauerhaft aktiv (12&nbsp;V)`, s2dAlwaysOn: `AC&#8209;DC-Wandler, alle AC&nbsp;OUT-Relaisspulen, die Sendekarte`,
+      s2rSwitched: `Geschaltet (AC&nbsp;OUT)`, s2dSwitched: `Jede 3-in-1-Platine (Strom/Empfang/HUB) und jeder LED-IC-Treiber`,
+      s2note2: `Die Baureihe hat keine L&uuml;fter; die dauerhaft aktive Dom&auml;ne enth&auml;lt nichts au&szlig;er den oben genannten Punkten &mdash; HDMI-Erkennung, IR-Empfang und die physische Taste werden alle von der Sendekarte selbst gehandhabt.`,
+      s2h3: `Standby-Modi`,
+      s2thActive: `Aktiver Standby (Expromo-Standard)`, s2thEco: `Eco-Standby`,
+      s2rMeasured: `Gemessener Verbrauch`, s2rLAN: `LAN-/UDP-Steuerung`, s2rButton: `Physische Taste / IR-Fernbedienung`,
+      s2callout1H: `Welchen Wert nimmt Ihr Bildschirm im Standby tats&auml;chlich auf?`,
+      s2callout1P: `Der im Datenblatt genannte Standbywert von &le;0,5&nbsp;W ist der <strong>Eco</strong>-Standbywert, nicht der Auslieferungsstandard. Expromo liefert Bildschirme im <strong>Aktiven Standby</strong> aus, damit LAN/UDP-Aufwachen, Fern&uuml;berwachung und Steuerungssystem-Polling weiter funktionieren &mdash; kalkulieren Sie daher <strong>14&nbsp;W</strong> f&uuml;r den Standbyverbrauch ein, sofern der Eco-Modus nicht bewusst konfiguriert wurde. Der Eco-Modus trennt die Netzwerkverbindung vollst&auml;ndig und sollte nicht bei einem &uuml;ber ein Netzwerk-Steuerungssystem betriebenen Bildschirm verwendet werden.`,
+      s2callout2H: `Standby-Schaltung`,
+      s2callout2P: `In beiden Modi wird die gesamte geschaltete Dom&auml;ne vollst&auml;ndig spannungsfrei geschaltet &mdash; jede 3-in-1-Platine und jeder LED-Treiber verliert die AC-Versorgung, nicht nur das Videosignal. Die PSUs nutzen <strong>Nulldurchgangsrelais</strong>, um den Einschaltstrom beim erneuten Einschalten der geschalteten Dom&auml;ne zu minimieren.`,
+
+      s3h2: `Kabinettnummerierung`,
+      s3note: `Kabinett 1 ist immer das Kabinett <strong>oben links</strong>, von vorne auf den Bildschirm gesehen. Die Nummerierung erfolgt <strong>spaltenweise</strong>: sie l&auml;uft von oben nach unten durch die &auml;u&szlig;erste linke Spalte, setzt sich dann von oben nach unten in der n&auml;chsten Spalte rechts davon fort, und so weiter &uuml;ber den gesamten Bildschirm.`,
+      s3calloutH: `Allgemeine Formel`,
+      s3calloutP: `F&uuml;r ein <em>n&times;n</em>-Raster mit der Gesamtkabinettzahl <code>N = n&sup2;</code>, mit 1-basierten Werten f&uuml;r <code>Zeile</code>/<code>Spalte</code>, gez&auml;hlt von oben links, Ansicht von vorne:`,
+      s3caption: `Verifiziertes Beispiel &mdash; 135&Prime; (5&times;5 = 25 Kabinette), Ansicht von vorne`,
+      s3col1: `Sp. 1`, s3col2: `Sp. 2`, s3col3: `Sp. 3`, s3col4: `Sp. 4`, s3col5: `Sp. 5`,
+      s3row1: `Zeile 1`, s3row2: `Zeile 2`, s3row3: `Zeile 3`, s3row4: `Zeile 4`, s3row5: `Zeile 5`,
+      s3anchors: `Eckpunkte, f&uuml;r jede Gr&ouml;&szlig;e: oben links = <code>1</code>, unten links = <code>n</code>, oben rechts = <code>N&minus;n+1</code>, unten rechts = <code>N</code>.`,
+
+      s4h2: `Feste Komponentenplatzierung`,
+      s4note: `Diese Platzierungen sind in der gesamten Baureihe identisch &mdash; keine Ausnahmen.`,
+      modelWord: `Modell`, s4thSendMain: `Sendekarte + Haupt-PSU`, s4thCable: `Kabinett mit Einspeisekabel-Eintritt`,
+      s4c135: `Kabinett 25 (unten rechts)`, s4e135: `Kabinett 24`,
+      s4c162: `Kabinett 36 (unten rechts)`, s4e162: `Kabinett 35`,
+      s4c190: `Kabinett 49 (unten rechts)`, s4e190: `Kabinett 48`,
+      s4c216: `Kabinett 64 (unten rechts)`, s4e216: `Kabinett 63`,
+      s4r1t: `Sendekarte`, s4r1d: `Immer im Kabinett unten rechts (Kabinett <code>N</code>). Keine Ausnahmen in der gesamten Baureihe.`,
+      s4r2t: `Haupt-PSU`, s4r2d: `Immer neben der Sendekarte, im selben Kabinett unten rechts.`,
+      s4r3t: `Kabeleinf&uuml;hrung`, s4r3d: `Das Hauptversorgungskabel tritt durch das Kabinett direkt &uuml;ber dem unten rechten Kabinett ein (Kabinett <code>N&minus;1</code>) und f&uuml;hrt hinunter zum AC&nbsp;IN der Haupt-PSU.`,
+      s4r4t: `Einspeisestecker`, s4r4d: `Die Haupteinspeisung des Bildschirms ist ein <strong>IEC&nbsp;60320&nbsp;C20</strong>-Ger&auml;testecker (Stiftkontakte) &mdash; spannungslos, bis er angeschlossen wird. Das passende Netzkabel endet in einer <strong>C19</strong>-Kupplung (Buchsenkontakte), die das spannungsf&uuml;hrende Ende ist, das mit dem Bildschirm verbunden wird.`,
+      s4r5t: `Direktverdrahtung`, s4r5d: `Der C20-Ger&auml;testecker kann entfernt und die Phasenleiter direkt an den Schraubklemmen der PSU angeschlossen werden. <strong>Nur durch eine Elektrofachkraft</strong> &mdash; siehe &sect;09.`,
+
+      s5h2: `Elektrische &Uuml;bersicht pro Modell`,
+      s5note: `Dies sind die festen Hardwarefakten f&uuml;r jede Gr&ouml;&szlig;e: wie viele PSUs/Haupteinspeisungen sie hat und ihre Leistungsaufnahme laut offiziellem Datenblatt. Dimensionierung der Stromkreise, Schutzeinrichtungen und Phasenverteilung werden von Expromo nicht vorgegeben &mdash; das ist die Entscheidung des ausf&uuml;hrenden Elektrikers f&uuml;r das jeweilige Projekt. <span class="tag tag-est">EST</span> kennzeichnet einen Wert, der noch auf den abschlie&szlig;enden Fertigungstest wartet.`,
+      specWord: `Spezifikation`,
+      s5rGrid: `Kabinettraster`, s5rPSU: `Anzahl PSUs / Haupteinspeisungen`, s5rMax: `Maximale Leistungsaufnahme`, s5rTypical: `Typische Leistungsaufnahme`,
+      s5rStandby: `Standby (Aktiv-Standard / Eco)`, s5rVoltage: `Eingangsspannung`, s5rCircuit: `Stromkreisplanung`,
+      s5dCircuit: `Durch den ausf&uuml;hrenden Elektriker &mdash; nicht von Expromo vorgegeben`,
+      s5caption1: `Die Leistungswerte gelten pro Bildschirm und stammen aus dem offiziellen Datenblatt. Jede Haupteinspeisung ist ein unabh&auml;ngiger Netzanschluss und kann auf einen eigenen Stromkreis und eine eigene Phase gelegt werden; wie viele Stromkreise/Phasen genutzt werden und welche Sicherungen und FI-Schutzschalter eingebaut werden, entscheidet der ausf&uuml;hrende Elektriker anhand der Versorgung vor Ort und der &ouml;rtlichen Vorschriften &mdash; siehe &sect;09.`,
+      s5h3: `Gesch&auml;tzte Leistung pro PSU-Gruppe, bei 600 Nits`,
+      s5note2: `Die obigen Datenblattwerte decken den gesamten Bildschirm ab und sind die korrekten Werte f&uuml;r die Elektroplanung. Diese Aufschl&uuml;sselung zeigt stattdessen, wo die Last tats&auml;chlich anf&auml;llt, PSU f&uuml;r PSU, anhand der tats&auml;chlichen Kabinettanzahl jeder PSU &mdash; n&uuml;tzlicher Kontext f&uuml;r den Elektriker bei der Aufteilung der Stromkreise auf die Haupteinspeisungen, ohne dass Expromo diese Aufteilung vorschreibt.`,
+      s5methodH: `Methode`,
+      s5methodP: `Die 24&nbsp;W Overhead sind der w&auml;hrend der Werkspr&uuml;fung gemessene Verbrauch von Sendekarte/Steuerung; er f&auml;llt nur einmal pro Bildschirm an, an der Haupt-PSU, da es nur eine Sendekarte gibt. Die Kabinettleistung bei 600 Nits ist aus gemessenen Proben des Kabinetts mit dem n&auml;chstliegenden Pixelabstand normiert:`,
+      s5thCabPower: `Kabinettleistung bei 600 Nits`,
+      s5caption2: `Bediente Kabinette und gesch&auml;tzte Leistung pro PSU-Gruppe, bei 600 Nits`,
+      s5thCabsServed: `Bediente Kabinette`, s5thEstPower: `Gesch. Leistung bei 600 Nits`,
+      mainPsuSend: `Haupt-PSU (+ Sendekarte)`, secPsuWord: `Sekund&auml;r-PSU`, secPsu1Word: `Sekund&auml;r-PSU 1`, secPsu2Word: `Sekund&auml;r-PSU 2`,
+      s5total135: `135&Prime; Bildschirm gesamt`, s5total162: `162&Prime; Bildschirm gesamt`, s5total190: `190&Prime; Bildschirm gesamt`, s5total216: `216&Prime; Bildschirm gesamt`,
+      s5caption3: `Dies sind realistische Betriebssch&auml;tzungen bei 600 Nits, nicht das konservative Datenblattmaximum &mdash; die vollst&auml;ndige Messgrundlage finden Sie in der eXview-Leistungsaufnahme-&Uuml;bersicht. Sie dienen betrieblichen Zwecken/Diskussionen; die offizielle maximale Leistungsaufnahme laut Datenblatt in der Tabelle oben bleibt der korrekte Wert f&uuml;r die Elektroplanung.`,
+
+      s6h2: `PSU-Verbindung &mdash; 3-Pin- &amp; 5-Pin-Kabelbaum`,
+      s6note: `Jede PSU &mdash; Haupt- und Sekund&auml;r-PSU &mdash; hat dieselben zwei Niederspannungsanschl&uuml;sse, immer an derselben Position.`,
+      s6thPort: `Anschluss`, s6thPosition: `Position an der PSU`, s6thFunction: `Funktion`,
+      bottomLeft: `Unten links`, bottomRight: `Unten rechts`,
+      s6d3pin: `<strong>12&nbsp;V-Verbindung zwischen PSUs</strong> &mdash; verteilt die 12&nbsp;V der Haupt-PSU an jede Sekund&auml;r-PSU`,
+      s6d5pin: `<strong>12&nbsp;V + Standby-Aktivierung/-Deaktivierung</strong> &mdash; von der Haupt-PSU zur Sendekarte, und von jeder Sekund&auml;r-PSU zu ihrer Verteilerplatine`,
+      svgTitle: `Konzeptioneller Strom- und Steuersignalfluss f&uuml;r einen Bildschirm mit drei PSUs`,
+      svgCabinets: `Kabinette`, svgSec2Group: `Sekund&auml;r-PSU-2-Gruppe`, svgSec1Group: `Sekund&auml;r-PSU-1-Gruppe`, svgMainGroup: `Haupt-PSU-Gruppe`,
+      svgSec2: `Sekund&auml;r-PSU 2`, svgIn3: `AC IN &larr; Haupteinspeisung Nr. 3`,
+      svgSec1: `Sekund&auml;r-PSU 1`, svgIn2: `AC IN &larr; Haupteinspeisung Nr. 2`,
+      svgMain: `Haupt-PSU`, svgIn1: `AC IN &larr; Haupteinspeisung Nr. 1`,
+      svg3pinLine: `3-Pin &middot; 12V-Verbindung, Haupt-PSU &rarr; jede Sekund&auml;r-PSU`,
+      svg5pinLine: `5-Pin &middot; 12V + Standby-Steuerung`,
+      svgDistBoard: `Verteilerplatine`, svgSendCard: `Sendekarte`,
+      svgFootnote: `Konzeptioneller Signalfluss, nicht ma&szlig;stabsgetreu. Bei der 162&Prime; entf&auml;llt die Sekund&auml;r-PSU 2. Bei der 135&Prime; gibt es nur die Haupt-PSU &mdash; keine 3-Pin-Verbindung erforderlich.`,
+      s6r1t: `3-Pin-Verbindung`, s6r1d: `Der 3-Pin-Anschluss der Haupt-PSU verbindet sich mit dem 3-Pin-Anschluss jeder Sekund&auml;r-PSU und verteilt die 12&nbsp;V, die der AC&#8209;DC-Wandler der Haupt-PSU erzeugt. Die 135&Prime; hat nur eine PSU, daher entf&auml;llt das 3-Pin-Verbindungskabel.`,
+      s6r2t: `5-Pin-Pfad`, s6r2d: `Die Sendekarte wird &uuml;ber den <strong>5-Pin</strong>-Anschluss der Haupt-PSU versorgt, nicht &uuml;ber den 3-Pin-Anschluss. Erscheint eine Sendekarte tot, verfolgen Sie die 5-Pin-Leitung von der Haupt-PSU &mdash; die 12&nbsp;V-Kette zwischen den PSUs ist ein separater Fehlerbereich.`,
+      s6r3t: `Sonderkabel`, s6r3d: `Bei der 162&Prime;, 190&Prime; und 216&Prime; sind sowohl das 3-Pin- als auch das 5-Pin-Kabel <strong>modellspezifisch gefertigt</strong> und zwischen den Gr&ouml;&szlig;en nicht austauschbar. Bestellung nach Modell, nicht nach L&auml;nge.`,
+      s6r4t: `Pinbelegungen`, s6r4d: `Die Pinbelegungen von 3-Pin und 5-Pin sind propriet&auml;r und nicht ver&ouml;ffentlicht. Fertigen Sie keine Ersatzkabel an &mdash; bestellen Sie Werkskabel &uuml;ber Expromo.`,
+      s6r5d: `Wird der C20-Ger&auml;testecker entfernt und werden die Phasenleiter direkt an den Schraubklemmen der PSU angeschlossen, bleibt die gesamte 3-Pin-/5-Pin-Verkabelung unver&auml;ndert.`,
+      s6troubleH: `Fehlersuche-Tipp: teilweiser Standby`,
+      s6troubleP: `Zeigt eine Gruppe von Spalten keinen Inhalt beim Verlassen des Standby, bleiben aber deren 3-in-1-Platinen und LED-Treiber warm, wird das PSU-Relais dieser Gruppe nicht angesteuert. Pr&uuml;fen Sie zuerst, ob sowohl die <strong>3-Pin-Verbindung (12&nbsp;V)</strong> als auch die <strong>5-Pin-Verbindung (Strom + Standby-Steuerung)</strong> zu dieser Sekund&auml;r-PSU eingesteckt und korrekt eingerastet sind &mdash; dies ist das erwartete Symptom einer losen oder fehlenden Kabelverbindung, kein Firmwarefehler. Die Pr&uuml;fung beider Anschl&uuml;sse zeigt zudem, welcher neu eingesteckt werden muss, bevor Sie weitersuchen.`,
+
+      s7h2: `Empfohlene Installationsreihenfolge`,
+      s7note: `Das Design mit Wartungszugang von vorne und ohne Werkzeug bedeutet, dass die LED-Module zuletzt eingesetzt werden, nachdem die elektrische Grundverkabelung als korrekt best&auml;tigt wurde &mdash; nicht vorher. So wird vermieden, dass frisch eingesetzte Module gegen eine fehlerhaft verdrahtete oder unvollst&auml;ndige Strom-/Steuerkette unter Spannung gesetzt werden.`,
+      s7step1: `Alle Kabinette auf der Montageschiene (oder Standfu&szlig;/Trolley, falls angeboten) montieren und ausrichten, bevor irgendetwas verkabelt wird.`,
+      s7step2: `Die Netzversorgung zu jeder Haupteinspeisung verlegen und anschlie&szlig;en, gem&auml;&szlig; dem f&uuml;r das Modell vereinbarten Stromkreiskonzept (&sect;05).`,
+      s7step3: `Den 3-Pin-Kabelbaum (12&nbsp;V-Verbindung) zwischen der Haupt-PSU und jeder Sekund&auml;r-PSU anschlie&szlig;en, sowie den 5-Pin-Kabelbaum (Strom + Standby-Steuerung) von der Haupt-PSU zur Sendekarte und von jeder Sekund&auml;r-PSU zu ihrer Verteilerplatine. Nur Werkskabel (&sect;06).`,
+      s7step4: `Einschalten und das korrekte Verhalten best&auml;tigen, bevor Module eingesetzt werden: alle AC&nbsp;OUT-Gruppen sollten gemeinsam unter Spannung stehen, und die Sendekarte sollte auf Steuerungs-/Standbybefehle reagieren.`,
+      s7step5: `Erst danach die LED-Module von vorne, Kabinett f&uuml;r Kabinett, einsetzen.`,
+
+      s8h2: `Referenzschaltpl&auml;ne`,
+      s8note: `Werksseitige Kabelbaumzeichnungen f&uuml;r alle vier Modelle. Rasterlinien dienen nur der Orientierung &mdash; die montierte Bildschirmoberfl&auml;che ist nahtlos. Auf eine Zeichnung klicken, um sie in voller Gr&ouml;&szlig;e zu &ouml;ffnen.`,
+      s8leg1: `3-in-1-Platine (Strom/Empfang/HUB pro Kabinett)`, s8leg2: `PSU-/Relaismodul`,
+      s8leg5: `Geschaltete AC-Sammelschiene (Farbe je PSU-Gruppe)`, s8leg6: `3-Pin &middot; 12V-Verbindung, PSU zu PSU`, s8leg7: `5-Pin &middot; Strom + Standby-Steuerung`,
+      figFull135: `Vollst&auml;ndige Kabelbaum&uuml;bersicht &mdash; <code>135inch.png</code>`,
+      fig135zoom: `Detail unten rechts: AC&#8209;DC-Modul, Sendekarte, 5-Pin-Leitung &mdash; <code>135inch_Wire_Harness_Zoom.png</code>`,
+      figFull162: `Vollst&auml;ndige Kabelbaum&uuml;bersicht &mdash; <code>162inch.png</code>`,
+      fig162zoom: `Detail unten rechts: Haupt- + Sekund&auml;r-PSU, 3-Pin- und 5-Pin-Leitungen &mdash; <code>162inch_Wire_Harness_Zoom.png</code>`,
+      figFull190: `Vollst&auml;ndige Kabelbaum&uuml;bersicht &mdash; <code>190inch.png</code>`,
+      fig190zoom: `Detail unten rechts, 3 PSUs (gemeinsame Zeichnung mit 216&Prime;) &mdash; <code>190inch_and_216inch_Wire_Harness_Zoom.png</code>`,
+      figFull216: `Vollst&auml;ndige Kabelbaum&uuml;bersicht &mdash; <code>216inch.png</code>`,
+      fig216zoom: `Detail unten rechts, 3 PSUs (gemeinsame Zeichnung mit 190&Prime;) &mdash; <code>190inch_and_216inch_Wire_Harness_Zoom.png</code>`,
+
+      s9h2: `Installationshinweise Elektro`,
+      s9r1t: `Verantwortung`, s9r1d: `Dimensionierung der Stromkreise, Schutzeinrichtungen (Sicherungen, FI-Schutzschalter) und Phasenverteilung liegen ausschlie&szlig;lich in der Verantwortung des ausf&uuml;hrenden Elektrikers, gem&auml;&szlig; &ouml;rtlichen Vorschriften und den Leistungswerten je Modell in &sect;05. Expromo gibt f&uuml;r diese Bildschirme keine Sicherung, keinen FI-Nennwert und keine Ausl&ouml;secharakteristik vor oder empfiehlt eine solche &mdash; wir geben die Anzahl der PSUs/Haupteinspeisungen an, und der Elektriker w&auml;hlt die jeweilige Schutzeinrichtung.`,
+      s9r2t: `Einschaltstrom`, s9r2d: `Die PSUs verwenden Nulldurchgangsrelais, die den Einschaltstrom beim Einschalten begrenzen. Dies ist eine Hardwaretatsache, die der Elektriker bei der eigenen Ger&auml;teauswahl ber&uuml;cksichtigen sollte, kein Ersatz daf&uuml;r.`,
+      s9r3t: `Bildschirme mit mehreren Einspeisungen`, s9r3d: `Bei der 162&Prime;, 190&Prime; und 216&Prime; ist jede Haupteinspeisung ein separater Netzanschluss und kann auf einer eigenen Phase und mit einer eigenen Schutzeinrichtung liegen. Da die PSU-Verbindung mit 12&nbsp;V (nicht AC) erfolgt, k&ouml;nnen separate Einspeisungen aus unterschiedlichen Phasen versorgt werden, w&auml;hrend der Bildschirm den Standby weiterhin als eine Einheit schaltet.`,
+      s9r4t: `Direkte Phasenverdrahtung`, s9r4d: `Das Entfernen des C20-Ger&auml;testeckers und der direkte Anschluss der Phasenleiter an den Schraubklemmen der PSU ist eine unterst&uuml;tzte Option und muss von einer <strong>Elektrofachkraft</strong> durchgef&uuml;hrt werden.`,
+
+      yesWord: `Ja`, noWord: `Nein`,
+
+      footer1: `Zusammengestellt aus interner technischer Dokumentation zu Kabinettnummerierung, Stromarchitektur, den in &sect;08 referenzierten werksseitigen Kabelbaumzeichnungen sowie gemessenen Kabinettleistungsdaten (verwendet in &sect;05).`,
+      footer2: `Verwandte Dokumente:`,
+      footerLink1: `eXview Edge Spezifikationsvergleich`, footerLink1d: `vollst&auml;ndige technische Spezifikationsreferenz`,
+      footerLink2: `eXview Edge Datenblatt`, footerLink2d: `kundenorientiertes Produktblatt`,
+      footer3: `Fragen zur Stromkreisplanung eines konkreten Projekts sind vor Arbeitsbeginn an die Projektingenieure von Expromo zu richten.`
+    },
+    zh: {
+      eyebrow: `安装参考`,
+      h1: `电气与电源架构安装指南`,
+      subtitle: `eXview Edge系列&mdash;&mdash;135&Prime;、162&Prime;、190&Prime;和216&Prime;。屏幕的供电、切换与互联方式，以及电工规划电路所需了解的内容。`,
+      quickLink: `&larr; 时间紧张？请阅读2分钟快速参考`,
+      summaryStrip: `<strong>简而言之：</strong>四种尺寸均采用100&ndash;240&nbsp;VAC、50/60&nbsp;Hz供电。135&Prime;有1个主进线，162&Prime;有2个，190&Prime;和216&Prime;各有3个&mdash;&mdash;每个进线都是独立的交流供电入口，可接入各自的电路和相线。Expromo不指定断路器、漏电保护器或相位分配：<strong>电路设计与保护装置的选择完全由安装电工负责</strong>，并应基于本指南中的功耗数据及当地法规。`,
+      toc1: `术语`, toc2: `电源域与待机`, toc3: `机柜编号`, toc4: `固定组件位置`,
+      toc5: `各型号电气概览`, toc6: `PSU互联（3针/5针）`, toc7: `安装顺序`,
+      toc8: `参考接线图`, toc9: `安装电气注意事项`,
+
+      s1h2: `术语`,
+      s1note: `四种型号共用同一种<strong>600&times;337.5&nbsp;mm机柜</strong>。更大尺寸通过增加一行一列相同机柜构建&mdash;&mdash;机柜本身不变。`,
+      s1thTerm: `术语`, s1thMeans: `含义`,
+      s1rCabinet: `机柜`, s1dCabinet: `一块600&times;337.5&nbsp;mm面板，不含挂架重4&nbsp;kg，单独编号（见&sect;03）。`,
+      s1r3in1: `三合一卡`, s1d3in1: `每个机柜内集成电源、接收卡与HUB的板卡。<strong>这才是屏幕真正的电源</strong>&mdash;&mdash;每个机柜一块。`,
+      s1rPSU: `&ldquo;PSU&rdquo;`, s1dPSU: `位于屏幕底部的交流切换模块。实际功能是<strong>继电器</strong>，而非电源&mdash;&mdash;详见下方说明。`,
+      s1rMainPSU: `主PSU`, s1dMainPSU: `唯一带有AC&#8209;DC（12V）转换器的PSU。它是整台屏幕唯一的12V电源来源。`,
+      s1rSecPSU: `从PSU`, s1dSecPSU: `任何额外的PSU。它没有自己的AC&#8209;DC转换器&mdash;&mdash;12V电源来自主PSU。`,
+      s1rSendCard: `发送卡`, s1dSendCard: `视频/控制处理器。由主PSU供电，待机时保持通电。`,
+      s1rDistBoard: `分配板`, s1dDistBoard: `每块从PSU用于电源和待机信号连接的接入点。`,
+      s1rMainInlet: `主进线`, s1dMainInlet: `一个交流供电入口点。每个PSU恰好对应一个。`,
+      s1calloutH: `为何继电器模块仍被称为&ldquo;PSU&rdquo;`,
+      s1calloutP: `图纸和本指南中标注为<em>PSU</em>的模块实际用作<strong>继电器</strong>：真正的电源是每个机柜内的三合一卡。<em>PSU</em>这一名称被有意保留&mdash;&mdash;用于图纸、文档及服务沟通&mdash;&mdash;因为这是您的服务联系人和工厂已经在使用的名称；更改名称只会造成混淆，而非消除混淆。`,
+
+      s2h2: `电源域与待机`,
+      s2note1: `主PSU的AC&#8209;DC转换器是屏幕内唯一的12V电源。这路12V为每个PSU的AC&nbsp;OUT继电器线圈、发送卡供电，并&mdash;&mdash;通过PSU间连接线&mdash;&mdash;为每块从PSU供电。屏幕内其他部分只有在继电器将交流电切换过去后才会通电。`,
+      s2thDomain: `电源域`, s2thLive: `待机时是否通电？`, s2thContains: `包含`,
+      s2rAlwaysOn: `常电域（12V）`, s2dAlwaysOn: `AC&#8209;DC转换器、所有AC&nbsp;OUT继电器线圈、发送卡`,
+      s2rSwitched: `受控域（AC&nbsp;OUT）`, s2dSwitched: `每块三合一卡（电源/接收/HUB）及每个LED IC驱动`,
+      s2note2: `本系列无风扇；常电域除上述内容外不包含其他部件&mdash;&mdash;HDMI检测、红外接收和物理按键均由发送卡本身处理。`,
+      s2h3: `待机模式`,
+      s2thActive: `活动待机（Expromo默认）`, s2thEco: `节能待机`,
+      s2rMeasured: `实测功耗`, s2rLAN: `LAN/UDP控制`, s2rButton: `物理按键/红外遥控`,
+      s2callout1H: `屏幕待机时实际功耗是多少？`,
+      s2callout1P: `产品资料中标注的&le;0.5&nbsp;W待机功耗是<strong>节能</strong>待机数值，并非出厂默认状态。Expromo出厂默认设置为<strong>活动待机</strong>，以保证LAN/UDP唤醒、远程监控及控制系统轮询持续可用&mdash;&mdash;因此除非已刻意配置为节能模式，待机功耗应按<strong>14&nbsp;W</strong>估算。节能模式会完全断开网络连接，不应用于由网络控制系统驱动的屏幕。`,
+      s2callout2H: `待机切换方式`,
+      s2callout2P: `无论哪种模式，整个受控域都会被完全断电&mdash;&mdash;每块三合一卡及每个LED驱动都会失去交流供电，不仅仅是视频信号。PSU采用<strong>过零继电器</strong>，以在受控域重新通电时将浪涌电流降至最低。`,
+
+      s3h2: `机柜编号`,
+      s3note: `1号机柜始终是屏幕正面视角下<strong>左上角</strong>的机柜。编号方式为<strong>按列排序</strong>：从最左列自上而下编号，再移至右侧下一列继续自上而下编号，依此类推遍历整个屏幕。`,
+      s3calloutH: `通用公式`,
+      s3calloutP: `对于机柜总数为<code>N = n&sup2;</code>的<em>n&times;n</em>网格，以正面视角从左上角开始的1基<code>行</code>/<code>列</code>：`,
+      s3caption: `已验证示例&mdash;&mdash;135&Prime;（5&times;5 = 25个机柜），正面视角`,
+      s3col1: `第1列`, s3col2: `第2列`, s3col3: `第3列`, s3col4: `第4列`, s3col5: `第5列`,
+      s3row1: `第1行`, s3row2: `第2行`, s3row3: `第3行`, s3row4: `第4行`, s3row5: `第5行`,
+      s3anchors: `任意尺寸的定位点：左上角 = <code>1</code>，左下角 = <code>n</code>，右上角 = <code>N&minus;n+1</code>，右下角 = <code>N</code>。`,
+
+      s4h2: `固定组件位置`,
+      s4note: `这些位置在整个系列中完全一致&mdash;&mdash;没有例外。`,
+      modelWord: `型号`, s4thSendMain: `发送卡+主PSU`, s4thCable: `供电线缆入口机柜`,
+      s4c135: `25号机柜（右下角）`, s4e135: `24号机柜`,
+      s4c162: `36号机柜（右下角）`, s4e162: `35号机柜`,
+      s4c190: `49号机柜（右下角）`, s4e190: `48号机柜`,
+      s4c216: `64号机柜（右下角）`, s4e216: `63号机柜`,
+      s4r1t: `发送卡`, s4r1d: `始终位于右下角机柜（第<code>N</code>号机柜）。全系列无例外。`,
+      s4r2t: `主PSU`, s4r2d: `始终与发送卡位于同一右下角机柜内。`,
+      s4r3t: `线缆入口`, s4r3d: `主供电线缆通过右下角机柜正上方的机柜（第<code>N&minus;1</code>号机柜）进入，并向下连接至主PSU的AC&nbsp;IN。`,
+      s4r4t: `进线接口`, s4r4d: `屏幕的主电源进线为<strong>IEC&nbsp;60320&nbsp;C20</strong>设备插座（针脚式）&mdash;&mdash;未连接时不带电。配套供电线缆末端为<strong>C19</strong>插头（孔式），该端带电，用于连接至屏幕。`,
+      s4r5t: `直接接线`, s4r5d: `可拆除C20设备插座，将相线直接接至PSU的接线端子。<strong>须由持证电工操作</strong>&mdash;&mdash;见&sect;09。`,
+
+      s5h2: `各型号电气概览`,
+      s5note: `以下为各尺寸固定的硬件参数：PSU/主进线数量，以及官方产品资料中的功耗数据。电路设计、保护装置及相位分配均不由Expromo指定&mdash;&mdash;由安装电工根据具体项目决定。<span class="tag tag-est">EST</span>标记为待最终量产测试确认的数值。`,
+      specWord: `规格`,
+      s5rGrid: `机柜网格`, s5rPSU: `PSU数量/主进线数`, s5rMax: `最大功耗`, s5rTypical: `典型功耗`,
+      s5rStandby: `待机（活动默认/节能）`, s5rVoltage: `输入电压`, s5rCircuit: `电路设计`,
+      s5dCircuit: `由安装电工负责&mdash;&mdash;Expromo不作规定`,
+      s5caption1: `功耗数据为每屏数值，来自官方产品资料。每个主进线均为独立的交流供电入口，可接入各自的电路和相线；使用多少电路/相位，以及安装哪种断路器和漏电保护器，均由安装电工根据现场供电情况及当地法规决定&mdash;&mdash;见&sect;09。`,
+      s5h3: `600 nits下各PSU组的估算功耗`,
+      s5note2: `上方产品资料数据涵盖整屏功耗，是电气规划的正确依据。此处的拆分则展示了负载在各PSU上的实际分布情况，基于每个PSU实际服务的机柜数量&mdash;&mdash;为电工在各主进线间分配电路时提供有用参考，但不代表Expromo规定了具体分配方式。`,
+      s5methodH: `计算方法`,
+      s5methodP: `24&nbsp;W为工厂测试中实测的发送卡/控制部分功耗；由于全屏只有一块发送卡，该开销仅在主PSU上计入一次。600 nits下的机柜功耗依据点间距最接近的机柜实测样本归一化得出：`,
+      s5thCabPower: `600 nits下机柜功耗`,
+      s5caption2: `各PSU组服务的机柜数及600 nits下的估算功耗`,
+      s5thCabsServed: `服务机柜数`, s5thEstPower: `600 nits下估算功耗`,
+      mainPsuSend: `主PSU（含发送卡）`, secPsuWord: `从PSU`, secPsu1Word: `从PSU 1`, secPsu2Word: `从PSU 2`,
+      s5total135: `135&Prime;整屏合计`, s5total162: `162&Prime;整屏合计`, s5total190: `190&Prime;整屏合计`, s5total216: `216&Prime;整屏合计`,
+      s5caption3: `以上为600 nits下的实际运行估算值，并非保守的产品资料最大值&mdash;&mdash;完整测量依据请参见eXview功耗说明文档。这些数值仅供运营/讨论参考；上表中官方产品资料的最大功耗仍是电气规划的正确依据。`,
+
+      s6h2: `PSU互联&mdash;&mdash;3针与5针线束`,
+      s6note: `每个PSU&mdash;&mdash;无论主PSU还是从PSU&mdash;&mdash;都配有相同的两个低压接口，位置始终一致。`,
+      s6thPort: `接口`, s6thPosition: `PSU上的位置`, s6thFunction: `功能`,
+      bottomLeft: `左下方`, bottomRight: `右下方`,
+      s6d3pin: `<strong>PSU间12V连接</strong>&mdash;&mdash;将主PSU的12V分配给每块从PSU`,
+      s6d5pin: `<strong>12V+待机激活/停用</strong>&mdash;&mdash;从主PSU连接至发送卡，并从每块从PSU连接至其分配板`,
+      svgTitle: `三PSU eXview Edge屏幕的概念性电源与控制信号流程`,
+      svgCabinets: `机柜`, svgSec2Group: `从PSU 2组`, svgSec1Group: `从PSU 1组`, svgMainGroup: `主PSU组`,
+      svgSec2: `从PSU 2`, svgIn3: `AC IN &larr; 3号主进线`,
+      svgSec1: `从PSU 1`, svgIn2: `AC IN &larr; 2号主进线`,
+      svgMain: `主PSU`, svgIn1: `AC IN &larr; 1号主进线`,
+      svg3pinLine: `3针&middot;12V连接，主PSU&rarr;每块从PSU`,
+      svg5pinLine: `5针&middot;12V+待机控制`,
+      svgDistBoard: `分配板`, svgSendCard: `发送卡`,
+      svgFootnote: `概念性信号流程示意，非等比例绘制。162&Prime;不含从PSU 2。135&Prime;仅有主PSU&mdash;&mdash;不适用3针连接。`,
+      s6r1t: `3针连接`, s6r1d: `主PSU的3针接口连接至每块从PSU的3针接口，分配主PSU的AC&#8209;DC转换器产生的12V电源。135&Prime;只有一个PSU，因此不适用3针连接线。`,
+      s6r2t: `5针路径`, s6r2d: `发送卡由主PSU的<strong>5针</strong>接口供电，而非3针接口。若发送卡无反应，应从主PSU排查5针线路&mdash;&mdash;PSU间12V链路属于另一个独立的故障范围。`,
+      s6r3t: `定制线缆`, s6r3d: `在162&Prime;、190&Prime;和216&Prime;上，3针和5针线缆均为<strong>按型号定制</strong>，不同尺寸之间不可互换。请按型号而非长度订购。`,
+      s6r4t: `针脚定义`, s6r4d: `3针和5针的针脚定义为专有信息，未公开。请勿自行制作替代线缆&mdash;&mdash;请通过Expromo订购原厂线缆。`,
+      s6r5d: `若拆除C20设备插座并将相线直接接至PSU接线端子，所有3针/5针接线均不受影响。`,
+      s6troubleH: `故障排查提示：部分待机异常`,
+      s6troubleP: `若某组列在退出待机时无画面显示，但其三合一卡和LED驱动仍保持温热，说明该组的PSU继电器未被驱动。请先检查该从PSU的<strong>3针（12V连接）</strong>和<strong>5针（电源+待机控制）</strong>接口是否均已插好并完全就位&mdash;&mdash;这是线束连接松动或缺失的典型表现，而非固件故障。同时检查两个接口也有助于确认需要重新插接的是哪一个，再进一步排查。`,
+
+      s7h2: `建议安装顺序`,
+      s7note: `本产品采用前维护、免工具设计，意味着LED模组应在确认电气基础连接正确无误之后再安装&mdash;&mdash;而非之前。这样可避免新安装的模组在接线错误或线路不完整的情况下通电。`,
+      s7step1: `在接线之前，先将所有机柜安装并对齐至挂墙挂架（或支架/推车，如有提供）。`,
+      s7step2: `按照该型号商定的电路设计（&sect;05），敷设并接好各主进线的市电供电。`,
+      s7step3: `连接主PSU与每块从PSU之间的3针（12V连接）线束，以及从主PSU到发送卡、从每块从PSU到其分配板的5针（电源+待机控制）线束。仅可使用原厂线缆（&sect;06）。`,
+      s7step4: `在安装任何模组之前先通电并确认工作状态正确：所有AC&nbsp;OUT组应同步通电，且发送卡应能响应控制/待机指令。`,
+      s7step5: `确认无误后，再从正面逐个机柜安装LED模组。`,
+
+      s8h2: `参考接线图`,
+      s8note: `全部四种型号的工厂线束图纸。网格线仅供参考&mdash;&mdash;组装后的屏幕表面为无缝拼接。点击任意图纸可查看全尺寸图像。`,
+      s8leg1: `三合一卡（每机柜电源/接收/HUB）`, s8leg2: `PSU/继电器模块`,
+      s8leg5: `受控交流母线（颜色按PSU组区分）`, s8leg6: `3针&middot;12V连接，PSU间`, s8leg7: `5针&middot;电源+待机控制`,
+      figFull135: `完整线束概览图&mdash;&mdash;<code>135inch.png</code>`,
+      fig135zoom: `右下角细节：AC&#8209;DC模块、发送卡、5针线路&mdash;&mdash;<code>135inch_Wire_Harness_Zoom.png</code>`,
+      figFull162: `完整线束概览图&mdash;&mdash;<code>162inch.png</code>`,
+      fig162zoom: `右下角细节：主PSU与从PSU、3针及5针线路&mdash;&mdash;<code>162inch_Wire_Harness_Zoom.png</code>`,
+      figFull190: `完整线束概览图&mdash;&mdash;<code>190inch.png</code>`,
+      fig190zoom: `右下角细节，3个PSU（与216&Prime;共用图纸）&mdash;&mdash;<code>190inch_and_216inch_Wire_Harness_Zoom.png</code>`,
+      figFull216: `完整线束概览图&mdash;&mdash;<code>216inch.png</code>`,
+      fig216zoom: `右下角细节，3个PSU（与190&Prime;共用图纸）&mdash;&mdash;<code>190inch_and_216inch_Wire_Harness_Zoom.png</code>`,
+
+      s9h2: `安装电气注意事项`,
+      s9r1t: `责任划分`, s9r1d: `电路设计、保护装置（断路器、漏电保护器）及相位分配完全由安装电工负责，依据当地法规及&sect;05中各型号的功耗数据执行。Expromo不为这些屏幕指定或推荐断路器、漏电保护器额定值或脱扣曲线类型&mdash;&mdash;我们仅提供PSU/主进线数量，具体保护装置由电工为每路选定。`,
+      s9r2t: `浪涌电流`, s9r2d: `PSU采用过零继电器，可在通电瞬间限制浪涌电流。这是电工在自行选择保护装置时应纳入考虑的硬件事实，而非替代其选型工作。`,
+      s9r3t: `多进线屏幕`, s9r3d: `在162&Prime;、190&Prime;和216&Prime;上，每个主进线均为独立的供电入口，可接入各自的相线及保护装置。由于PSU间连接为12V（非交流），各进线即使接入不同相线，屏幕仍可作为一个整体统一切换待机状态。`,
+      s9r4t: `直接相线接线`, s9r4d: `拆除C20设备插座并将相线直接接至PSU接线端子是受支持的方式，且必须由<strong>持证电工</strong>操作。`,
+
+      yesWord: `是`, noWord: `否`,
+
+      footer1: `本文档整理自内部工程资料，涵盖机柜编号、电源架构、&sect;08中引用的工厂线束图纸，以及&sect;05中使用的实测机柜功耗数据。`,
+      footer2: `相关文档：`,
+      footerLink1: `eXview Edge规格对比`, footerLink1d: `完整技术规格参考`,
+      footerLink2: `eXview Edge产品资料`, footerLink2d: `面向客户的产品资料`,
+      footer3: `有关具体项目电路设计的问题，应在施工前咨询Expromo项目工程团队。`
+    }
+  };
+
+  var HTML_LANG = { en: 'en', da: 'da', de: 'de', zh: 'zh-CN' };
+  var STORAGE_KEY = 'exview-edge-lang';
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+  var _decodeEl = document.createElement('textarea');
+  function decodeEntities(html) {
+    _decodeEl.innerHTML = html;
+    var decoded = _decodeEl.textContent;
+    _decodeEl.innerHTML = '';
+    return decoded;
+  }
+
+  function applyLang(lang) {
+    var currentLang = STRINGS[lang] ? lang : 'en';
+    var dict = STRINGS[currentLang];
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var key = nodes[i].getAttribute('data-i18n');
+      if (dict[key] === undefined) { continue; }
+      if (nodes[i].namespaceURI === SVG_NS) {
+        nodes[i].textContent = decodeEntities(dict[key]);
+      } else {
+        nodes[i].innerHTML = dict[key];
+      }
+    }
+    document.documentElement.lang = HTML_LANG[currentLang] || 'en';
+    var btns = document.querySelectorAll('.lang-switch button');
+    for (var j = 0; j < btns.length; j++) {
+      var isActive = btns[j].getAttribute('data-lang') === currentLang;
+      btns[j].classList.toggle('active', isActive);
+      btns[j].setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    }
+    try { localStorage.setItem(STORAGE_KEY, currentLang); } catch (e) {}
+  }
+
+  var switchBtns = document.querySelectorAll('.lang-switch button');
+  for (var k = 0; k < switchBtns.length; k++) {
+    switchBtns[k].addEventListener('click', function () { applyLang(this.getAttribute('data-lang')); });
+  }
+
+  var saved = null;
+  try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+  applyLang(saved && STRINGS[saved] ? saved : 'en');
+})();
+</script>
 
 </body>
 </html>

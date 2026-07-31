@@ -6,7 +6,7 @@
 <title>eXview Edge — Electrical Quick Reference</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --paper:      #F5F6F3;
@@ -19,6 +19,7 @@
     --signal-dim: #E3F1F2;
     --amber:      #B5650D;
     --amber-dim:  #FBEFDD;
+    --cyan:       #22C7DB;
     --content-w:  880px;
   }
   * { box-sizing: border-box; }
@@ -26,11 +27,11 @@
     margin: 0;
     background: var(--paper);
     color: var(--ink);
-    font-family: "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
+    font-family: "IBM Plex Sans", "Noto Sans SC", -apple-system, "Segoe UI", sans-serif;
     line-height: 1.5;
     font-size: 16px;
   }
-  h1, h2, h3 { font-family: "Space Grotesk", "Segoe UI", sans-serif; font-weight: 600; margin: 0; color: var(--ink); }
+  h1, h2, h3 { font-family: "Space Grotesk", "Noto Sans SC", "Segoe UI", sans-serif; font-weight: 600; margin: 0; color: var(--ink); }
   code, .mono { font-family: "IBM Plex Mono", ui-monospace, "Courier New", monospace; }
   a { color: var(--signal); }
 
@@ -38,11 +39,21 @@
   .masthead__inner { max-width: var(--content-w); margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; gap: 1.5rem; flex-wrap: wrap; }
   .masthead__logo { background: var(--paper); border-radius: 6px; padding: 4px 12px; display: inline-flex; align-items: center; flex-shrink: 0; }
   .masthead__logo img { width: 100px; height: auto; display: block; }
+  .masthead__meta { display: flex; flex-direction: column; align-items: flex-end; gap: 0.7rem; flex-shrink: 0; }
   .eyebrow { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: #7FC4CC; margin: 0 0 0.6rem 0; }
   .masthead h1 { color: var(--paper); font-size: clamp(1.5rem, 3.4vw, 2rem); letter-spacing: -0.01em; line-height: 1.15; max-width: 24ch; }
   .masthead .subtitle { margin: 0.6rem 0 0 0; color: #C4CCD1; font-size: 0.98rem; max-width: 52ch; }
   .masthead .full-link { display: inline-block; margin-top: 1rem; font-family: "IBM Plex Mono", monospace; font-size: 0.78rem; color: #7FC4CC; text-decoration: none; border-bottom: 1px dotted #7FC4CC; }
   .masthead .full-link:hover { color: var(--paper); border-color: var(--paper); }
+
+  .lang-switch { display: flex; gap: 2px; background: rgba(255,255,255,0.06); padding: 4px; border-radius: 20px; }
+  .lang-switch button {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; border: none; background: transparent;
+    color: #9FB4BB; padding: 6px 12px; border-radius: 16px; cursor: pointer; white-space: nowrap; transition: background 0.15s, color 0.15s;
+  }
+  .lang-switch button:hover { color: #fff; }
+  .lang-switch button.active { background: var(--cyan); color: var(--navy); }
+  .lang-switch button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
 
   main { max-width: var(--content-w); margin: 0 auto; padding: 2.2rem 1.5rem 3rem; }
 
@@ -64,7 +75,7 @@
   table.mini { border-collapse: collapse; width: 100%; font-size: 0.88rem; min-width: 460px; }
   table.mini th, table.mini td { border-bottom: 1px solid var(--hairline); padding: 0.5rem 0.9rem; text-align: left; }
   table.mini td { font-family: "IBM Plex Mono", monospace; font-size: 0.86rem; }
-  table.mini thead th { background: var(--ink); color: var(--paper); font-family: "Space Grotesk", sans-serif; font-weight: 600; font-size: 0.82rem; }
+  table.mini thead th { background: var(--ink); color: var(--paper); font-family: "Space Grotesk", "Noto Sans SC", sans-serif; font-weight: 600; font-size: 0.82rem; }
   table.mini tbody tr:last-child td, table.mini tbody tr:last-child th { border-bottom: none; }
   table.mini tr.group-end td, table.mini tr.group-end th { border-bottom: 2px solid var(--hairline); }
   p.table-note { font-size: 0.82rem; color: var(--steel); margin: 0.6rem 0 0 0; }
@@ -102,7 +113,7 @@
 
   .next-step { background: var(--navy); color: var(--paper); border-radius: 10px; padding: 1.4rem 1.5rem; text-align: center; }
   .next-step p { margin: 0 0 0.8rem 0; color: #C4CCD1; font-size: 0.92rem; }
-  .next-step a.btn { display: inline-block; background: var(--signal); color: #fff; font-family: "Space Grotesk", sans-serif; font-weight: 600; font-size: 0.92rem; text-decoration: none; padding: 0.65rem 1.4rem; border-radius: 24px; }
+  .next-step a.btn { display: inline-block; background: var(--signal); color: #fff; font-family: "Space Grotesk", "Noto Sans SC", sans-serif; font-weight: 600; font-size: 0.92rem; text-decoration: none; padding: 0.65rem 1.4rem; border-radius: 24px; }
   .next-step a.btn:hover { background: #0a5f6d; }
 
   footer.page-footer { max-width: var(--content-w); margin: 0 auto; padding: 0 1.5rem 2.5rem; font-size: 0.78rem; color: var(--steel); }
@@ -113,11 +124,14 @@
   }
   @media (max-width: 480px) {
     .card-row { grid-template-columns: 1fr; }
+    .masthead__inner { flex-direction: column; }
+    .masthead__meta { align-items: flex-start; }
   }
   @media print {
     .masthead { background: none; color: #000; border-bottom: 2px solid #000; }
     .masthead h1, .masthead .subtitle, .eyebrow { color: #000 !important; }
     .masthead .full-link { display: none; }
+    .lang-switch { display: none; }
     .next-step { background: none; border: 1px solid #000; color: #000; }
     .next-step p, .next-step a.btn { color: #000 !important; background: none !important; }
   }
@@ -128,131 +142,380 @@
 <header class="masthead">
   <div class="masthead__inner">
     <div>
-      <p class="eyebrow">For the installing electrician &middot; 2-minute read</p>
-      <h1>eXview Edge — Electrical Quick Reference</h1>
-      <p class="subtitle">The numbers you need before you quote or wire the circuit. For diagrams, cabinet numbering and troubleshooting, see the full guide.</p>
-      <a class="full-link" href="exview-edge-electrical-installation-guide.html">&rarr; Full installation guide</a>
+      <p class="eyebrow" data-i18n="eyebrow">For the installing electrician &middot; 2-minute read</p>
+      <h1 data-i18n="h1">eXview Edge — Electrical Quick Reference</h1>
+      <p class="subtitle" data-i18n="subtitle">The numbers you need before you quote or wire the circuit. For diagrams, cabinet numbering and troubleshooting, see the full guide.</p>
+      <a class="full-link" href="exview-edge-electrical-installation-guide.html" data-i18n="fullLink">&rarr; Full installation guide</a>
     </div>
-    <span class="masthead__logo"><img src="assets/expromo-logo.jpg" alt="Expromo"></span>
+    <div class="masthead__meta">
+      <span class="masthead__logo"><img src="assets/expromo-logo.jpg" alt="Expromo"></span>
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" data-lang="en" class="active" aria-pressed="true">EN</button>
+        <button type="button" data-lang="da" aria-pressed="false">DA</button>
+        <button type="button" data-lang="de" aria-pressed="false">DE</button>
+        <button type="button" data-lang="zh" aria-pressed="false">中文</button>
+      </div>
+    </div>
   </div>
 </header>
 
 <main>
 
 <section>
-  <h2><span class="n">01</span>The 4 numbers you need</h2>
+  <h2><span class="n">01</span><span data-i18n="h2_01">The 4 numbers you need</span></h2>
   <div class="card-row">
     <div class="num-card">
       <div class="size">135&Prime;</div>
       <div class="inlets">1</div>
-      <div class="inlets-label">main inlet</div>
-      <div class="power">1.87&nbsp;kW max<br>0.623&nbsp;kW typical</div>
+      <div class="inlets-label" data-i18n="inletsLabelSingular">main inlet</div>
+      <div class="power">1.87&nbsp;kW <span data-i18n="wordMax">max</span><br>0.623&nbsp;kW <span data-i18n="wordTypical">typical</span></div>
     </div>
     <div class="num-card">
       <div class="size">162&Prime;</div>
       <div class="inlets">2</div>
-      <div class="inlets-label">main inlets</div>
-      <div class="power">2.69&nbsp;kW max<br>0.895&nbsp;kW typical</div>
+      <div class="inlets-label" data-i18n="inletsLabelPlural">main inlets</div>
+      <div class="power">2.69&nbsp;kW <span data-i18n="wordMax">max</span><br>0.895&nbsp;kW <span data-i18n="wordTypical">typical</span></div>
     </div>
     <div class="num-card">
       <div class="size">190&Prime;</div>
       <div class="inlets">3</div>
-      <div class="inlets-label">main inlets</div>
-      <div class="power">3.5&nbsp;kW max <span class="est">(est.)</span><br>1.17&nbsp;kW typical <span class="est">(est.)</span></div>
+      <div class="inlets-label" data-i18n="inletsLabelPlural">main inlets</div>
+      <div class="power">3.5&nbsp;kW <span data-i18n="wordMax">max</span> <span class="est" data-i18n="wordEst">(est.)</span><br>1.17&nbsp;kW <span data-i18n="wordTypical">typical</span> <span class="est" data-i18n="wordEst">(est.)</span></div>
     </div>
     <div class="num-card">
       <div class="size">216&Prime;</div>
       <div class="inlets">3</div>
-      <div class="inlets-label">main inlets</div>
-      <div class="power">4.6&nbsp;kW max <span class="est">(est.)</span><br>1.53&nbsp;kW typical <span class="est">(est.)</span></div>
+      <div class="inlets-label" data-i18n="inletsLabelPlural">main inlets</div>
+      <div class="power">4.6&nbsp;kW <span data-i18n="wordMax">max</span> <span class="est" data-i18n="wordEst">(est.)</span><br>1.53&nbsp;kW <span data-i18n="wordTypical">typical</span> <span class="est" data-i18n="wordEst">(est.)</span></div>
     </div>
   </div>
 </section>
 
 <section>
-  <h2><span class="n">01a</span>Estimated max power per PSU</h2>
+  <h2><span class="n">01a</span><span data-i18n="h2_01a">Estimated max power per PSU</span></h2>
   <div class="table-scroll">
   <table class="mini">
-    <thead><tr><th scope="col">Size</th><th scope="col">PSU</th><th scope="col">Est. max power</th></tr></thead>
+    <thead><tr><th scope="col" data-i18n="tableHeadSize">Size</th><th scope="col" data-i18n="tableHeadPSU">PSU</th><th scope="col" data-i18n="tableHeadMaxPower">Est. max power</th></tr></thead>
     <tbody>
-      <tr class="group-end"><th scope="row">135&Prime;</th><td>Main PSU (only)</td><td>1.87&nbsp;kW</td></tr>
+      <tr class="group-end"><th scope="row">135&Prime;</th><td data-i18n="mainPSUOnly">Main PSU (only)</td><td>1.87&nbsp;kW</td></tr>
 
-      <tr><th scope="row">162&Prime;</th><td>Main PSU</td><td>1.35&nbsp;kW</td></tr>
-      <tr class="group-end"><th scope="row"></th><td>Secondary PSU</td><td>1.35&nbsp;kW</td></tr>
+      <tr><th scope="row">162&Prime;</th><td data-i18n="mainPSU">Main PSU</td><td>1.35&nbsp;kW</td></tr>
+      <tr class="group-end"><th scope="row"></th><td data-i18n="secPSU">Secondary PSU</td><td>1.35&nbsp;kW</td></tr>
 
-      <tr><th scope="row">190&Prime;</th><td>Main PSU</td><td>1.50&nbsp;kW <span class="est">(est.)</span></td></tr>
-      <tr><th scope="row"></th><td>Secondary PSU 1</td><td>1.00&nbsp;kW <span class="est">(est.)</span></td></tr>
-      <tr class="group-end"><th scope="row"></th><td>Secondary PSU 2</td><td>1.00&nbsp;kW <span class="est">(est.)</span></td></tr>
+      <tr><th scope="row">190&Prime;</th><td data-i18n="mainPSU">Main PSU</td><td>1.50&nbsp;kW <span class="est" data-i18n="wordEst">(est.)</span></td></tr>
+      <tr><th scope="row"></th><td data-i18n="secPSU1">Secondary PSU 1</td><td>1.00&nbsp;kW <span class="est" data-i18n="wordEst">(est.)</span></td></tr>
+      <tr class="group-end"><th scope="row"></th><td data-i18n="secPSU2">Secondary PSU 2</td><td>1.00&nbsp;kW <span class="est" data-i18n="wordEst">(est.)</span></td></tr>
 
-      <tr><th scope="row">216&Prime;</th><td>Main PSU</td><td>1.73&nbsp;kW <span class="est">(est.)</span></td></tr>
-      <tr><th scope="row"></th><td>Secondary PSU 1</td><td>1.73&nbsp;kW <span class="est">(est.)</span></td></tr>
-      <tr class="group-end"><th scope="row"></th><td>Secondary PSU 2</td><td>1.15&nbsp;kW <span class="est">(est.)</span></td></tr>
+      <tr><th scope="row">216&Prime;</th><td data-i18n="mainPSU">Main PSU</td><td>1.73&nbsp;kW <span class="est" data-i18n="wordEst">(est.)</span></td></tr>
+      <tr><th scope="row"></th><td data-i18n="secPSU1">Secondary PSU 1</td><td>1.73&nbsp;kW <span class="est" data-i18n="wordEst">(est.)</span></td></tr>
+      <tr class="group-end"><th scope="row"></th><td data-i18n="secPSU2">Secondary PSU 2</td><td>1.15&nbsp;kW <span class="est" data-i18n="wordEst">(est.)</span></td></tr>
     </tbody>
   </table>
   </div>
-  <p class="table-note">Datasheet max power split across each model's PSUs, proportional to the cabinets each PSU serves &mdash; useful for sizing an individual circuit, not a substitute for the screen-total max above. Circuit and protective-device selection remain the electrician's decision.</p>
+  <p class="table-note" data-i18n="tableNote01a">Datasheet max power split across each model's PSUs, proportional to the cabinets each PSU serves &mdash; useful for sizing an individual circuit, not a substitute for the screen-total max above. Circuit and protective-device selection remain the electrician's decision.</p>
 </section>
 
 <section>
-  <h2><span class="n">02</span>Common to all four sizes</h2>
+  <h2><span class="n">02</span><span data-i18n="h2_02">Common to all four sizes</span></h2>
   <div class="facts">
-    <div>Input: <b>100&ndash;240&nbsp;VAC, 50/60&nbsp;Hz</b></div>
-    <div>Screen-side inlet: <b>IEC&nbsp;60320&nbsp;C20</b> (male, unpowered)</div>
-    <div>Cordset end: <b>C19</b> (female, powered)</div>
-    <div>Standby draw: <b>14&nbsp;W</b> default &middot; <b>0.5&nbsp;W</b> Eco (no network)</div>
+    <div><span data-i18n="factInputLabel">Input:</span> <b>100&ndash;240&nbsp;VAC, 50/60&nbsp;Hz</b></div>
+    <div><span data-i18n="factInletLabel">Screen-side inlet:</span> <b>IEC&nbsp;60320&nbsp;C20</b> <span data-i18n="factInletDesc">(male, unpowered)</span></div>
+    <div><span data-i18n="factCordLabel">Cordset end:</span> <b>C19</b> <span data-i18n="factCordDesc">(female, powered)</span></div>
+    <div><span data-i18n="factStandbyLabel">Standby draw:</span> <b>14&nbsp;W</b> <span data-i18n="wordDefault">default</span> &middot; <b>0.5&nbsp;W</b> <span data-i18n="factEcoDesc">Eco (no network)</span></div>
   </div>
 </section>
 
 <section>
-  <h2><span class="n">03</span>What Expromo specifies &mdash; and what's yours to decide</h2>
+  <h2><span class="n">03</span><span data-i18n="h2_03">What Expromo specifies &mdash; and what's yours to decide</span></h2>
   <div class="split">
     <div class="split-card do">
-      <h3>We tell you</h3>
+      <h3 data-i18n="doTitle">We tell you</h3>
       <ul>
-        <li>How many PSUs / main inlets each size has</li>
-        <li>The connector type on the screen (C20)</li>
-        <li>Power draw, from the official datasheet</li>
-        <li>That each main inlet is a fully independent AC supply entry</li>
+        <li data-i18n="doLi1">How many PSUs / main inlets each size has</li>
+        <li data-i18n="doLi2">The connector type on the screen (C20)</li>
+        <li data-i18n="doLi3">Power draw, from the official datasheet</li>
+        <li data-i18n="doLi4">That each main inlet is a fully independent AC supply entry</li>
       </ul>
     </div>
     <div class="split-card dont">
-      <h3>You decide</h3>
+      <h3 data-i18n="dontTitle">You decide</h3>
       <ul>
-        <li>Breaker type, curve and rating</li>
-        <li>RCD/RCBO selection</li>
-        <li>How many circuits/phases to use across the inlets</li>
-        <li>Cable sizing, per local regulations</li>
+        <li data-i18n="dontLi1">Breaker type, curve and rating</li>
+        <li data-i18n="dontLi2">RCD/RCBO selection</li>
+        <li data-i18n="dontLi3">How many circuits/phases to use across the inlets</li>
+        <li data-i18n="dontLi4">Cable sizing, per local regulations</li>
       </ul>
     </div>
   </div>
 </section>
 
 <section>
-  <h2><span class="n">04</span>Before you start</h2>
+  <h2><span class="n">04</span><span data-i18n="h2_04">Before you start</span></h2>
   <ol class="checklist">
-    <li>Each main inlet can be wired to its own circuit and phase, or not &mdash; that split is your call, based on the power figures above and local code.</li>
-    <li>The PSUs use zero-cross relays, which limit inrush at switch-on &mdash; a normal factor to weigh in your own device selection.</li>
-    <li>Mount the cabinets, wire the mains, and connect the low-voltage 12&nbsp;V PSU control harness <em>before</em> any LED module is fitted. Power on and confirm the screen switches correctly first.</li>
-    <li>Removing the C20 inlet and landing phase conductors directly on the PSU screw terminals is supported &mdash; certified electrician only.</li>
+    <li data-i18n="checklist1">Each main inlet can be wired to its own circuit and phase, or not &mdash; that split is your call, based on the power figures above and local code.</li>
+    <li data-i18n="checklist2">The PSUs use zero-cross relays, which limit inrush at switch-on &mdash; a normal factor to weigh in your own device selection.</li>
+    <li data-i18n="checklist3">Mount the cabinets, wire the mains, and connect the low-voltage 12&nbsp;V PSU control harness <em>before</em> any LED module is fitted. Power on and confirm the screen switches correctly first.</li>
+    <li data-i18n="checklist4">Removing the C20 inlet and landing phase conductors directly on the PSU screw terminals is supported &mdash; certified electrician only.</li>
   </ol>
 </section>
 
 <section>
-  <div class="callout">
+  <div class="callout" data-i18n="calloutText">
     <strong>Not sure which of the above applies to your specific unit?</strong> Cabinet numbering, per-PSU cabinet counts, the exact 3-pin/5-pin harness rules, and the factory wiring diagrams for all four sizes are in the full guide &mdash; linked below.
   </div>
 </section>
 
 <div class="next-step">
-  <p>Need cabinet numbering, wiring diagrams, or troubleshooting steps?</p>
-  <a class="btn" href="exview-edge-electrical-installation-guide.html">Open the full installation guide &rarr;</a>
+  <p data-i18n="nextStepP">Need cabinet numbering, wiring diagrams, or troubleshooting steps?</p>
+  <a class="btn" href="exview-edge-electrical-installation-guide.html" data-i18n="nextStepBtn">Open the full installation guide &rarr;</a>
 </div>
 
 </main>
 
 <footer class="page-footer">
-  <p>eXview Edge family &mdash; 135&Prime;, 162&Prime;, 190&Prime;, 216&Prime;. Summarized from the full <a href="exview-edge-electrical-installation-guide.html">Electrical &amp; Power Architecture Installation Guide</a>. Circuit sizing, protective devices and phase allocation remain the responsibility of the installing electrician.</p>
+  <p data-i18n="footerText">eXview Edge family &mdash; 135&Prime;, 162&Prime;, 190&Prime;, 216&Prime;. Summarized from the full <a href="exview-edge-electrical-installation-guide.html">Electrical &amp; Power Architecture Installation Guide</a>. Circuit sizing, protective devices and phase allocation remain the responsibility of the installing electrician.</p>
 </footer>
+
+<script>
+(function () {
+  var STRINGS = {
+    en: {
+      eyebrow: `For the installing electrician &middot; 2-minute read`,
+      h1: `eXview Edge &mdash; Electrical Quick Reference`,
+      subtitle: `The numbers you need before you quote or wire the circuit. For diagrams, cabinet numbering and troubleshooting, see the full guide.`,
+      fullLink: `&rarr; Full installation guide`,
+      h2_01: `The 4 numbers you need`,
+      inletsLabelSingular: `main inlet`,
+      inletsLabelPlural: `main inlets`,
+      wordMax: `max`,
+      wordTypical: `typical`,
+      wordEst: `(est.)`,
+      h2_01a: `Estimated max power per PSU`,
+      tableHeadSize: `Size`,
+      tableHeadPSU: `PSU`,
+      tableHeadMaxPower: `Est. max power`,
+      mainPSUOnly: `Main PSU (only)`,
+      mainPSU: `Main PSU`,
+      secPSU: `Secondary PSU`,
+      secPSU1: `Secondary PSU 1`,
+      secPSU2: `Secondary PSU 2`,
+      tableNote01a: `Datasheet max power split across each model's PSUs, proportional to the cabinets each PSU serves &mdash; useful for sizing an individual circuit, not a substitute for the screen-total max above. Circuit and protective-device selection remain the electrician's decision.`,
+      h2_02: `Common to all four sizes`,
+      factInputLabel: `Input:`,
+      factInletLabel: `Screen-side inlet:`,
+      factInletDesc: `(male, unpowered)`,
+      factCordLabel: `Cordset end:`,
+      factCordDesc: `(female, powered)`,
+      factStandbyLabel: `Standby draw:`,
+      wordDefault: `default`,
+      factEcoDesc: `Eco (no network)`,
+      h2_03: `What Expromo specifies &mdash; and what's yours to decide`,
+      doTitle: `We tell you`,
+      doLi1: `How many PSUs / main inlets each size has`,
+      doLi2: `The connector type on the screen (C20)`,
+      doLi3: `Power draw, from the official datasheet`,
+      doLi4: `That each main inlet is a fully independent AC supply entry`,
+      dontTitle: `You decide`,
+      dontLi1: `Breaker type, curve and rating`,
+      dontLi2: `RCD/RCBO selection`,
+      dontLi3: `How many circuits/phases to use across the inlets`,
+      dontLi4: `Cable sizing, per local regulations`,
+      h2_04: `Before you start`,
+      checklist1: `Each main inlet can be wired to its own circuit and phase, or not &mdash; that split is your call, based on the power figures above and local code.`,
+      checklist2: `The PSUs use zero-cross relays, which limit inrush at switch-on &mdash; a normal factor to weigh in your own device selection.`,
+      checklist3: `Mount the cabinets, wire the mains, and connect the low-voltage 12&nbsp;V PSU control harness <em>before</em> any LED module is fitted. Power on and confirm the screen switches correctly first.`,
+      checklist4: `Removing the C20 inlet and landing phase conductors directly on the PSU screw terminals is supported &mdash; certified electrician only.`,
+      calloutText: `<strong>Not sure which of the above applies to your specific unit?</strong> Cabinet numbering, per-PSU cabinet counts, the exact 3-pin/5-pin harness rules, and the factory wiring diagrams for all four sizes are in the full guide &mdash; linked below.`,
+      nextStepP: `Need cabinet numbering, wiring diagrams, or troubleshooting steps?`,
+      nextStepBtn: `Open the full installation guide &rarr;`,
+      footerText: `eXview Edge family &mdash; 135&Prime;, 162&Prime;, 190&Prime;, 216&Prime;. Summarized from the full <a href="exview-edge-electrical-installation-guide.html">Electrical &amp; Power Architecture Installation Guide</a>. Circuit sizing, protective devices and phase allocation remain the responsibility of the installing electrician.`
+    },
+    da: {
+      eyebrow: `Til den installer&aelig;nde elektriker &middot; 2 minutters l&aelig;sning`,
+      h1: `eXview Edge &mdash; Hurtig el-oversigt`,
+      subtitle: `De tal du skal bruge, f&oslash;r du afgiver tilbud eller tilslutter kredsl&oslash;bet. Se den fulde vejledning for diagrammer, kabinetnummerering og fejlfinding.`,
+      fullLink: `&rarr; Fuld installationsvejledning`,
+      h2_01: `De 4 tal, du skal bruge`,
+      inletsLabelSingular: `hovedindgang`,
+      inletsLabelPlural: `hovedindgange`,
+      wordMax: `maks.`,
+      wordTypical: `typisk`,
+      wordEst: `(est.)`,
+      h2_01a: `Estimeret maks. effekt pr. PSU`,
+      tableHeadSize: `St&oslash;rrelse`,
+      tableHeadPSU: `PSU`,
+      tableHeadMaxPower: `Est. maks. effekt`,
+      mainPSUOnly: `Hoved-PSU (eneste)`,
+      mainPSU: `Hoved-PSU`,
+      secPSU: `Sekund&aelig;r PSU`,
+      secPSU1: `Sekund&aelig;r PSU 1`,
+      secPSU2: `Sekund&aelig;r PSU 2`,
+      tableNote01a: `Databladets maks. effekt fordelt p&aring; hver models PSU'er, proportionalt med antallet af kabinetter hver PSU forsyner &mdash; nyttigt til dimensionering af den enkelte kreds, men erstatter ikke sk&aelig;rmens samlede maks. effekt ovenfor. Valg af kreds og beskyttelsesudstyr er fortsat elektrikerens beslutning.`,
+      h2_02: `F&aelig;lles for alle fire st&oslash;rrelser`,
+      factInputLabel: `Indgang:`,
+      factInletLabel: `Sk&aelig;rmens indgangsstik:`,
+      factInletDesc: `(han, sp&aelig;ndingsl&oslash;s)`,
+      factCordLabel: `Forsyningskablets ende:`,
+      factCordDesc: `(hun, sp&aelig;ndingsf&oslash;rende)`,
+      factStandbyLabel: `Standbyforbrug:`,
+      wordDefault: `standard`,
+      factEcoDesc: `Eco (intet netv&aelig;rk)`,
+      h2_03: `Hvad Expromo angiver &mdash; og hvad der er dit valg`,
+      doTitle: `Vi oplyser`,
+      doLi1: `Hvor mange PSU'er/hovedindgange hver st&oslash;rrelse har`,
+      doLi2: `Stiktypen p&aring; sk&aelig;rmen (C20)`,
+      doLi3: `Effektforbrug, fra det officielle datablad`,
+      doLi4: `At hver hovedindgang er en fuldt uafh&aelig;ngig AC-forsyningsindgang`,
+      dontTitle: `Du beslutter`,
+      dontLi1: `Afbrydertype, kurve og m&aelig;rkestr&oslash;m`,
+      dontLi2: `Valg af RCD/RCBO`,
+      dontLi3: `Hvor mange kredse/faser der bruges p&aring; tv&aelig;rs af indgangene`,
+      dontLi4: `Kabeldimensionering, iht. lokale regler`,
+      h2_04: `F&oslash;r du g&aring;r i gang`,
+      checklist1: `Hver hovedindgang kan tilsluttes sin egen kreds og fase &mdash; eller ikke &mdash; det valg er dit, baseret p&aring; effekttallene ovenfor og lokale regler.`,
+      checklist2: `PSU'erne bruger nulgennemgangsrel&aelig;er, som begr&aelig;nser indkoblingsstr&oslash;mmen &mdash; en normal faktor at inddrage i dit eget valg af udstyr.`,
+      checklist3: `Monter kabinetterne, tilslut str&oslash;mforsyningen, og forbind den lavsp&aelig;ndte 12&nbsp;V PSU-styrekabling <em>f&oslash;r</em> et LED-modul monteres. T&aelig;nd og bekr&aelig;ft f&oslash;rst, at sk&aelig;rmen skifter korrekt.`,
+      checklist4: `Det er underst&oslash;ttet at fjerne C20-indgangen og tilslutte faseledere direkte p&aring; PSU'ens skrueterminaler &mdash; kun af en autoriseret elektriker.`,
+      calloutText: `<strong>Ikke sikker p&aring;, hvad der g&aelig;lder for netop din enhed?</strong> Kabinetnummerering, antal kabinetter pr. PSU, de n&oslash;jagtige 3-pin/5-pin kabelregler og fabrikkens ledningsdiagrammer for alle fire st&oslash;rrelser findes i den fulde vejledning &mdash; link nedenfor.`,
+      nextStepP: `Mangler du kabinetnummerering, ledningsdiagrammer eller fejlfindingstrin?`,
+      nextStepBtn: `&Aring;bn den fulde installationsvejledning &rarr;`,
+      footerText: `eXview Edge-serien &mdash; 135&Prime;, 162&Prime;, 190&Prime;, 216&Prime;. Sammenfattet fra den fulde <a href="exview-edge-electrical-installation-guide.html">El- og str&oslash;markitektur &mdash; installationsvejledning</a>. Valg af kreds, beskyttelsesudstyr og fasefordeling er fortsat den installer&aelig;nde elektrikers ansvar.`
+    },
+    de: {
+      eyebrow: `F&uuml;r den installierenden Elektriker &middot; 2 Minuten Lesezeit`,
+      h1: `eXview Edge &mdash; Elektro-Kurz&uuml;bersicht`,
+      subtitle: `Die Werte, die Sie vor einem Angebot oder der Verkabelung ben&ouml;tigen. Diagramme, Kabinettnummerierung und Fehlerbehebung finden Sie im vollst&auml;ndigen Leitfaden.`,
+      fullLink: `&rarr; Vollst&auml;ndige Installationsanleitung`,
+      h2_01: `Die 4 Werte, die Sie brauchen`,
+      inletsLabelSingular: `Haupteinspeisung`,
+      inletsLabelPlural: `Haupteinspeisungen`,
+      wordMax: `max.`,
+      wordTypical: `typisch`,
+      wordEst: `(gesch&auml;tzt)`,
+      h2_01a: `Gesch&auml;tzte max. Leistung pro PSU`,
+      tableHeadSize: `Gr&ouml;&szlig;e`,
+      tableHeadPSU: `PSU`,
+      tableHeadMaxPower: `Gesch&auml;tzte max. Leistung`,
+      mainPSUOnly: `Haupt-PSU (einzige)`,
+      mainPSU: `Haupt-PSU`,
+      secPSU: `Sekund&auml;r-PSU`,
+      secPSU1: `Sekund&auml;r-PSU 1`,
+      secPSU2: `Sekund&auml;r-PSU 2`,
+      tableNote01a: `Die maximale Leistung aus dem Datenblatt, aufgeteilt auf die PSUs jedes Modells, proportional zu den von der jeweiligen PSU versorgten Kabinetten &mdash; n&uuml;tzlich zur Dimensionierung eines einzelnen Stromkreises, aber kein Ersatz f&uuml;r die oben genannte Gesamt-Maximalleistung des Bildschirms. Die Wahl von Stromkreis und Schutzeinrichtung obliegt weiterhin dem Elektriker.`,
+      h2_02: `Gemeinsam f&uuml;r alle vier Gr&ouml;&szlig;en`,
+      factInputLabel: `Eingang:`,
+      factInletLabel: `Einspeisung bildschirmseitig:`,
+      factInletDesc: `(Stecker, spannungsfrei)`,
+      factCordLabel: `Kabelende versorgungsseitig:`,
+      factCordDesc: `(Buchse, spannungsf&uuml;hrend)`,
+      factStandbyLabel: `Standby-Leistungsaufnahme:`,
+      wordDefault: `Standardeinstellung`,
+      factEcoDesc: `Eco (kein Netzwerk)`,
+      h2_03: `Was Expromo festlegt &mdash; und was Sie entscheiden`,
+      doTitle: `Das geben wir vor`,
+      doLi1: `Wie viele PSUs/Haupteinspeisungen jede Gr&ouml;&szlig;e hat`,
+      doLi2: `Den Steckertyp am Bildschirm (C20)`,
+      doLi3: `Die Leistungsaufnahme laut offiziellem Datenblatt`,
+      doLi4: `Dass jede Haupteinspeisung ein vollst&auml;ndig unabh&auml;ngiger AC-Versorgungseingang ist`,
+      dontTitle: `Das entscheiden Sie`,
+      dontLi1: `Sicherungstyp, Ausl&ouml;secharakteristik und Nennstrom`,
+      dontLi2: `Auswahl von FI-Schutzschalter/RCBO`,
+      dontLi3: `Wie viele Stromkreise/Phasen &uuml;ber die Einspeisungen verteilt werden`,
+      dontLi4: `Kabeldimensionierung gem&auml;&szlig; &ouml;rtlichen Vorschriften`,
+      h2_04: `Bevor Sie beginnen`,
+      checklist1: `Jede Haupteinspeisung kann an einen eigenen Stromkreis und eine eigene Phase angeschlossen werden &mdash; oder auch nicht; das entscheiden Sie anhand der obigen Leistungswerte und der &ouml;rtlichen Vorschriften.`,
+      checklist2: `Die PSUs verwenden Nulldurchgangsrelais, die den Einschaltstrom begrenzen &mdash; ein normaler Faktor, den Sie bei der Auswahl Ihrer eigenen Schutzger&auml;te ber&uuml;cksichtigen sollten.`,
+      checklist3: `Montieren Sie die Kabinette, verlegen Sie die Netzversorgung und verbinden Sie den 12&nbsp;V-Niederspannungs-Kabelbaum der PSU-Steuerung, <em>bevor</em> ein LED-Modul eingesetzt wird. Schalten Sie zuerst ein und best&auml;tigen Sie, dass der Bildschirm korrekt schaltet.`,
+      checklist4: `Das Entfernen des C20-Einspeisesteckers und der direkte Anschluss der Phasenleiter an den Schraubklemmen der PSU ist zul&auml;ssig &mdash; nur durch eine Elektrofachkraft.`,
+      calloutText: `<strong>Nicht sicher, was f&uuml;r Ihr konkretes Ger&auml;t gilt?</strong> Kabinettnummerierung, PSU-Kabinettanzahl, die genauen 3-Pin/5-Pin-Kabelbaumregeln sowie die Werkschaltpl&auml;ne f&uuml;r alle vier Gr&ouml;&szlig;en finden Sie im vollst&auml;ndigen Leitfaden &mdash; Link unten.`,
+      nextStepP: `Ben&ouml;tigen Sie Kabinettnummerierung, Schaltpl&auml;ne oder Schritte zur Fehlerbehebung?`,
+      nextStepBtn: `Vollst&auml;ndige Installationsanleitung &ouml;ffnen &rarr;`,
+      footerText: `eXview Edge Baureihe &mdash; 135&Prime;, 162&Prime;, 190&Prime;, 216&Prime;. Zusammengefasst aus der vollst&auml;ndigen <a href="exview-edge-electrical-installation-guide.html">Installationsanleitung Elektro- und Stromarchitektur</a>. Die Wahl von Stromkreis, Schutzeinrichtungen und Phasenzuordnung obliegt weiterhin dem installierenden Elektriker.`
+    },
+    zh: {
+      eyebrow: `致安装电工 &middot; 2分钟阅读`,
+      h1: `eXview Edge &mdash; 电气快速参考`,
+      subtitle: `报价或接线前您需要了解的关键数据。图纸、机柜编号与故障排查请参阅完整指南。`,
+      fullLink: `&rarr; 查看完整安装指南`,
+      h2_01: `您需要了解的4个关键数据`,
+      inletsLabelSingular: `主进线`,
+      inletsLabelPlural: `主进线`,
+      wordMax: `最大`,
+      wordTypical: `典型`,
+      wordEst: `（预估）`,
+      h2_01a: `各PSU的预估最大功耗`,
+      tableHeadSize: `尺寸`,
+      tableHeadPSU: `PSU`,
+      tableHeadMaxPower: `预估最大功耗`,
+      mainPSUOnly: `主PSU（唯一）`,
+      mainPSU: `主PSU`,
+      secPSU: `从PSU`,
+      secPSU1: `从PSU 1`,
+      secPSU2: `从PSU 2`,
+      tableNote01a: `按各PSU所负责的机柜数量比例，将产品资料中的最大功耗进行分配&mdash;&mdash;便于单一回路的选型参考，但不能替代上方的整屏最大功耗。回路及保护装置的选型仍由电工决定。`,
+      h2_02: `四种尺寸的共同参数`,
+      factInputLabel: `输入：`,
+      factInletLabel: `屏幕侧插座：`,
+      factInletDesc: `（公头，未通电）`,
+      factCordLabel: `电源线端：`,
+      factCordDesc: `（母头，带电）`,
+      factStandbyLabel: `待机功耗：`,
+      wordDefault: `默认`,
+      factEcoDesc: `节能模式（无网络）`,
+      h2_03: `Expromo规定的内容 &mdash; 以及需要您决定的内容`,
+      doTitle: `我们提供`,
+      doLi1: `每种尺寸的PSU/主进线数量`,
+      doLi2: `屏幕上的接口类型（C20）`,
+      doLi3: `官方产品资料中的功耗数据`,
+      doLi4: `每个主进线均为完全独立的交流电源入口`,
+      dontTitle: `需您决定`,
+      dontLi1: `断路器类型、脱扣曲线及额定值`,
+      dontLi2: `漏电保护器（RCD/RCBO）选型`,
+      dontLi3: `各进线之间使用多少回路/相位`,
+      dontLi4: `依据当地法规确定电缆规格`,
+      h2_04: `开始安装前`,
+      checklist1: `每个主进线可以接入独立的回路和相位，也可以不接&mdash;&mdash;由您根据上方的功耗数据和当地法规决定。`,
+      checklist2: `PSU采用过零继电器，可限制开机时的浪涌电流&mdash;&mdash;这是您在选型保护装置时需要考虑的正常因素。`,
+      checklist3: `请先安装机柜、接好市电，并连接PSU控制用的低压12&nbsp;V线束，<em>然后</em>再安装LED模组。先通电确认屏幕切换正常，再继续下一步。`,
+      checklist4: `支持拆除C20插座、将相线直接接至PSU接线端子&mdash;&mdash;仅限持证电工操作。`,
+      calloutText: `<strong>不确定以上内容是否适用于您的具体机型？</strong> 完整指南中包含机柜编号、各PSU的机柜数量、详细的3针/5针线束规则，以及四种尺寸的工厂接线图&mdash;&mdash;详见下方链接。`,
+      nextStepP: `需要机柜编号、接线图或故障排查步骤？`,
+      nextStepBtn: `打开完整安装指南 &rarr;`,
+      footerText: `eXview Edge系列 &mdash; 135&Prime;、162&Prime;、190&Prime;、216&Prime;。摘自完整的<a href="exview-edge-electrical-installation-guide.html">电气与电源架构安装指南</a>。回路、保护装置及相位分配的选型仍由安装电工负责。`
+    }
+  };
+
+  var HTML_LANG = { en: 'en', da: 'da', de: 'de', zh: 'zh-CN' };
+  var STORAGE_KEY = 'exview-edge-lang';
+
+  function applyLang(lang) {
+    var currentLang = STRINGS[lang] ? lang : 'en';
+    var dict = STRINGS[currentLang];
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var key = nodes[i].getAttribute('data-i18n');
+      if (dict[key] !== undefined) { nodes[i].innerHTML = dict[key]; }
+    }
+    document.documentElement.lang = HTML_LANG[currentLang] || 'en';
+    var btns = document.querySelectorAll('.lang-switch button');
+    for (var j = 0; j < btns.length; j++) {
+      var isActive = btns[j].getAttribute('data-lang') === currentLang;
+      btns[j].classList.toggle('active', isActive);
+      btns[j].setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    }
+    try { localStorage.setItem(STORAGE_KEY, currentLang); } catch (e) {}
+  }
+
+  var switchBtns = document.querySelectorAll('.lang-switch button');
+  for (var k = 0; k < switchBtns.length; k++) {
+    switchBtns[k].addEventListener('click', function () { applyLang(this.getAttribute('data-lang')); });
+  }
+
+  var saved = null;
+  try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+  applyLang(saved && STRINGS[saved] ? saved : 'en');
+})();
+</script>
 
 </body>
 </html>
