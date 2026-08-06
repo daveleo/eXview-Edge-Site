@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>eXview Edge — Standby &amp; Power Modes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:      #F5F6F3;
+    --paper-raised:#FFFFFF;
+    --ink:        #14181D;
+    --navy:       #0B1E27;
+    --steel:      #4B5760;
+    --hairline:   #DCE2E4;
+    --signal:     #0B7285;
+    --signal-dim: #E3F1F2;
+    --amber:      #B5650D;
+    --amber-dim:  #FBEFDD;
+    --cyan:       #22C7DB;
+    --leaf:       #1F9C53;
+    --leaf-dim:   #E7F5EC;
+    --content-w:  880px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", "Noto Sans SC", -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.5;
+    font-size: 16px;
+  }
+  h1, h2, h3 { font-family: "Space Grotesk", "Noto Sans SC", "Segoe UI", sans-serif; font-weight: 600; margin: 0; color: var(--ink); }
+  code, .mono { font-family: "IBM Plex Mono", ui-monospace, "Courier New", monospace; }
+  a { color: var(--signal); }
+
+  .masthead { background: var(--navy); color: var(--paper); padding: 2.2rem 1.5rem; }
+  .masthead__inner { max-width: var(--content-w); margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; gap: 1.5rem; flex-wrap: wrap; }
+  .masthead__logo { background: var(--paper); border-radius: 6px; padding: 4px 12px; display: inline-flex; align-items: center; flex-shrink: 0; }
+  .masthead__logo img { width: 100px; height: auto; display: block; }
+  .masthead__meta { display: flex; flex-direction: column; align-items: flex-end; gap: 0.7rem; flex-shrink: 0; }
+  .eyebrow { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: #7FC4CC; margin: 0 0 0.6rem 0; }
+  .masthead h1 { color: var(--paper); font-size: clamp(1.5rem, 3.4vw, 2rem); letter-spacing: -0.01em; line-height: 1.15; max-width: 28ch; }
+  .masthead .subtitle { margin: 0.6rem 0 0 0; color: #C4CCD1; font-size: 0.98rem; max-width: 56ch; }
+
+  .lang-switch { display: flex; gap: 2px; background: rgba(255,255,255,0.06); padding: 4px; border-radius: 20px; }
+  .lang-switch button {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; border: none; background: transparent;
+    color: #9FB4BB; padding: 6px 12px; border-radius: 16px; cursor: pointer; white-space: nowrap; transition: background 0.15s, color 0.15s;
+  }
+  .lang-switch button:hover { color: #fff; }
+  .lang-switch button.active { background: var(--cyan); color: var(--navy); }
+  .lang-switch button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+
+  main { max-width: var(--content-w); margin: 0 auto; padding: 2.2rem 1.5rem 3rem; }
+
+  section { margin: 0 0 2.4rem 0; }
+  section h2 { font-size: 1.1rem; margin-bottom: 0.9rem; }
+  section h2 .n { font-family: "IBM Plex Mono", monospace; color: var(--signal); margin-right: 0.5rem; }
+  .section-intro { color: var(--steel); max-width: 66ch; margin: 0 0 1.3rem; font-size: 0.95rem; }
+
+  /* ---------- Wayfinding facts strip ---------- */
+  .facts { background: var(--paper-raised); border: 1px solid var(--hairline); border-radius: 8px; padding: 0.9rem 1.2rem; display: flex; flex-wrap: wrap; gap: 0.4rem 0.6rem; font-size: 0.88rem; margin-bottom: 2.4rem; }
+  .facts b { font-family: "IBM Plex Mono", monospace; font-weight: 600; color: var(--signal); }
+
+  /* ---------- Standby mode comparison ---------- */
+  .mode-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .mode-card { background: var(--paper-raised); border: 1px solid var(--hairline); border-radius: 8px; padding: 1.2rem 1.3rem 1.4rem; }
+  .mode-card-head { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-bottom: 1rem; }
+  .mode-name { font-family: "Space Grotesk", "Noto Sans SC", sans-serif; font-weight: 600; font-size: 1.1rem; }
+  .mode-tag { font-family: "IBM Plex Mono", monospace; font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.2rem 0.5rem; border-radius: 999px; background: var(--signal-dim); color: var(--signal); white-space: nowrap; }
+  .power-stat { display: flex; align-items: baseline; gap: 0.35rem; font-family: "IBM Plex Mono", monospace; margin-bottom: 0.3rem; }
+  .power-stat .value { font-size: 2rem; font-weight: 600; line-height: 1; color: var(--ink); }
+  .power-stat .unit { font-size: 0.95rem; color: var(--steel); }
+  .power-caption { font-size: 0.78rem; color: var(--steel); margin: 0 0 0.7rem; }
+  .power-bar-track { height: 9px; border-radius: 999px; background: var(--paper); border: 1px solid var(--hairline); overflow: hidden; margin-bottom: 1rem; }
+  .power-bar-fill { height: 100%; border-radius: 999px; background: var(--leaf); }
+  .power-bar-fill.slim { min-width: 4px; }
+  .mode-desc { font-size: 0.92rem; margin: 0 0 1rem; color: var(--ink); }
+  .remote-row { display: flex; align-items: center; gap: 0.55rem; padding-top: 0.85rem; border-top: 1px solid var(--hairline); }
+  .remote-row svg { flex-shrink: 0; width: 20px; height: 20px; }
+  .remote-row.yes svg { color: var(--leaf); }
+  .remote-row.no svg { color: var(--steel); }
+  .remote-row .remote-text { font-size: 0.84rem; color: var(--steel); }
+  .remote-row .remote-text strong { display: block; color: var(--ink); font-size: 0.87rem; font-weight: 600; }
+  .practical-note { font-size: 0.8rem; color: var(--steel); margin-top: 0.85rem; padding-top: 0.85rem; border-top: 1px dashed var(--hairline); }
+  .practical-note .label { font-family: "IBM Plex Mono", monospace; font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--signal); display: block; margin-bottom: 0.3rem; }
+
+  /* ---------- Timers ---------- */
+  .timer-list { display: flex; flex-direction: column; gap: 0.8rem; }
+  .timer-card { display: grid; grid-template-columns: 2.1rem 1fr auto; align-items: start; gap: 0.9rem; background: var(--paper-raised); border: 1px solid var(--hairline); border-radius: 8px; padding: 0.9rem 1.1rem; }
+  .timer-order { font-family: "IBM Plex Mono", monospace; font-size: 0.88rem; color: var(--signal); font-weight: 600; display: flex; align-items: center; justify-content: center; width: 2.1rem; height: 2.1rem; border-radius: 50%; border: 1px solid var(--hairline); }
+  .timer-body .timer-name { font-family: "Space Grotesk", "Noto Sans SC", sans-serif; font-weight: 600; font-size: 0.98rem; margin: 0 0 0.15rem; }
+  .timer-body .timer-menu-label { font-family: "IBM Plex Mono", monospace; font-size: 0.66rem; color: var(--steel); margin: 0 0 0.4rem; }
+  .timer-body p.desc { margin: 0; font-size: 0.87rem; color: var(--steel); }
+  .timer-subnote { margin: 0.5rem 0 0; font-size: 0.78rem; color: var(--steel); font-style: italic; }
+  .timer-default { text-align: right; white-space: nowrap; }
+  .timer-default .value { font-family: "IBM Plex Mono", monospace; font-size: 1.25rem; font-weight: 600; color: var(--ink); display: block; }
+  .timer-default .value-unit { font-size: 0.7rem; font-weight: 400; color: var(--steel); }
+  .timer-default .range { font-size: 0.66rem; color: var(--steel); }
+
+  .callout { background: var(--paper-raised); border: 1px solid var(--hairline); border-left: 4px solid var(--signal); border-radius: 0 8px 8px 0; padding: 1rem 1.2rem; font-size: 0.9rem; margin-top: 1rem; }
+  .callout strong { color: var(--ink); }
+
+  footer.page-footer { max-width: var(--content-w); margin: 0 auto; padding: 0 1.5rem 2.5rem; font-size: 0.78rem; color: var(--steel); }
+
+  @media (max-width: 720px) {
+    .mode-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) {
+    .masthead__inner { flex-direction: column; }
+    .masthead__meta { align-items: flex-start; }
+    .timer-card { grid-template-columns: 2.1rem 1fr; }
+    .timer-default { grid-column: 1 / -1; text-align: left; margin-top: 0.5rem; }
+  }
+  @media print {
+    .masthead { background: none; color: #000; border-bottom: 2px solid #000; }
+    .masthead h1, .masthead .subtitle, .eyebrow { color: #000 !important; }
+    .lang-switch { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead__inner">
+    <div>
+      <p class="eyebrow" data-i18n="eyebrow">For anyone using the screen &middot; plain-language guide</p>
+      <h1 data-i18n="h1">eXview Edge — Standby &amp; Power Modes</h1>
+      <p class="subtitle" data-i18n="subtitle">What Active and Eco standby actually do, the two timers that trigger them, and how to wake the screen back up.</p>
+    </div>
+    <div class="masthead__meta">
+      <span class="masthead__logo"><img src="assets/expromo-logo.jpg" alt="Expromo"></span>
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" data-lang="en" class="active" aria-pressed="true">EN</button>
+        <button type="button" data-lang="da" aria-pressed="false">DA</button>
+        <button type="button" data-lang="de" aria-pressed="false">DE</button>
+        <button type="button" data-lang="zh" aria-pressed="false">中文</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<div class="facts">
+  <span><b data-i18n="factsLabelB">Where to find this on the screen:</b></span>
+  <span class="mono">Apps &amp; Settings &rarr; Settings &rarr; Device Management &rarr; Standby Mode</span>
+</div>
+
+<section>
+  <h2><span class="n">01</span><span data-i18n="h2_01">Two ways to rest</span></h2>
+  <p class="section-intro" data-i18n="secIntro01">This is set once, and decides what "standby" actually means every time the screen powers down.</p>
+
+  <div class="mode-grid">
+
+    <div class="mode-card">
+      <div class="mode-card-head">
+        <span class="mode-name" data-i18n="activeName">Active Standby</span>
+        <span class="mode-tag" data-i18n="activeTag">Factory default</span>
+      </div>
+      <div class="power-stat"><span class="value">14</span><span class="unit">W</span></div>
+      <p class="power-caption" data-i18n="activeCaption">roughly what a couple of LED light bulbs use</p>
+      <div class="power-bar-track"><div class="power-bar-fill" style="width: 100%;"></div></div>
+      <p class="mode-desc" data-i18n="activeDesc">The picture and sound turn off, but the screen quietly keeps its network connection alive.</p>
+      <div class="remote-row yes">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5a16 16 0 0 1 20 0"/><path d="M5.5 12a11 11 0 0 1 13 0"/><path d="M9 15.5a6 6 0 0 1 6 0"/><circle cx="12" cy="19" r="1" fill="currentColor" stroke="none"/></svg>
+        <span class="remote-text"><strong data-i18n="activeRemoteStrong">Reachable over the network</strong><span data-i18n="activeRemoteText">can be checked on and switched back on remotely</span></span>
+      </div>
+      <div class="practical-note">
+        <span class="label" data-i18n="activeNoteLabel">Tested on a real screen</span>
+        <span data-i18n="activeNoteText">Putting the screen into Active Standby and immediately waking it back up again took about a minute in total, with two short reboots (~25 seconds each) along the way.</span>
+      </div>
+    </div>
+
+    <div class="mode-card">
+      <div class="mode-card-head">
+        <span class="mode-name" data-i18n="ecoName">Eco Standby</span>
+      </div>
+      <div class="power-stat"><span class="value">&le;0.5</span><span class="unit">W</span></div>
+      <p class="power-caption" data-i18n="ecoCaption">about 28&times; less power than Active Standby</p>
+      <div class="power-bar-track"><div class="power-bar-fill slim" style="width: 3.6%;"></div></div>
+      <p class="mode-desc" data-i18n="ecoDesc">Almost everything shuts off, including the network connection, to save as much energy as possible.</p>
+      <div class="remote-row no">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l20 20"/><path d="M2 8.5a16 16 0 0 1 8.5-4.3"/><path d="M16.7 5.5A16 16 0 0 1 22 8.5"/><path d="M5.5 12a11 11 0 0 1 3.8-2.3"/><path d="M13.2 9.3A11 11 0 0 1 18.5 12"/><path d="M9 15.5a6 6 0 0 1 3.4-1.1"/><circle cx="12" cy="19" r="1" fill="currentColor" stroke="none"/></svg>
+        <span class="remote-text"><strong data-i18n="ecoRemoteStrong">Not reachable over the network</strong><span data-i18n="ecoRemoteText">can still be woken with the power button, an IR remote, or RS232 &mdash; the yellow, upward-facing 3.5&nbsp;mm jack on the sending card</span></span>
+      </div>
+      <div class="practical-note">
+        <span class="label" data-i18n="ecoNoteLabel">Best for</span>
+        <span data-i18n="ecoNoteText">Screens left unused for long stretches where nobody needs to check on or wake them remotely.</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="callout" data-i18n="ruleOfThumb"><strong>Rule of thumb:</strong> keep Active Standby if the screen needs to stay reachable from control software or a control room. Only switch to Eco Standby for screens that sit unused for long periods and don't need remote wake.</div>
+</section>
+
+<section>
+  <h2><span class="n">02</span><span data-i18n="h2_02">What decides when it happens</span></h2>
+  <p class="section-intro" data-i18n="secIntro02">Separately from which standby mode is selected above, two timers in the same menu decide <em>when</em> the screen starts winding down after being left alone. They run in this order:</p>
+
+  <div class="timer-list">
+
+    <div class="timer-card">
+      <span class="timer-order">1</span>
+      <div class="timer-body">
+        <p class="timer-name" data-i18n="timer1Name">Blackout</p>
+        <p class="timer-menu-label">menu: blackout time switch / time</p>
+        <p class="desc" data-i18n="timer1Desc">Turns the picture fully black once the screen has been idle for a while. It's still fully powered and turns back on instantly &mdash; this isn't standby, just a blank picture.</p>
+        <p class="timer-subnote" data-i18n="timer1Subnote">A screensaver (showing a picture instead of black) is available as an alternative, if preferred &mdash; only one of the two can be on at a time.</p>
+      </div>
+      <div class="timer-default"><span class="value">10<span class="value-unit" data-i18n="unitMin"> min</span></span><span class="range" data-i18n="range1">default &middot; 1&ndash;60 min available</span></div>
+    </div>
+
+    <div class="timer-card">
+      <span class="timer-order">2</span>
+      <div class="timer-body">
+        <p class="timer-name" data-i18n="timer2Name">Sleep</p>
+        <p class="timer-menu-label">menu: standby time switch / time</p>
+        <p class="desc" data-i18n="timer2Desc">Puts the screen into full standby &mdash; Active or Eco, whichever was chosen above.</p>
+      </div>
+      <div class="timer-default"><span class="value">20<span class="value-unit" data-i18n="unitMin"> min</span></span><span class="range" data-i18n="range2">default &middot; 5&ndash;60 min available</span></div>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<footer class="page-footer">
+  <p data-i18n="footerText">Sources: the eXview Edge menu structure specification, the <a href="../installation/exview-edge-electrical-installation-guide.html">electrical installation guide</a>, and live tests run against a physical unit.</p>
+</footer>
+
+<script>
+(function () {
+  var STRINGS = {
+    en: {
+      eyebrow: `For anyone using the screen &middot; plain-language guide`,
+      h1: `eXview Edge &mdash; Standby &amp; Power Modes`,
+      subtitle: `What Active and Eco standby actually do, the two timers that trigger them, and how to wake the screen back up.`,
+      factsLabelB: `Where to find this on the screen:`,
+      h2_01: `Two ways to rest`,
+      secIntro01: `This is set once, and decides what "standby" actually means every time the screen powers down.`,
+      activeName: `Active Standby`,
+      activeTag: `Factory default`,
+      activeCaption: `roughly what a couple of LED light bulbs use`,
+      activeDesc: `The picture and sound turn off, but the screen quietly keeps its network connection alive.`,
+      activeRemoteStrong: `Reachable over the network`,
+      activeRemoteText: `can be checked on and switched back on remotely`,
+      activeNoteLabel: `Tested on a real screen`,
+      activeNoteText: `Putting the screen into Active Standby and immediately waking it back up again took about a minute in total, with two short reboots (~25 seconds each) along the way.`,
+      ecoName: `Eco Standby`,
+      ecoCaption: `about 28&times; less power than Active Standby`,
+      ecoDesc: `Almost everything shuts off, including the network connection, to save as much energy as possible.`,
+      ecoRemoteStrong: `Not reachable over the network`,
+      ecoRemoteText: `can still be woken with the power button, an IR remote, or RS232 &mdash; the yellow, upward-facing 3.5&nbsp;mm jack on the sending card`,
+      ecoNoteLabel: `Best for`,
+      ecoNoteText: `Screens left unused for long stretches where nobody needs to check on or wake them remotely.`,
+      ruleOfThumb: `<strong>Rule of thumb:</strong> keep Active Standby if the screen needs to stay reachable from control software or a control room. Only switch to Eco Standby for screens that sit unused for long periods and don't need remote wake.`,
+      h2_02: `What decides when it happens`,
+      secIntro02: `Separately from which standby mode is selected above, two timers in the same menu decide <em>when</em> the screen starts winding down after being left alone. They run in this order:`,
+      timer1Name: `Blackout`,
+      timer1Desc: `Turns the picture fully black once the screen has been idle for a while. It's still fully powered and turns back on instantly &mdash; this isn't standby, just a blank picture.`,
+      timer1Subnote: `A screensaver (showing a picture instead of black) is available as an alternative, if preferred &mdash; only one of the two can be on at a time.`,
+      unitMin: ` min`,
+      range1: `default &middot; 1&ndash;60 min available`,
+      timer2Name: `Sleep`,
+      timer2Desc: `Puts the screen into full standby &mdash; Active or Eco, whichever was chosen above.`,
+      range2: `default &middot; 5&ndash;60 min available`,
+      footerText: `Sources: the eXview Edge menu structure specification, the <a href="../installation/exview-edge-electrical-installation-guide.html">electrical installation guide</a>, and live tests run against a physical unit.`
+    },
+    da: {
+      eyebrow: `Til alle, der bruger sk&aelig;rmen &middot; forklaret uden fagsprog`,
+      h1: `eXview Edge &mdash; Standby- og strømtilstande`,
+      subtitle: `Hvad Active og Eco standby helt konkret g&oslash;r, de to timere der udl&oslash;ser dem, og hvordan sk&aelig;rmen v&aelig;kkes igen.`,
+      factsLabelB: `S&aring; finder du det p&aring; sk&aelig;rmen:`,
+      h2_01: `To m&aring;der at hvile p&aring;`,
+      secIntro01: `Dette v&aelig;lges &eacute;n gang og afg&oslash;r, hvad "standby" reelt betyder, hver gang sk&aelig;rmen sl&aring;r fra.`,
+      activeName: `Active Standby`,
+      activeTag: `Fabriksindstilling`,
+      activeCaption: `omtrent hvad et par LED-pærer bruger`,
+      activeDesc: `Billede og lyd slukker, men sk&aelig;rmen holder stille og roligt netv&aelig;rksforbindelsen i live.`,
+      activeRemoteStrong: `Kan tilg&aring;s over netv&aelig;rket`,
+      activeRemoteText: `kan tjekkes og t&aelig;ndes igen p&aring; afstand`,
+      activeNoteLabel: `Testet p&aring; en rigtig sk&aelig;rm`,
+      activeNoteText: `At s&aelig;tte sk&aelig;rmen i Active Standby og straks v&aelig;kke den igen tog i alt omkring et minut, med to korte genstarter (~25 sekunder hver) undervejs.`,
+      ecoName: `Eco Standby`,
+      ecoCaption: `omkring 28&times; mindre str&oslash;mforbrug end Active Standby`,
+      ecoDesc: `N&aelig;sten alt slukkes, inklusive netv&aelig;rksforbindelsen, for at spare mest muligt str&oslash;m.`,
+      ecoRemoteStrong: `Kan ikke tilg&aring;s over netv&aelig;rket`,
+      ecoRemoteText: `kan stadig v&aelig;kkes med t&aelig;nd/sluk-knappen, en IR-fjernbetjening eller RS232 &mdash; det gule, opadvendte 3,5&nbsp;mm stik p&aring; sendekortet`,
+      ecoNoteLabel: `Bedst til`,
+      ecoNoteText: `Sk&aelig;rme, der st&aring;r ubrugte i l&aelig;ngere perioder, hvor ingen har brug for at tjekke eller v&aelig;kke dem p&aring; afstand.`,
+      ruleOfThumb: `<strong>Tommelfingerregel:</strong> behold Active Standby, hvis sk&aelig;rmen skal kunne tilg&aring;s fra styresoftware eller et kontrolrum. Skift kun til Eco Standby p&aring; sk&aelig;rme, der st&aring;r ubrugte i l&aelig;ngere tid og ikke skal kunne v&aelig;kkes p&aring; afstand.`,
+      h2_02: `Hvad afg&oslash;r hvorn&aring;r det sker`,
+      secIntro02: `Uafh&aelig;ngigt af hvilken standbytilstand der er valgt ovenfor, afg&oslash;r to timere i samme menu <em>hvorn&aring;r</em> sk&aelig;rmen begynder at l&aelig;gge sig, efter den har st&aring;et ubrugt hen. De k&oslash;rer i denne r&aelig;kkef&oslash;lge:`,
+      timer1Name: `Blackout`,
+      timer1Desc: `G&oslash;r billedet helt sort, n&aring;r sk&aelig;rmen har st&aring;et ubrugt et stykke tid. Den er stadig fuldt t&aelig;ndt og t&aelig;nder billedet igen med det samme &mdash; det er ikke standby, blot et sort billede.`,
+      timer1Subnote: `En screensaver (der viser et billede i stedet for sort) kan bruges i stedet, hvis det foretr&aelig;kkes &mdash; kun &eacute;n af de to kan v&aelig;re aktiv ad gangen.`,
+      unitMin: ` min`,
+      range1: `standard &middot; 1&ndash;60 min. tilg&aelig;ngelig`,
+      timer2Name: `Sleep (dvale)`,
+      timer2Desc: `S&aelig;tter sk&aelig;rmen i fuld standby &mdash; Active eller Eco, alt efter hvad der er valgt ovenfor.`,
+      range2: `standard &middot; 5&ndash;60 min. tilg&aelig;ngelig`,
+      footerText: `Kilder: eXview Edges menustruktur-specifikation, den fulde <a href="../installation/exview-edge-electrical-installation-guide.html">el-installationsvejledning</a>, samt tests udf&oslash;rt p&aring; en fysisk enhed.`
+    },
+    de: {
+      eyebrow: `F&uuml;r alle, die den Bildschirm nutzen &middot; einfach erkl&auml;rt`,
+      h1: `eXview Edge &mdash; Standby- und Energiemodi`,
+      subtitle: `Was Active und Eco Standby konkret bewirken, welche zwei Timer sie ausl&ouml;sen, und wie der Bildschirm wieder geweckt wird.`,
+      factsLabelB: `So finden Sie es am Bildschirm:`,
+      h2_01: `Zwei Arten der Ruhe`,
+      secIntro01: `Dies wird einmalig festgelegt und bestimmt, was "Standby" jedes Mal bedeutet, wenn der Bildschirm herunterf&auml;hrt.`,
+      activeName: `Active Standby`,
+      activeTag: `Werkseinstellung`,
+      activeCaption: `etwa so viel wie ein paar LED-Gl&uuml;hbirnen`,
+      activeDesc: `Bild und Ton schalten sich ab, doch der Bildschirm h&auml;lt seine Netzwerkverbindung im Hintergrund aufrecht.`,
+      activeRemoteStrong: `&Uuml;ber das Netzwerk erreichbar`,
+      activeRemoteText: `kann aus der Ferne gepr&uuml;ft und wieder eingeschaltet werden`,
+      activeNoteLabel: `An einem echten Ger&auml;t getestet`,
+      activeNoteText: `Den Bildschirm in Active Standby zu versetzen und ihn sofort wieder aufzuwecken, dauerte insgesamt etwa eine Minute, mit zwei kurzen Neustarts (~25 Sekunden je) unterwegs.`,
+      ecoName: `Eco Standby`,
+      ecoCaption: `etwa 28&times; weniger Leistung als Active Standby`,
+      ecoDesc: `Fast alles schaltet sich ab, einschlie&szlig;lich der Netzwerkverbindung, um so viel Energie wie m&ouml;glich zu sparen.`,
+      ecoRemoteStrong: `&Uuml;ber das Netzwerk nicht erreichbar`,
+      ecoRemoteText: `kann weiterhin mit dem Netzschalter, einer IR-Fernbedienung oder RS232 geweckt werden &mdash; der gelben, nach oben weisenden 3,5&nbsp;mm-Buchse auf der Sendekarte`,
+      ecoNoteLabel: `Am besten geeignet f&uuml;r`,
+      ecoNoteText: `Bildschirme, die l&auml;ngere Zeit ungenutzt bleiben und bei denen niemand sie aus der Ferne pr&uuml;fen oder wecken muss.`,
+      ruleOfThumb: `<strong>Faustregel:</strong> Behalten Sie Active Standby bei, wenn der Bildschirm &uuml;ber Steuersoftware oder einen Kontrollraum erreichbar bleiben soll. Wechseln Sie nur bei Bildschirmen zu Eco Standby, die l&auml;ngere Zeit ungenutzt bleiben und kein Fernwecken ben&ouml;tigen.`,
+      h2_02: `Was &uuml;ber den Zeitpunkt entscheidet`,
+      secIntro02: `Unabh&auml;ngig vom oben gew&auml;hlten Standby-Modus entscheiden zwei Timer im selben Men&uuml;, <em>wann</em> der Bildschirm nach einer Zeit der Inaktivit&auml;t herunterzufahren beginnt. Sie laufen in dieser Reihenfolge ab:`,
+      timer1Name: `Blackout`,
+      timer1Desc: `Schaltet das Bild vollst&auml;ndig schwarz, sobald der Bildschirm eine Weile inaktiv war. Er bleibt dabei voll eingeschaltet und schaltet das Bild sofort wieder ein &mdash; das ist kein Standby, nur ein schwarzes Bild.`,
+      timer1Subnote: `Ein Bildschirmschoner (der ein Bild statt Schwarz zeigt) steht als Alternative zur Verf&uuml;gung, falls gew&uuml;nscht &mdash; nur einer von beiden kann gleichzeitig aktiv sein.`,
+      unitMin: ` Min.`,
+      range1: `Standard &middot; 1&ndash;60 Min. verf&uuml;gbar`,
+      timer2Name: `Sleep`,
+      timer2Desc: `Versetzt den Bildschirm in vollen Standby &mdash; Active oder Eco, je nachdem, was oben gew&auml;hlt wurde.`,
+      range2: `Standard &middot; 5&ndash;60 Min. verf&uuml;gbar`,
+      footerText: `Quellen: die eXview Edge Men&uuml;struktur-Spezifikation, die vollst&auml;ndige <a href="../installation/exview-edge-electrical-installation-guide.html">Installationsanleitung Elektro- und Stromarchitektur</a>, sowie Tests an einem physischen Ger&auml;t.`
+    },
+    zh: {
+      eyebrow: `致每一位使用屏幕的人 &middot; 通俗易懂的指南`,
+      h1: `eXview Edge &mdash; 待机与电源模式`,
+      subtitle: `Active 待机与 Eco 待机具体做了什么、触发它们的两个计时器，以及如何将屏幕重新唤醒。`,
+      factsLabelB: `在屏幕上的查找路径：`,
+      h2_01: `两种休息方式`,
+      secIntro01: `此设置只需选择一次，决定了屏幕每次关闭时"待机"的实际含义。`,
+      activeName: `Active Standby（主动待机）`,
+      activeTag: `出厂默认`,
+      activeCaption: `大约相当于两三个LED灯泡的功耗`,
+      activeDesc: `画面和声音会关闭，但屏幕会安静地保持网络连接。`,
+      activeRemoteStrong: `可通过网络访问`,
+      activeRemoteText: `可以远程查看状态并重新开机`,
+      activeNoteLabel: `在真实屏幕上测试过`,
+      activeNoteText: `将屏幕设为Active Standby后立即将其唤醒，整个过程大约耗时一分钟，期间经历了两次约25秒的短暂重启。`,
+      ecoName: `Eco Standby（节能待机）`,
+      ecoCaption: `功耗比Active Standby低约28倍`,
+      ecoDesc: `几乎所有功能都会关闭，包括网络连接，以尽可能节省电能。`,
+      ecoRemoteStrong: `无法通过网络访问`,
+      ecoRemoteText: `仍可通过电源按钮、红外遥控器或RS232唤醒 &mdash; 即发送卡上黄色、朝上的3.5&nbsp;mm接口`,
+      ecoNoteLabel: `适用场景`,
+      ecoNoteText: `长时间不使用、且无需远程查看或唤醒的屏幕。`,
+      ruleOfThumb: `<strong>经验法则：</strong>若屏幕需要保持可被控制软件或中控室访问，请保留Active Standby。仅当屏幕长期不使用且无需远程唤醒时，才切换为Eco Standby。`,
+      h2_02: `决定何时进入待机`,
+      secIntro02: `与上方选择的待机模式无关，同一菜单中的两个计时器决定屏幕在闲置一段时间后<em>何时</em>开始进入休眠。它们按以下顺序运行：`,
+      timer1Name: `Blackout（黑屏）`,
+      timer1Desc: `屏幕闲置一段时间后，画面会完全变黑。此时屏幕仍处于完全通电状态，一有操作便会立即恢复画面 &mdash; 这并非待机，只是画面变黑。`,
+      timer1Subnote: `如有需要，可改用屏保（显示图片而非黑屏）作为替代方案 &mdash; 两者只能二选一同时开启。`,
+      unitMin: ` 分钟`,
+      range1: `默认 &middot; 可选1&ndash;60分钟`,
+      timer2Name: `Sleep（睡眠）`,
+      timer2Desc: `使屏幕进入完全待机 &mdash; 具体为Active或Eco，取决于上方所选模式。`,
+      range2: `默认 &middot; 可选5&ndash;60分钟`,
+      footerText: `资料来源：eXview Edge菜单结构规范、完整的<a href="../installation/exview-edge-electrical-installation-guide.html">电气与电源架构安装指南</a>，以及对实体设备进行的实际测试。`
+    }
+  };
+
+  var HTML_LANG = { en: 'en', da: 'da', de: 'de', zh: 'zh-CN' };
+  var STORAGE_KEY = 'exview-edge-lang';
+
+  function applyLang(lang) {
+    var currentLang = STRINGS[lang] ? lang : 'en';
+    var dict = STRINGS[currentLang];
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var key = nodes[i].getAttribute('data-i18n');
+      if (dict[key] !== undefined) { nodes[i].innerHTML = dict[key]; }
+    }
+    document.documentElement.lang = HTML_LANG[currentLang] || 'en';
+    var btns = document.querySelectorAll('.lang-switch button');
+    for (var j = 0; j < btns.length; j++) {
+      var isActive = btns[j].getAttribute('data-lang') === currentLang;
+      btns[j].classList.toggle('active', isActive);
+      btns[j].setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    }
+    try { localStorage.setItem(STORAGE_KEY, currentLang); } catch (e) {}
+  }
+
+  var switchBtns = document.querySelectorAll('.lang-switch button');
+  for (var k = 0; k < switchBtns.length; k++) {
+    switchBtns[k].addEventListener('click', function () { applyLang(this.getAttribute('data-lang')); });
+  }
+
+  var saved = null;
+  try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+  applyLang(saved && STRINGS[saved] ? saved : 'en');
+})();
+</script>
+
+</body>
+</html>
