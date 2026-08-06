@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>eXview Edge — Screen Capture and Control via ADB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:      #F5F6F3;
+    --paper-raised:#FFFFFF;
+    --ink:        #14181D;
+    --navy:       #0B1E27;
+    --steel:      #4B5760;
+    --hairline:   #DCE2E4;
+    --signal:     #0B7285;
+    --signal-dim: #E3F1F2;
+    --amber:      #B5650D;
+    --amber-dim:  #FBEFDD;
+    --cyan:       #22C7DB;
+    --content-w:  820px;
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans","Noto Sans SC",-apple-system,"Segoe UI",sans-serif; line-height:1.55; font-size:16px; }
+  h1,h2,h3 { font-family:"Space Grotesk","Noto Sans SC",sans-serif; font-weight:600; margin:0; color:var(--ink); }
+  code,.mono { font-family:"IBM Plex Mono",ui-monospace,"Courier New",monospace; }
+  a { color: var(--signal); }
+
+  .masthead { background: var(--navy); color: var(--paper); padding: 2.2rem 1.5rem; }
+  .masthead__inner { max-width: var(--content-w); margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; gap: 1.5rem; flex-wrap: wrap; }
+  .masthead__logo { background: var(--paper); border-radius: 6px; padding: 4px 12px; display: inline-flex; align-items: center; flex-shrink: 0; }
+  .masthead__logo img { width: 100px; height: auto; display: block; }
+  .masthead__meta { display: flex; flex-direction: column; align-items: flex-end; gap: 0.7rem; flex-shrink: 0; }
+  .eyebrow { font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:#7FC4CC; margin:0 0 0.6rem; }
+  .masthead h1 { color: var(--paper); font-size: clamp(1.5rem, 3.6vw, 2.1rem); letter-spacing:-0.01em; line-height:1.18; max-width:32ch; }
+  .masthead .subtitle { margin: 0.7rem 0 0; color: #C4CCD1; font-size: 0.98rem; max-width: 58ch; }
+
+  .lang-switch { display: flex; gap: 2px; background: rgba(255,255,255,0.06); padding: 4px; border-radius: 20px; }
+  .lang-switch button {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; border: none; background: transparent;
+    color: #9FB4BB; padding: 6px 12px; border-radius: 16px; cursor: pointer; white-space: nowrap; transition: background 0.15s, color 0.15s;
+  }
+  .lang-switch button:hover { color: #fff; }
+  .lang-switch button.active { background: var(--cyan); color: var(--navy); }
+  .lang-switch button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+
+  main { max-width: var(--content-w); margin: 0 auto; padding: 2.2rem 1.5rem 3rem; }
+  section { margin: 0 0 2.4rem; }
+  section h2 { font-size: 1.1rem; margin-bottom: 0.9rem; }
+  section h2 .n { font-family:"IBM Plex Mono",monospace; color: var(--signal); margin-right: 0.5rem; }
+  .section-intro { color: var(--steel); max-width: 66ch; margin: 0 0 1.3rem; font-size: 0.95rem; }
+
+  .facts { background: var(--paper-raised); border: 1px solid var(--hairline); border-radius: 8px; padding: 0.9rem 1.2rem; display: flex; flex-wrap: wrap; gap: 0.4rem 2rem; font-size: 0.88rem; }
+  .facts div { white-space: nowrap; }
+  .facts b { font-family:"IBM Plex Mono",monospace; font-weight: 600; }
+
+  .download-cta { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; background: var(--signal-dim); border: 1px solid var(--signal); border-radius: 10px; padding: 0.9rem 1.2rem; margin-top: 0.9rem; }
+  .download-cta p { margin: 0; font-size: 0.88rem; color: var(--ink); }
+  .download-cta a.btn { flex-shrink: 0; display: inline-block; background: var(--signal); color: #fff; font-family: "Space Grotesk", "Noto Sans SC", sans-serif; font-weight: 600; font-size: 0.85rem; text-decoration: none; padding: 0.55rem 1.1rem; border-radius: 20px; }
+  .download-cta a.btn:hover { background: #0a5f6d; }
+
+  ol.checklist { margin: 0; padding: 0; list-style: none; counter-reset: step; }
+  ol.checklist li { counter-increment: step; display: grid; grid-template-columns: 34px 1fr; gap: 0.8rem; padding: 0.85rem 0; border-bottom: 1px solid var(--hairline); font-size: 0.94rem; }
+  ol.checklist li:last-child { border-bottom: none; }
+  ol.checklist li::before {
+    content: counter(step);
+    font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:0.92rem;
+    background: var(--ink); color: var(--paper); border-radius: 50%;
+    width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  ol.checklist li .step-title { font-family:"Space Grotesk","Noto Sans SC",sans-serif; font-weight: 600; font-size: 0.98rem; margin: 0 0 0.25rem; }
+  ol.checklist li p { margin: 0; color: var(--steel); }
+  ol.checklist li .mono-note { display:block; margin-top:0.35rem; font-family:"IBM Plex Mono",monospace; font-size:0.78rem; color: var(--signal); }
+  ol.checklist li .sample-list { display:block; margin-top:0.5rem; background: var(--paper); border: 1px solid var(--hairline); border-radius: 6px; padding: 0.55rem 0.8rem; font-family: "IBM Plex Mono", monospace; font-size: 0.8rem; color: var(--ink); line-height: 1.7; }
+
+  .path-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 640px) { .path-grid { grid-template-columns: 1fr; } }
+  .path-card { background: var(--paper-raised); border: 1px solid var(--hairline); border-radius: 8px; padding: 1.1rem 1.3rem 1.3rem; }
+  .path-card .path-tag { display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:0.62rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--signal); background:var(--signal-dim); padding:0.15rem 0.5rem; border-radius:3px; margin-bottom:0.6rem; }
+  .path-card h3 { font-size: 1.02rem; margin: 0 0 0.5rem; }
+  .path-card .menu-path { font-family:"IBM Plex Mono",monospace; font-size: 0.82rem; color: var(--signal); background: var(--signal-dim); border-radius: 6px; padding: 0.5rem 0.7rem; margin: 0 0 0.7rem; line-height:1.5; }
+  .path-card p.desc { margin: 0; font-size: 0.88rem; color: var(--steel); }
+
+  .callout { background: var(--paper-raised); border: 1px solid var(--hairline); border-left: 4px solid var(--signal); border-radius: 0 8px 8px 0; padding: 1rem 1.2rem; font-size: 0.9rem; margin-top: 1rem; }
+  .callout.warn { border-left-color: var(--amber); background: var(--amber-dim); }
+  .callout strong { color: var(--ink); }
+
+  footer.page-footer { max-width: var(--content-w); margin: 0 auto; padding: 0 1.5rem 2.5rem; font-size: 0.78rem; color: var(--steel); }
+
+  @media print {
+    .masthead { background: none; color: #000; border-bottom: 2px solid #000; }
+    .masthead h1, .masthead .subtitle, .eyebrow { color: #000 !important; }
+    .lang-switch { display: none; }
+    .download-cta { border: 1px solid #000; background: none; }
+    .download-cta a.btn { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead__inner">
+    <div>
+      <p class="eyebrow" data-i18n="eyebrow">When the picture is unusable &middot; Expromo-directed recovery</p>
+      <h1 data-i18n="h1">eXview Edge — Screen Capture and Control via ADB</h1>
+      <p class="subtitle" data-i18n="subtitle">If the screen is blank or too distorted to use, and Expromo support has told you it needs a firmware upgrade or a factory reset, you can still reach the Android system inside it and do that &mdash; without the LED wall showing anything useful.</p>
+    </div>
+    <div class="masthead__meta">
+      <span class="masthead__logo"><img src="assets/expromo-logo.jpg" alt="Expromo"></span>
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" data-lang="en" class="active" aria-pressed="true">EN</button>
+        <button type="button" data-lang="da" aria-pressed="false">DA</button>
+        <button type="button" data-lang="de" aria-pressed="false">DE</button>
+        <button type="button" data-lang="zh" aria-pressed="false">中文</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section>
+  <h2><span class="n">01</span><span data-i18n="h2_01">What you need</span></h2>
+  <p class="section-intro" data-i18n="secIntro01">This only works if Expromo support has already diagnosed the issue and told you a firmware upgrade or factory reset is the fix. It mirrors the screen's own Android interface onto a laptop over the network, so you can operate it even though the physical picture isn't usable.</p>
+  <div class="facts">
+    <div><b data-i18n="factUsb">USB drive</b> <span data-i18n="factUsbDesc">with the <code>LDataAdbConfigEnable</code> file on it</span></div>
+    <div><b data-i18n="factPc">PC</b> <span data-i18n="factPcDesc">on the same network as the screen</span></div>
+    <div><b data-i18n="factTool">ADB/scrcpy tool folder</b></div>
+  </div>
+  <div class="download-cta">
+    <p data-i18n="downloadText">The tool folder (<code>RUN-ME.exe</code>, ADB, scrcpy, and <code>LDataAdbConfigEnable</code>) is available as a single download.</p>
+    <a class="btn" href="https://nextcloud.expromo.eu/s/5naywZ8RkADQn8a" data-i18n="downloadBtn">Download the tool folder</a>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">02</span><span data-i18n="h2_02">Connect and mirror the screen</span></h2>
+  <ol class="checklist">
+    <li>
+      <div>
+        <p class="step-title" data-i18n="step1Title">Enable ADB on the screen</p>
+        <p data-i18n="step1Desc">Copy the <code>LDataAdbConfigEnable</code> file &mdash; on its own, nothing else needed &mdash; to the root of a USB flash drive. Plug that drive into the eXview Edge screen. This turns on the debug connection the next step needs.</p>
+      </div>
+    </li>
+    <li>
+      <div>
+        <p class="step-title" data-i18n="step2Title">Run <code>RUN-ME.exe</code> and pick your screen</p>
+        <p data-i18n="step2Desc">In the tool folder, double-click <code>RUN-ME.exe</code>. It scans the network automatically and lists any eXview screens it finds:</p>
+        <span class="sample-list">Found 1 screen(s):<br>&nbsp;&nbsp;1) eXviewEDGE&nbsp;&nbsp;-&nbsp;&nbsp;10.20.30.55<br>&nbsp;&nbsp;0) You don't see your screen? Type IP here</span>
+        <p data-i18n="step2Desc2" style="margin-top:0.5rem;">Enter the number for your screen. If it isn't listed, type its IP address at the same prompt instead &mdash; you can find it in eXconfig under Link Info if needed. Once connected, a mirror window opens automatically.</p>
+        <span class="mono-note" data-i18n="step2Note">Can't connect? Double-check the USB drive from step 1 is plugged in, and that the IP address is correct.</span>
+      </div>
+    </li>
+  </ol>
+</section>
+
+<section>
+  <h2><span class="n">03</span><span data-i18n="h2_03">Do what Expromo told you to do</span></h2>
+  <p class="section-intro" data-i18n="secIntro03">Once the mirror window is open, use the mouse to navigate exactly as you would on the screen itself: <span class="mono">Apps &amp; Settings &rarr; Settings</span>.</p>
+
+  <div class="path-grid">
+    <div class="path-card">
+      <span class="path-tag" data-i18n="pathTagUpdate">If told: firmware upgrade</span>
+      <h3 data-i18n="pathTitleUpdate">Check for updates</h3>
+      <p class="menu-path">Settings &rarr; About &rarr; Check for updates</p>
+      <p class="desc" data-i18n="pathDescUpdate">Shows the current software version and starts the update if one is available.</p>
+    </div>
+    <div class="path-card">
+      <span class="path-tag" data-i18n="pathTagReset">If told: factory reset</span>
+      <h3 data-i18n="pathTitleReset">Restore factory settings</h3>
+      <p class="menu-path">Settings &rarr; Restore &rarr; Restore factory settings</p>
+      <p class="desc" data-i18n="pathDescReset">Clears app data, user data, and any downloaded apps.</p>
+    </div>
+  </div>
+
+  <div class="callout warn" data-i18n="warnCallout"><strong>Only do this if Expromo told you to.</strong> A factory reset clears application data, user data, and downloaded apps, and can't be undone from here. If you're not sure which path applies, stop and confirm with Expromo support before continuing.</div>
+</section>
+
+<section>
+  <h2><span class="n">04</span><span data-i18n="h2_04">Scope of this guide</span></h2>
+  <div class="callout" data-i18n="scopeCallout">There is also a hidden factory/debug menu on these screens, used internally by Expromo for deeper diagnostics. It's not covered here and isn't needed for a normal firmware upgrade or factory reset &mdash; both are reachable through the regular Settings menu shown above. Only use the factory/debug menu if an Expromo technician walks you through it directly.</div>
+</section>
+
+</main>
+
+<footer class="page-footer">
+  <p data-i18n="footerText">For anyone on-site handling a screen with an unusable picture, under Expromo support's direction. If the screen is still unreachable after checking the USB drive, IP address, and network, contact Expromo support.</p>
+</footer>
+
+<script>
+(function () {
+  var STRINGS = {
+    en: {
+      eyebrow: `When the picture is unusable &middot; Expromo-directed recovery`,
+      h1: `eXview Edge &mdash; Screen Capture and Control via ADB`,
+      subtitle: `If the screen is blank or too distorted to use, and Expromo support has told you it needs a firmware upgrade or a factory reset, you can still reach the Android system inside it and do that &mdash; without the LED wall showing anything useful.`,
+      h2_01: `What you need`,
+      secIntro01: `This only works if Expromo support has already diagnosed the issue and told you a firmware upgrade or factory reset is the fix. It mirrors the screen's own Android interface onto a laptop over the network, so you can operate it even though the physical picture isn't usable.`,
+      factUsb: `USB drive`,
+      factUsbDesc: `with the <code>LDataAdbConfigEnable</code> file on it`,
+      factPc: `PC`,
+      factPcDesc: `on the same network as the screen`,
+      factTool: `ADB/scrcpy tool folder`,
+      downloadText: `The tool folder (<code>RUN-ME.exe</code>, ADB, scrcpy, and <code>LDataAdbConfigEnable</code>) is available as a single download.`,
+      downloadBtn: `Download the tool folder`,
+      h2_02: `Connect and mirror the screen`,
+      step1Title: `Enable ADB on the screen`,
+      step1Desc: `Copy the <code>LDataAdbConfigEnable</code> file &mdash; on its own, nothing else needed &mdash; to the root of a USB flash drive. Plug that drive into the eXview Edge screen. This turns on the debug connection the next step needs.`,
+      step2Title: `Run <code>RUN-ME.exe</code> and pick your screen`,
+      step2Desc: `In the tool folder, double-click <code>RUN-ME.exe</code>. It scans the network automatically and lists any eXview screens it finds:`,
+      step2Desc2: `Enter the number for your screen. If it isn't listed, type its IP address at the same prompt instead &mdash; you can find it in eXconfig under Link Info if needed. Once connected, a mirror window opens automatically.`,
+      step2Note: `Can't connect? Double-check the USB drive from step 1 is plugged in, and that the IP address is correct.`,
+      h2_03: `Do what Expromo told you to do`,
+      secIntro03: `Once the mirror window is open, use the mouse to navigate exactly as you would on the screen itself: <span class="mono">Apps &amp; Settings &rarr; Settings</span>.`,
+      pathTagUpdate: `If told: firmware upgrade`,
+      pathTitleUpdate: `Check for updates`,
+      pathDescUpdate: `Shows the current software version and starts the update if one is available.`,
+      pathTagReset: `If told: factory reset`,
+      pathTitleReset: `Restore factory settings`,
+      pathDescReset: `Clears app data, user data, and any downloaded apps.`,
+      warnCallout: `<strong>Only do this if Expromo told you to.</strong> A factory reset clears application data, user data, and downloaded apps, and can't be undone from here. If you're not sure which path applies, stop and confirm with Expromo support before continuing.`,
+      h2_04: `Scope of this guide`,
+      scopeCallout: `There is also a hidden factory/debug menu on these screens, used internally by Expromo for deeper diagnostics. It's not covered here and isn't needed for a normal firmware upgrade or factory reset &mdash; both are reachable through the regular Settings menu shown above. Only use the factory/debug menu if an Expromo technician walks you through it directly.`,
+      footerText: `For anyone on-site handling a screen with an unusable picture, under Expromo support's direction. If the screen is still unreachable after checking the USB drive, IP address, and network, contact Expromo support.`
+    },
+    da: {
+      eyebrow: `N&aring;r billedet ikke kan bruges &middot; genopretning efter Expromos anvisning`,
+      h1: `eXview Edge &mdash; Sk&aelig;rmoptagelse og -styring via ADB`,
+      subtitle: `Hvis sk&aelig;rmen er sort eller billedet er for forvr&aelig;nget til at bruge, og Expromo support har fortalt dig, at den skal have en firmwareopdatering eller en fabriksnulstilling, kan du stadig tilg&aring; Android-systemet inde i den og g&oslash;re det &mdash; uden at LED-v&aelig;ggen viser noget brugbart.`,
+      h2_01: `Det skal du bruge`,
+      secIntro01: `Dette virker kun, hvis Expromo support allerede har diagnosticeret problemet og fortalt dig, at en firmwareopdatering eller fabriksnulstilling er l&oslash;sningen. Det spejler sk&aelig;rmens eget Android-interface til en b&aelig;rbar over netv&aelig;rket, s&aring; du kan betjene den, selvom det fysiske billede ikke kan bruges.`,
+      factUsb: `USB-drev`,
+      factUsbDesc: `med filen <code>LDataAdbConfigEnable</code> p&aring;`,
+      factPc: `PC`,
+      factPcDesc: `p&aring; samme netv&aelig;rk som sk&aelig;rmen`,
+      factTool: `ADB/scrcpy-v&aelig;rkt&oslash;jsmappe`,
+      downloadText: `V&aelig;rkt&oslash;jsmappen (<code>RUN-ME.exe</code>, ADB, scrcpy og <code>LDataAdbConfigEnable</code>) f&aring;s som &eacute;n samlet download.`,
+      downloadBtn: `Download v&aelig;rkt&oslash;jsmappen`,
+      h2_02: `Tilslut og spejl sk&aelig;rmen`,
+      step1Title: `Aktiv&eacute;r ADB p&aring; sk&aelig;rmen`,
+      step1Desc: `Kopi&eacute;r filen <code>LDataAdbConfigEnable</code> &mdash; alene, intet andet n&oslash;dvendigt &mdash; til roden af et USB-flashdrev. S&aelig;t drevet i eXview Edge-sk&aelig;rmen. Dette aktiverer den debug-forbindelse, n&aelig;ste trin skal bruge.`,
+      step2Title: `K&oslash;r <code>RUN-ME.exe</code>, og v&aelig;lg din sk&aelig;rm`,
+      step2Desc: `Dobbeltklik p&aring; <code>RUN-ME.exe</code> i v&aelig;rkt&oslash;jsmappen. Den scanner netv&aelig;rket automatisk og lister de eXview-sk&aelig;rme, den finder:`,
+      step2Desc2: `Indtast nummeret p&aring; din sk&aelig;rm. Hvis den ikke er p&aring; listen, kan du i stedet skrive dens IP-adresse ved samme prompt &mdash; du kan finde den i eXconfig under Link Info om n&oslash;dvendigt. N&aring;r der er forbindelse, &aring;bnes et spejlingsvindue automatisk.`,
+      step2Note: `Kan du ikke f&aring; forbindelse? Tjek at USB-drevet fra trin 1 sidder i, og at IP-adressen er korrekt.`,
+      h2_03: `G&oslash;r det, Expromo bad dig om`,
+      secIntro03: `N&aring;r spejlingsvinduet er &aring;bent, skal du bruge musen til at navigere pr&aelig;cis som p&aring; sk&aelig;rmen selv: <span class="mono">Apps &amp; Settings &rarr; Settings</span>.`,
+      pathTagUpdate: `Hvis du er bedt om: firmwareopdatering`,
+      pathTitleUpdate: `Check for updates`,
+      pathDescUpdate: `Viser den nuv&aelig;rende softwareversion og starter opdateringen, hvis en er tilg&aelig;ngelig.`,
+      pathTagReset: `Hvis du er bedt om: fabriksnulstilling`,
+      pathTitleReset: `Restore factory settings`,
+      pathDescReset: `Rydder appdata, brugerdata og eventuelle downloadede apps.`,
+      warnCallout: `<strong>Kun hvis Expromo har bedt dig om det.</strong> En fabriksnulstilling rydder applikationsdata, brugerdata og downloadede apps og kan ikke fortrydes herfra. Er du i tvivl om, hvilken vej der g&aelig;lder, s&aring; stop og bekr&aelig;ft med Expromo support, f&oslash;r du forts&aelig;tter.`,
+      h2_04: `Denne vejlednings omfang`,
+      scopeCallout: `Der findes ogs&aring; en skjult fabriks-/debugmenu p&aring; disse sk&aelig;rme, som Expromo bruger internt til dybere fejlfinding. Den er ikke dækket her og er ikke n&oslash;dvendig til en normal firmwareopdatering eller fabriksnulstilling &mdash; begge dele n&aring;s via den almindelige Settings-menu vist ovenfor. Brug kun fabriks-/debugmenuen, hvis en Expromo-tekniker guider dig direkte igennem den.`,
+      footerText: `Til alle p&aring; stedet, der h&aring;ndterer en sk&aelig;rm med et ubrugeligt billede, efter anvisning fra Expromo support. Hvis sk&aelig;rmen stadig ikke kan n&aring;s, efter du har tjekket USB-drevet, IP-adressen og netv&aelig;rket, s&aring; kontakt Expromo support.`
+    },
+    de: {
+      eyebrow: `Wenn das Bild unbrauchbar ist &middot; Wiederherstellung nach Expromo-Anweisung`,
+      h1: `eXview Edge &mdash; Bildschirmerfassung und -steuerung via ADB`,
+      subtitle: `Wenn der Bildschirm schwarz oder das Bild zu verzerrt ist, um es zu nutzen, und der Expromo-Support Ihnen mitgeteilt hat, dass ein Firmware-Update oder ein Werksreset n&ouml;tig ist, k&ouml;nnen Sie trotzdem auf das darin enthaltene Android-System zugreifen und dies durchf&uuml;hren &mdash; ohne dass die LED-Wand etwas Brauchbares anzeigt.`,
+      h2_01: `Was Sie ben&ouml;tigen`,
+      secIntro01: `Dies funktioniert nur, wenn der Expromo-Support das Problem bereits diagnostiziert und Ihnen mitgeteilt hat, dass ein Firmware-Update oder Werksreset die L&ouml;sung ist. Dabei wird die Android-Oberfl&auml;che des Bildschirms &uuml;ber das Netzwerk auf einen Laptop gespiegelt, sodass Sie ihn bedienen k&ouml;nnen, auch wenn das physische Bild nicht nutzbar ist.`,
+      factUsb: `USB-Stick`,
+      factUsbDesc: `mit der Datei <code>LDataAdbConfigEnable</code> darauf`,
+      factPc: `PC`,
+      factPcDesc: `im selben Netzwerk wie der Bildschirm`,
+      factTool: `ADB/scrcpy-Toolordner`,
+      downloadText: `Der Toolordner (<code>RUN-ME.exe</code>, ADB, scrcpy und <code>LDataAdbConfigEnable</code>) steht als ein einzelner Download zur Verf&uuml;gung.`,
+      downloadBtn: `Toolordner herunterladen`,
+      h2_02: `Bildschirm verbinden und spiegeln`,
+      step1Title: `ADB am Bildschirm aktivieren`,
+      step1Desc: `Kopieren Sie die Datei <code>LDataAdbConfigEnable</code> &mdash; allein, nichts weiter n&ouml;tig &mdash; in das Stammverzeichnis eines USB-Sticks. Stecken Sie den Stick in den eXview-Edge-Bildschirm. Damit wird die Debug-Verbindung aktiviert, die der n&auml;chste Schritt ben&ouml;tigt.`,
+      step2Title: `<code>RUN-ME.exe</code> ausf&uuml;hren und Bildschirm ausw&auml;hlen`,
+      step2Desc: `Doppelklicken Sie im Toolordner auf <code>RUN-ME.exe</code>. Es durchsucht das Netzwerk automatisch und listet alle gefundenen eXview-Bildschirme auf:`,
+      step2Desc2: `Geben Sie die Nummer Ihres Bildschirms ein. Steht er nicht in der Liste, geben Sie stattdessen seine IP-Adresse an derselben Stelle ein &mdash; bei Bedarf finden Sie sie in eXconfig unter Link Info. Nach dem Verbinden &ouml;ffnet sich automatisch ein Spiegelungsfenster.`,
+      step2Note: `Keine Verbindung? Pr&uuml;fen Sie, ob der USB-Stick aus Schritt 1 steckt und die IP-Adresse korrekt ist.`,
+      h2_03: `Tun Sie, was Expromo Ihnen gesagt hat`,
+      secIntro03: `Sobald das Spiegelungsfenster ge&ouml;ffnet ist, navigieren Sie mit der Maus genau wie am Bildschirm selbst: <span class="mono">Apps &amp; Settings &rarr; Settings</span>.`,
+      pathTagUpdate: `Falls Anweisung: Firmware-Update`,
+      pathTitleUpdate: `Check for updates`,
+      pathDescUpdate: `Zeigt die aktuelle Softwareversion an und startet das Update, falls eines verf&uuml;gbar ist.`,
+      pathTagReset: `Falls Anweisung: Werksreset`,
+      pathTitleReset: `Restore factory settings`,
+      pathDescReset: `L&ouml;scht App-Daten, Benutzerdaten und alle heruntergeladenen Apps.`,
+      warnCallout: `<strong>Nur, wenn Expromo Sie dazu angewiesen hat.</strong> Ein Werksreset l&ouml;scht Anwendungsdaten, Benutzerdaten und heruntergeladene Apps und kann von hier aus nicht r&uuml;ckg&auml;ngig gemacht werden. Sind Sie sich nicht sicher, welcher Weg zutrifft, stoppen Sie und best&auml;tigen Sie es mit dem Expromo-Support, bevor Sie fortfahren.`,
+      h2_04: `Umfang dieser Anleitung`,
+      scopeCallout: `Es gibt au&szlig;erdem ein verstecktes Werks-/Debugmen&uuml; auf diesen Bildschirmen, das Expromo intern f&uuml;r tiefergehende Diagnosen nutzt. Es wird hier nicht behandelt und ist f&uuml;r ein normales Firmware-Update oder einen Werksreset nicht erforderlich &mdash; beides erreichen Sie &uuml;ber das oben gezeigte reguläre Settings-Men&uuml;. Nutzen Sie das Werks-/Debugmen&uuml; nur, wenn ein Expromo-Techniker Sie direkt dabei anleitet.`,
+      footerText: `F&uuml;r alle vor Ort, die einen Bildschirm mit unbrauchbarem Bild bearbeiten, nach Anweisung des Expromo-Supports. Ist der Bildschirm weiterhin nicht erreichbar, nachdem Sie USB-Stick, IP-Adresse und Netzwerk gepr&uuml;ft haben, wenden Sie sich an den Expromo-Support.`
+    },
+    zh: {
+      eyebrow: `画面无法使用时 &middot; 按Expromo指示进行恢复`,
+      h1: `eXview Edge &mdash; 通过ADB进行屏幕捕获与控制`,
+      subtitle: `如果屏幕黑屏或画面严重失真无法使用，且Expromo支持团队已告知需要进行固件升级或恢复出厂设置，您仍然可以访问屏幕内部的Android系统并完成操作 &mdash; 即使LED墙本身没有显示任何有用的画面。`,
+      h2_01: `所需准备`,
+      secIntro01: `此方法仅在Expromo支持团队已诊断问题、并明确告知需要固件升级或恢复出厂设置时适用。它会通过网络将屏幕自身的Android界面镜像到笔记本电脑上，这样即使实际画面无法使用，您仍可以操作它。`,
+      factUsb: `U盘`,
+      factUsbDesc: `内含<code>LDataAdbConfigEnable</code>文件`,
+      factPc: `电脑`,
+      factPcDesc: `与屏幕处于同一网络`,
+      factTool: `ADB/scrcpy工具文件夹`,
+      downloadText: `工具文件夹（包含<code>RUN-ME.exe</code>、ADB、scrcpy及<code>LDataAdbConfigEnable</code>）以单一压缩包形式提供下载。`,
+      downloadBtn: `下载工具文件夹`,
+      h2_02: `连接并镜像屏幕`,
+      step1Title: `在屏幕上启用ADB`,
+      step1Desc: `将<code>LDataAdbConfigEnable</code>文件（仅此文件，无需其他内容）复制到U盘的根目录。将U盘插入eXview Edge屏幕。这将启用下一步所需的调试连接。`,
+      step2Title: `运行<code>RUN-ME.exe</code>并选择您的屏幕`,
+      step2Desc: `在工具文件夹中双击<code>RUN-ME.exe</code>。它会自动扫描网络，并列出找到的eXview屏幕：`,
+      step2Desc2: `输入对应屏幕的编号。如果列表中没有您的屏幕，可在同一提示处直接输入其IP地址 &mdash; 如有需要，可在eXconfig的Link Info中查找该地址。连接成功后，镜像窗口将自动打开。`,
+      step2Note: `无法连接？请再次确认步骤1中的U盘已插入，且IP地址正确。`,
+      h2_03: `按Expromo的指示操作`,
+      secIntro03: `镜像窗口打开后，请像操作屏幕本身一样使用鼠标导航：<span class="mono">Apps &amp; Settings &rarr; Settings</span>。`,
+      pathTagUpdate: `若被告知：固件升级`,
+      pathTitleUpdate: `Check for updates`,
+      pathDescUpdate: `显示当前软件版本，如有可用更新则开始升级。`,
+      pathTagReset: `若被告知：恢复出厂设置`,
+      pathTitleReset: `Restore factory settings`,
+      pathDescReset: `清除应用数据、用户数据及所有已下载的应用。`,
+      warnCallout: `<strong>仅在Expromo明确要求时才执行此操作。</strong>恢复出厂设置会清除应用数据、用户数据及已下载的应用，且此操作无法撤销。如不确定应采用哪种方式，请先暂停并与Expromo支持团队确认后再继续。`,
+      h2_04: `本指南的适用范围`,
+      scopeCallout: `这些屏幕上还存在一个隐藏的工厂/调试菜单，由Expromo内部用于更深入的诊断。本指南不涉及该菜单，正常的固件升级或恢复出厂设置也无需使用它 &mdash; 上述两项操作均可通过常规Settings菜单完成。仅在Expromo技术人员直接指导时才使用该工厂/调试菜单。`,
+      footerText: `献给所有按Expromo支持团队指示、现场处理画面无法使用的屏幕的人员。如果在检查U盘、IP地址及网络后屏幕仍无法访问，请联系Expromo支持团队。`
+    }
+  };
+
+  var HTML_LANG = { en: 'en', da: 'da', de: 'de', zh: 'zh-CN' };
+  var STORAGE_KEY = 'exview-edge-lang';
+
+  function applyLang(lang) {
+    var currentLang = STRINGS[lang] ? lang : 'en';
+    var dict = STRINGS[currentLang];
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var key = nodes[i].getAttribute('data-i18n');
+      if (dict[key] !== undefined) { nodes[i].innerHTML = dict[key]; }
+    }
+    document.documentElement.lang = HTML_LANG[currentLang] || 'en';
+    var btns = document.querySelectorAll('.lang-switch button');
+    for (var j = 0; j < btns.length; j++) {
+      var isActive = btns[j].getAttribute('data-lang') === currentLang;
+      btns[j].classList.toggle('active', isActive);
+      btns[j].setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    }
+    try { localStorage.setItem(STORAGE_KEY, currentLang); } catch (e) {}
+  }
+
+  var switchBtns = document.querySelectorAll('.lang-switch button');
+  for (var k = 0; k < switchBtns.length; k++) {
+    switchBtns[k].addEventListener('click', function () { applyLang(this.getAttribute('data-lang')); });
+  }
+
+  var saved = null;
+  try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+  applyLang(saved && STRINGS[saved] ? saved : 'en');
+})();
+</script>
+
+</body>
+</html>
