@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>eXview Edge — Crestron Control Module</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:      #F5F6F3;
+    --paper-raised:#FFFFFF;
+    --ink:        #14181D;
+    --navy:       #0B1E27;
+    --steel:      #4B5760;
+    --hairline:   #DCE2E4;
+    --signal:     #0B7285;
+    --signal-dim: #E3F1F2;
+    --amber:      #B5650D;
+    --amber-dim:  #FBEFDD;
+    --cyan:       #22C7DB;
+    --content-w:  820px;
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans","Noto Sans SC",-apple-system,"Segoe UI",sans-serif; line-height:1.55; font-size:16px; }
+  h1,h2,h3 { font-family:"Space Grotesk","Noto Sans SC",sans-serif; font-weight:600; margin:0; color:var(--ink); }
+  code,.mono { font-family:"IBM Plex Mono",ui-monospace,"Courier New",monospace; }
+  a { color: var(--signal); }
+
+  .masthead { background: var(--navy); color: var(--paper); padding: 2.2rem 1.5rem; }
+  .masthead__inner { max-width: var(--content-w); margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; gap: 1.5rem; flex-wrap: wrap; }
+  .masthead__logo { background: var(--paper); border-radius: 6px; padding: 4px 12px; display: inline-flex; align-items: center; flex-shrink: 0; }
+  .masthead__logo img { width: 100px; height: auto; display: block; }
+  .masthead__meta { display: flex; flex-direction: column; align-items: flex-end; gap: 0.7rem; flex-shrink: 0; }
+  .eyebrow { font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:#7FC4CC; margin:0 0 0.6rem; }
+  .masthead h1 { color: var(--paper); font-size: clamp(1.5rem, 3.6vw, 2.1rem); letter-spacing:-0.01em; line-height:1.18; max-width:32ch; }
+  .masthead .subtitle { margin: 0.7rem 0 0; color: #C4CCD1; font-size: 0.98rem; max-width: 58ch; }
+
+  .lang-switch { display: flex; gap: 2px; background: rgba(255,255,255,0.06); padding: 4px; border-radius: 20px; }
+  .lang-switch button {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; border: none; background: transparent;
+    color: #9FB4BB; padding: 6px 12px; border-radius: 16px; cursor: pointer; white-space: nowrap; transition: background 0.15s, color 0.15s;
+  }
+  .lang-switch button:hover { color: #fff; }
+  .lang-switch button.active { background: var(--cyan); color: var(--navy); }
+  .lang-switch button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+
+  main { max-width: var(--content-w); margin: 0 auto; padding: 2.2rem 1.5rem 3rem; }
+  section { margin: 0 0 2.4rem; }
+  section h2 { font-size: 1.1rem; margin-bottom: 0.9rem; }
+  section h2 .n { font-family:"IBM Plex Mono",monospace; color: var(--signal); margin-right: 0.5rem; }
+  .section-intro { color: var(--steel); max-width: 66ch; margin: 0 0 1.3rem; font-size: 0.95rem; }
+
+  .facts { background: var(--paper-raised); border: 1px solid var(--hairline); border-radius: 8px; padding: 0.9rem 1.2rem; display: flex; flex-wrap: wrap; gap: 0.4rem 2rem; font-size: 0.88rem; }
+  .facts div { white-space: nowrap; }
+  .facts b { font-family:"IBM Plex Mono",monospace; font-weight: 600; }
+
+  .download-cta { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; background: var(--signal-dim); border: 1px solid var(--signal); border-radius: 10px; padding: 0.9rem 1.2rem; margin-top: 0.9rem; }
+  .download-cta p { margin: 0; font-size: 0.88rem; color: var(--ink); }
+  .download-cta a.btn { flex-shrink: 0; display: inline-block; background: var(--signal); color: #fff; font-family: "Space Grotesk", "Noto Sans SC", sans-serif; font-weight: 600; font-size: 0.85rem; text-decoration: none; padding: 0.55rem 1.1rem; border-radius: 20px; }
+  .download-cta a.btn:hover { background: #0a5f6d; }
+  .download-cta .placeholder-note { display: block; margin-top: 0.4rem; font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; color: var(--amber); }
+
+  ol.checklist { margin: 0; padding: 0; list-style: none; counter-reset: step; }
+  ol.checklist li { counter-increment: step; display: grid; grid-template-columns: 34px 1fr; gap: 0.8rem; padding: 0.85rem 0; border-bottom: 1px solid var(--hairline); font-size: 0.94rem; }
+  ol.checklist li:last-child { border-bottom: none; }
+  ol.checklist li::before {
+    content: counter(step);
+    font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:0.92rem;
+    background: var(--ink); color: var(--paper); border-radius: 50%;
+    width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  ol.checklist li .step-title { font-family:"Space Grotesk","Noto Sans SC",sans-serif; font-weight: 600; font-size: 0.98rem; margin: 0 0 0.25rem; }
+  ol.checklist li p { margin: 0; color: var(--steel); }
+  ol.checklist li .mono-note { display:block; margin-top:0.35rem; font-family:"IBM Plex Mono",monospace; font-size:0.78rem; color: var(--signal); }
+
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 640px) { .card-grid { grid-template-columns: 1fr; } }
+  .io-card { background: var(--paper-raised); border: 1px solid var(--hairline); border-radius: 8px; padding: 1.1rem 1.3rem 1.3rem; }
+  .io-card .path-tag { display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:0.62rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--signal); background:var(--signal-dim); padding:0.15rem 0.5rem; border-radius:3px; margin-bottom:0.6rem; }
+  .io-card h3 { font-size: 1.02rem; margin: 0 0 0.5rem; }
+  .io-card ul { margin: 0 0 0.7rem; padding-left: 1.1rem; font-size: 0.86rem; color: var(--ink); line-height: 1.6; }
+  .io-card ul li b { font-family: "IBM Plex Mono", monospace; font-weight: 600; }
+  .io-card p.desc { margin: 0; font-size: 0.86rem; color: var(--steel); }
+
+  .callout { background: var(--paper-raised); border: 1px solid var(--hairline); border-left: 4px solid var(--signal); border-radius: 0 8px 8px 0; padding: 1rem 1.2rem; font-size: 0.9rem; margin-top: 1rem; }
+  .callout.warn { border-left-color: var(--amber); background: var(--amber-dim); }
+  .callout strong { color: var(--ink); }
+
+  footer.page-footer { max-width: var(--content-w); margin: 0 auto; padding: 0 1.5rem 2.5rem; font-size: 0.78rem; color: var(--steel); }
+
+  @media print {
+    .masthead { background: none; color: #000; border-bottom: 2px solid #000; }
+    .masthead h1, .masthead .subtitle, .eyebrow { color: #000 !important; }
+    .lang-switch { display: none; }
+    .download-cta { border: 1px solid #000; background: none; }
+    .download-cta a.btn { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead__inner">
+    <div>
+      <p class="eyebrow" data-i18n="eyebrow">For Crestron programmers &amp; AV integrators</p>
+      <h1 data-i18n="h1">eXview Edge — Crestron Control Module</h1>
+      <p class="subtitle" data-i18n="subtitle">A SIMPL+ module for Crestron control processors that gives a touchpanel full control of an eXview Edge or eXview AIO screen: power, volume, brightness, source and HDMI signal status.</p>
+    </div>
+    <div class="masthead__meta">
+      <span class="masthead__logo"><img src="assets/expromo-logo.jpg" alt="Expromo"></span>
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" data-lang="en" class="active" aria-pressed="true">EN</button>
+        <button type="button" data-lang="da" aria-pressed="false">DA</button>
+        <button type="button" data-lang="de" aria-pressed="false">DE</button>
+        <button type="button" data-lang="zh" aria-pressed="false">中文</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section>
+  <h2><span class="n">01</span><span data-i18n="h2_01">What it is</span></h2>
+  <p class="section-intro" data-i18n="secIntro01">A SIMPL+ module (<code>.usp</code>) you drop into a SIMPL Windows program. Once wired to an eXview screen, it exposes simple joins a touchpanel program can use directly &mdash; no need to know anything about the screen's own command protocol.</p>
+  <div class="facts">
+    <div><b data-i18n="factWorks">Works with</b> <span data-i18n="factWorksDesc">eXview Edge and eXview AIO</span></div>
+    <div><b data-i18n="factTransport">Transport</b> <span data-i18n="factTransportDesc">network (UDP) or RS-232</span></div>
+    <div><b data-i18n="factPlatform">Platform</b> <span data-i18n="factPlatformDesc">SIMPL Windows, 3-Series / 4-Series processors</span></div>
+  </div>
+  <div class="download-cta">
+    <div>
+      <p data-i18n="downloadText">The compiled module is available as a single download.</p>
+      <span class="placeholder-note" data-i18n="downloadNote">Link placeholder &mdash; to be hosted on nextcloud.expromo.eu</span>
+    </div>
+    <a class="btn" href="https://nextcloud.expromo.eu/" data-i18n="downloadBtn">Download the module</a>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">02</span><span data-i18n="h2_02">Wiring it up</span></h2>
+  <ol class="checklist">
+    <li>
+      <div>
+        <p class="step-title" data-i18n="step1Title">Add the transport symbol</p>
+        <p data-i18n="step1Desc">Most installs use a UDP/IP Communications symbol pointed at the screen's IP address, port <code>8600</code>. Going over RS-232 instead, use a COM port symbol set to 115200 baud, 8-N-1.</p>
+      </div>
+    </li>
+    <li>
+      <div>
+        <p class="step-title" data-i18n="step2Title">Connect the module to it</p>
+        <p data-i18n="step2Desc">Wire the module's <code>ToDevice</code> output to that symbol's transmit line, and its <code>FromDevice</code> input to the receive line. That's the only wiring the module itself needs beyond your button/feedback joins.</p>
+      </div>
+    </li>
+    <li>
+      <div>
+        <p class="step-title" data-i18n="step3Title">Turn polling on</p>
+        <p data-i18n="step3Desc">Hold the <code>PollEnable</code> input high. The screen never reports changes on its own, so this is what keeps the touchpanel's feedback in sync &mdash; including changes made locally at the screen (remote control, on-screen menu).</p>
+        <span class="mono-note" data-i18n="step3Note">How often it polls is set by the PollIntervalSec parameter, see Section 04.</span>
+      </div>
+    </li>
+  </ol>
+</section>
+
+<section>
+  <h2><span class="n">03</span><span data-i18n="h2_03">What the signals do</span></h2>
+  <p class="section-intro" data-i18n="secIntro03">Every input is a plain button or slider; every output is plain feedback a touchpanel can bind to directly.</p>
+
+  <div class="card-grid">
+    <div class="io-card">
+      <span class="path-tag" data-i18n="tagPower">Power</span>
+      <h3 data-i18n="titlePower">Power control</h3>
+      <ul>
+        <li data-i18n="powerLi1"><b>Standby</b> &mdash; quick screen-off, screen stays online</li>
+        <li data-i18n="powerLi2"><b>Shutdown</b> &mdash; deep power-down</li>
+        <li data-i18n="powerLi3"><b>WakeUp</b> &mdash; wakes it back up, either state</li>
+        <li data-i18n="powerLi4"><b>Reboot</b>, <b>Query</b></li>
+      </ul>
+      <p class="desc" data-i18n="powerDesc">Feedback (<code>AwakeFb</code> / <code>BlackoutFb</code> / <code>StandbyFb</code>, plus a combined <code>PowerStateFb</code>) tells the panel which of the three states the screen is actually in.</p>
+    </div>
+
+    <div class="io-card">
+      <span class="path-tag" data-i18n="tagAV">Volume &amp; brightness</span>
+      <h3 data-i18n="titleAV">Sliders</h3>
+      <ul>
+        <li data-i18n="avLi1"><b>VolumeSet</b> / <b>BrightnessSet</b> &mdash; 0&ndash;100</li>
+      </ul>
+      <p class="desc" data-i18n="avDesc"><code>VolumeFb</code> / <code>BrightnessFb</code> report the current level back, so a slider on the panel always shows where the screen actually is, not just where it was last set to.</p>
+    </div>
+
+    <div class="io-card">
+      <span class="path-tag" data-i18n="tagSource">Source</span>
+      <h3 data-i18n="titleSource">Input selection</h3>
+      <ul>
+        <li data-i18n="sourceLi1"><b>SrcAndroid</b>, <b>SrcHdmi1&ndash;4</b> &mdash; one button per source</li>
+      </ul>
+      <p class="desc" data-i18n="sourceDesc">Per-source feedback shows the active input, and a separate set of <code>Input_Active_Fb</code> signals shows which HDMI ports actually have a live cable plugged in &mdash; useful for greying out inputs with nothing connected.</p>
+    </div>
+
+    <div class="io-card">
+      <span class="path-tag" data-i18n="tagParams">Parameters</span>
+      <h3 data-i18n="titleParams">Timing settings</h3>
+      <ul>
+        <li data-i18n="paramsLi1"><b>PollIntervalSec</b> &mdash; how often it polls (default 10s)</li>
+        <li data-i18n="paramsLi2"><b>ShutdownBusySec</b> / <b>RebootBusySec</b> &mdash; how long the screen is expected to be unreachable after each</li>
+      </ul>
+      <p class="desc" data-i18n="paramsDesc">A <code>BusyFb</code> output stays high for that long, so the panel can show &ldquo;please wait&rdquo; instead of looking unresponsive while the screen restarts.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">04</span><span data-i18n="h2_04">Good to know</span></h2>
+  <div class="callout" data-i18n="calloutStandby"><strong>While the screen is in Standby, volume/brightness/source can't be read.</strong> The module shows those as unknown rather than an old, possibly wrong reading &mdash; they come back automatically once the screen is awake again. This is expected, not a fault.</div>
+  <div class="callout" data-i18n="calloutHdmi"><strong>Four HDMI buttons, even on two-input screens.</strong> The module supports HDMI1&ndash;4 for the eXview AIO family. On an eXview Edge unit with only HDMI1/2, the extra buttons simply do nothing &mdash; there's no error, they're just inactive.</div>
+  <div class="callout warn" data-i18n="calloutBusy"><strong>Shutdown and Reboot take the screen offline for a while.</strong> Expect roughly a minute of no response while it restarts &mdash; that's what <code>BusyFb</code> and the timing parameters in Section 03 are for.</div>
+</section>
+
+</main>
+
+<footer class="page-footer">
+  <p data-i18n="footerText">For Crestron programmers and system integrators wiring eXview Edge/AIO control into a touchpanel project. Questions or a firmware-specific issue? Contact Expromo support.</p>
+</footer>
+
+<script>
+(function () {
+  var STRINGS = {
+    en: {
+      eyebrow: `For Crestron programmers &amp; AV integrators`,
+      h1: `eXview Edge &mdash; Crestron Control Module`,
+      subtitle: `A SIMPL+ module for Crestron control processors that gives a touchpanel full control of an eXview Edge or eXview AIO screen: power, volume, brightness, source and HDMI signal status.`,
+      h2_01: `What it is`,
+      secIntro01: `A SIMPL+ module (<code>.usp</code>) you drop into a SIMPL Windows program. Once wired to an eXview screen, it exposes simple joins a touchpanel program can use directly &mdash; no need to know anything about the screen's own command protocol.`,
+      factWorks: `Works with`,
+      factWorksDesc: `eXview Edge and eXview AIO`,
+      factTransport: `Transport`,
+      factTransportDesc: `network (UDP) or RS-232`,
+      factPlatform: `Platform`,
+      factPlatformDesc: `SIMPL Windows, 3-Series / 4-Series processors`,
+      downloadText: `The compiled module is available as a single download.`,
+      downloadNote: `Link placeholder &mdash; to be hosted on nextcloud.expromo.eu`,
+      downloadBtn: `Download the module`,
+      h2_02: `Wiring it up`,
+      step1Title: `Add the transport symbol`,
+      step1Desc: `Most installs use a UDP/IP Communications symbol pointed at the screen's IP address, port <code>8600</code>. Going over RS-232 instead, use a COM port symbol set to 115200 baud, 8-N-1.`,
+      step2Title: `Connect the module to it`,
+      step2Desc: `Wire the module's <code>ToDevice</code> output to that symbol's transmit line, and its <code>FromDevice</code> input to the receive line. That's the only wiring the module itself needs beyond your button/feedback joins.`,
+      step3Title: `Turn polling on`,
+      step3Desc: `Hold the <code>PollEnable</code> input high. The screen never reports changes on its own, so this is what keeps the touchpanel's feedback in sync &mdash; including changes made locally at the screen (remote control, on-screen menu).`,
+      step3Note: `How often it polls is set by the PollIntervalSec parameter, see Section 04.`,
+      h2_03: `What the signals do`,
+      secIntro03: `Every input is a plain button or slider; every output is plain feedback a touchpanel can bind to directly.`,
+      tagPower: `Power`,
+      titlePower: `Power control`,
+      powerLi1: `<b>Standby</b> &mdash; quick screen-off, screen stays online`,
+      powerLi2: `<b>Shutdown</b> &mdash; deep power-down`,
+      powerLi3: `<b>WakeUp</b> &mdash; wakes it back up, either state`,
+      powerLi4: `<b>Reboot</b>, <b>Query</b>`,
+      powerDesc: `Feedback (<code>AwakeFb</code> / <code>BlackoutFb</code> / <code>StandbyFb</code>, plus a combined <code>PowerStateFb</code>) tells the panel which of the three states the screen is actually in.`,
+      tagAV: `Volume &amp; brightness`,
+      titleAV: `Sliders`,
+      avLi1: `<b>VolumeSet</b> / <b>BrightnessSet</b> &mdash; 0&ndash;100`,
+      avDesc: `<code>VolumeFb</code> / <code>BrightnessFb</code> report the current level back, so a slider on the panel always shows where the screen actually is, not just where it was last set to.`,
+      tagSource: `Source`,
+      titleSource: `Input selection`,
+      sourceLi1: `<b>SrcAndroid</b>, <b>SrcHdmi1&ndash;4</b> &mdash; one button per source`,
+      sourceDesc: `Per-source feedback shows the active input, and a separate set of <code>Input_Active_Fb</code> signals shows which HDMI ports actually have a live cable plugged in &mdash; useful for greying out inputs with nothing connected.`,
+      tagParams: `Parameters`,
+      titleParams: `Timing settings`,
+      paramsLi1: `<b>PollIntervalSec</b> &mdash; how often it polls (default 10s)`,
+      paramsLi2: `<b>ShutdownBusySec</b> / <b>RebootBusySec</b> &mdash; how long the screen is expected to be unreachable after each`,
+      paramsDesc: `A <code>BusyFb</code> output stays high for that long, so the panel can show &ldquo;please wait&rdquo; instead of looking unresponsive while the screen restarts.`,
+      h2_04: `Good to know`,
+      calloutStandby: `<strong>While the screen is in Standby, volume/brightness/source can't be read.</strong> The module shows those as unknown rather than an old, possibly wrong reading &mdash; they come back automatically once the screen is awake again. This is expected, not a fault.`,
+      calloutHdmi: `<strong>Four HDMI buttons, even on two-input screens.</strong> The module supports HDMI1&ndash;4 for the eXview AIO family. On an eXview Edge unit with only HDMI1/2, the extra buttons simply do nothing &mdash; there's no error, they're just inactive.`,
+      calloutBusy: `<strong>Shutdown and Reboot take the screen offline for a while.</strong> Expect roughly a minute of no response while it restarts &mdash; that's what <code>BusyFb</code> and the timing parameters in Section 03 are for.`,
+      footerText: `For Crestron programmers and system integrators wiring eXview Edge/AIO control into a touchpanel project. Questions or a firmware-specific issue? Contact Expromo support.`
+    },
+    da: {
+      eyebrow: `Til Crestron-programm&oslash;rer &amp; AV-integrat&oslash;rer`,
+      h1: `eXview Edge &mdash; Crestron-styremodul`,
+      subtitle: `Et SIMPL+-modul til Crestron-styreprocessorer, der giver et betjeningspanel fuld kontrol over en eXview Edge- eller eXview AIO-sk&aelig;rm: strøm, lydstyrke, lysstyrke, kilde og HDMI-signalstatus.`,
+      h2_01: `Hvad det er`,
+      secIntro01: `Et SIMPL+-modul (<code>.usp</code>), du l&aelig;gger ind i et SIMPL Windows-program. N&aring;r det er tilsluttet en eXview-sk&aelig;rm, stiller det enkle signaler til r&aring;dighed, som et panelprogram kan bruge direkte &mdash; uden at kende noget til sk&aelig;rmens eget kommandoprotokol.`,
+      factWorks: `Virker med`,
+      factWorksDesc: `eXview Edge og eXview AIO`,
+      factTransport: `Transport`,
+      factTransportDesc: `netv&aelig;rk (UDP) eller RS-232`,
+      factPlatform: `Platform`,
+      factPlatformDesc: `SIMPL Windows, 3-Series / 4-Series-processorer`,
+      downloadText: `Det kompilerede modul f&aring;s som &eacute;n samlet download.`,
+      downloadNote: `Link-placeholder &mdash; skal hostes p&aring; nextcloud.expromo.eu`,
+      downloadBtn: `Download modulet`,
+      h2_02: `S&aring;dan tilsluttes det`,
+      step1Title: `Tilf&oslash;j transport-symbolet`,
+      step1Desc: `De fleste installationer bruger et UDP/IP Communications-symbol rettet mod sk&aelig;rmens IP-adresse, port <code>8600</code>. Bruges RS-232 i stedet, s&aelig;ttes et COM-port-symbol til 115200 baud, 8-N-1.`,
+      step2Title: `Forbind modulet til det`,
+      step2Desc: `Forbind modulets <code>ToDevice</code>-udgang til symbolets sendelinje, og dets <code>FromDevice</code>-indgang til modtagelinjen. Det er den eneste ledningsf&oslash;ring, modulet selv har brug for ud over dine knap-/feedbacksignaler.`,
+      step3Title: `Sl&aring; polling til`,
+      step3Desc: `Hold <code>PollEnable</code>-indgangen h&oslash;j. Sk&aelig;rmen melder aldrig &aelig;ndringer af sig selv, s&aring; det er dette, der holder panelets feedback synkroniseret &mdash; ogs&aring; &aelig;ndringer foretaget lokalt p&aring; sk&aelig;rmen (fjernbetjening, sk&aelig;rmmenu).`,
+      step3Note: `Hvor tit der pollese, styres af parameteren PollIntervalSec, se afsnit 04.`,
+      h2_03: `Hvad signalerne g&oslash;r`,
+      secIntro03: `Hver indgang er en almindelig knap eller skyder; hver udgang er almindelig feedback, som et panel kan bindes direkte til.`,
+      tagPower: `Str&oslash;m`,
+      titlePower: `Str&oslash;mstyring`,
+      powerLi1: `<b>Standby</b> &mdash; hurtig sluk af billedet, sk&aelig;rmen forbliver online`,
+      powerLi2: `<b>Shutdown</b> &mdash; dyb nedlukning`,
+      powerLi3: `<b>WakeUp</b> &mdash; v&aelig;kker den igen, uanset tilstand`,
+      powerLi4: `<b>Reboot</b>, <b>Query</b>`,
+      powerDesc: `Feedback (<code>AwakeFb</code> / <code>BlackoutFb</code> / <code>StandbyFb</code>, plus et samlet <code>PowerStateFb</code>) fort&aelig;ller panelet, hvilken af de tre tilstande sk&aelig;rmen faktisk er i.`,
+      tagAV: `Lydstyrke &amp; lysstyrke`,
+      titleAV: `Skydere`,
+      avLi1: `<b>VolumeSet</b> / <b>BrightnessSet</b> &mdash; 0&ndash;100`,
+      avDesc: `<code>VolumeFb</code> / <code>BrightnessFb</code> melder det aktuelle niveau tilbage, s&aring; en skyder p&aring; panelet altid viser, hvor sk&aelig;rmen faktisk st&aring;r &mdash; ikke bare, hvad den sidst blev sat til.`,
+      tagSource: `Kilde`,
+      titleSource: `Valg af indgang`,
+      sourceLi1: `<b>SrcAndroid</b>, <b>SrcHdmi1&ndash;4</b> &mdash; &eacute;n knap pr. kilde`,
+      sourceDesc: `Feedback pr. kilde viser den aktive indgang, og et separat s&aelig;t <code>Input_Active_Fb</code>-signaler viser, hvilke HDMI-porte der faktisk har et tilsluttet kabel &mdash; nyttigt til at gr&aring;t&oslash;ne indgange uden forbindelse.`,
+      tagParams: `Parametre`,
+      titleParams: `Tidsindstillinger`,
+      paramsLi1: `<b>PollIntervalSec</b> &mdash; hvor tit der polles (standard 10 sek.)`,
+      paramsLi2: `<b>ShutdownBusySec</b> / <b>RebootBusySec</b> &mdash; hvor l&aelig;nge sk&aelig;rmen forventes utilg&aelig;ngelig efter hver`,
+      paramsDesc: `En <code>BusyFb</code>-udgang forbliver h&oslash;j i det tidsrum, s&aring; panelet kan vise &bdquo;vent venligst&ldquo; i stedet for at virke uden respons, mens sk&aelig;rmen genstarter.`,
+      h2_04: `Godt at vide`,
+      calloutStandby: `<strong>N&aring;r sk&aelig;rmen er i Standby, kan lydstyrke/lysstyrke/kilde ikke l&aelig;ses.</strong> Modulet viser dem som ukendte i stedet for en gammel, muligvis forkert v&aelig;rdi &mdash; de kommer automatisk tilbage, n&aring;r sk&aelig;rmen er v&aring;gen igen. Det er forventet, ikke en fejl.`,
+      calloutHdmi: `<strong>Fire HDMI-knapper, ogs&aring; p&aring; sk&aelig;rme med kun to indgange.</strong> Modulet underst&oslash;tter HDMI1&ndash;4 til eXview AIO-serien. P&aring; en eXview Edge-enhed med kun HDMI1/2 g&oslash;r de ekstra knapper simpelthen ingenting &mdash; der er ingen fejl, de er bare inaktive.`,
+      calloutBusy: `<strong>Shutdown og Reboot tager sk&aelig;rmen offline et stykke tid.</strong> Forvent omkring et minuts manglende respons, mens den genstarter &mdash; det er dét, <code>BusyFb</code> og tidsparametrene i afsnit 03 er til.`,
+      footerText: `Til Crestron-programm&oslash;rer og systemintegrat&oslash;rer, der forbinder eXview Edge/AIO-styring til et panelprojekt. Sp&oslash;rgsm&aring;l eller et firmwarespecifikt problem? Kontakt Expromo support.`
+    },
+    de: {
+      eyebrow: `F&uuml;r Crestron-Programmierer &amp; AV-Integratoren`,
+      h1: `eXview Edge &mdash; Crestron-Steuerungsmodul`,
+      subtitle: `Ein SIMPL+-Modul f&uuml;r Crestron-Steuerprozessoren, das einem Bedienpanel die volle Kontrolle &uuml;ber einen eXview Edge- oder eXview AIO-Bildschirm gibt: Strom, Lautst&auml;rke, Helligkeit, Quelle und HDMI-Signalstatus.`,
+      h2_01: `Was es ist`,
+      secIntro01: `Ein SIMPL+-Modul (<code>.usp</code>), das Sie in ein SIMPL-Windows-Programm einf&uuml;gen. Einmal an einen eXview-Bildschirm angeschlossen, stellt es einfache Signale bereit, die ein Panel-Programm direkt nutzen kann &mdash; ohne irgendetwas &uuml;ber das eigene Befehlsprotokoll des Bildschirms wissen zu m&uuml;ssen.`,
+      factWorks: `Funktioniert mit`,
+      factWorksDesc: `eXview Edge und eXview AIO`,
+      factTransport: `&Uuml;bertragung`,
+      factTransportDesc: `Netzwerk (UDP) oder RS-232`,
+      factPlatform: `Plattform`,
+      factPlatformDesc: `SIMPL Windows, 3-Series-/4-Series-Prozessoren`,
+      downloadText: `Das kompilierte Modul steht als ein einzelner Download zur Verf&uuml;gung.`,
+      downloadNote: `Link-Platzhalter &mdash; wird auf nextcloud.expromo.eu gehostet`,
+      downloadBtn: `Modul herunterladen`,
+      h2_02: `Verkabelung`,
+      step1Title: `Transport-Symbol hinzuf&uuml;gen`,
+      step1Desc: `Die meisten Installationen verwenden ein UDP/IP-Communications-Symbol, das auf die IP-Adresse des Bildschirms, Port <code>8600</code>, zeigt. Bei RS-232 stattdessen ein COM-Port-Symbol mit 115200 Baud, 8-N-1 verwenden.`,
+      step2Title: `Modul damit verbinden`,
+      step2Desc: `Verbinden Sie den <code>ToDevice</code>-Ausgang des Moduls mit der Sendeleitung dieses Symbols und den <code>FromDevice</code>-Eingang mit der Empfangsleitung. Mehr Verkabelung braucht das Modul selbst nicht &mdash; abgesehen von Ihren Tasten-/Feedback-Signalen.`,
+      step3Title: `Polling aktivieren`,
+      step3Desc: `Halten Sie den <code>PollEnable</code>-Eingang high. Der Bildschirm meldet &Auml;nderungen nie von sich aus, daher h&auml;lt dies das Feedback des Panels synchron &mdash; auch bei &Auml;nderungen, die direkt am Bildschirm vorgenommen werden (Fernbedienung, Bildschirmmen&uuml;).`,
+      step3Note: `Wie oft gepollt wird, legt der Parameter PollIntervalSec fest, siehe Abschnitt 04.`,
+      h2_03: `Was die Signale bewirken`,
+      secIntro03: `Jeder Eingang ist eine einfache Taste oder ein Schieberegler; jeder Ausgang ist einfaches Feedback, das ein Panel direkt binden kann.`,
+      tagPower: `Strom`,
+      titlePower: `Stromsteuerung`,
+      powerLi1: `<b>Standby</b> &mdash; schnelles Ausschalten des Bildes, Bildschirm bleibt online`,
+      powerLi2: `<b>Shutdown</b> &mdash; tiefe Abschaltung`,
+      powerLi3: `<b>WakeUp</b> &mdash; weckt ihn wieder auf, aus beiden Zust&auml;nden`,
+      powerLi4: `<b>Reboot</b>, <b>Query</b>`,
+      powerDesc: `Feedback (<code>AwakeFb</code> / <code>BlackoutFb</code> / <code>StandbyFb</code>, plus ein kombiniertes <code>PowerStateFb</code>) zeigt dem Panel, in welchem der drei Zust&auml;nde sich der Bildschirm tats&auml;chlich befindet.`,
+      tagAV: `Lautst&auml;rke &amp; Helligkeit`,
+      titleAV: `Schieberegler`,
+      avLi1: `<b>VolumeSet</b> / <b>BrightnessSet</b> &mdash; 0&ndash;100`,
+      avDesc: `<code>VolumeFb</code> / <code>BrightnessFb</code> melden den aktuellen Wert zur&uuml;ck, sodass ein Schieberegler auf dem Panel immer zeigt, wo der Bildschirm tats&auml;chlich steht &mdash; nicht nur, worauf er zuletzt gesetzt wurde.`,
+      tagSource: `Quelle`,
+      titleSource: `Quellenauswahl`,
+      sourceLi1: `<b>SrcAndroid</b>, <b>SrcHdmi1&ndash;4</b> &mdash; eine Taste pro Quelle`,
+      sourceDesc: `Feedback pro Quelle zeigt den aktiven Eingang, und ein separater Satz <code>Input_Active_Fb</code>-Signale zeigt, welche HDMI-Ports tats&auml;chlich ein angeschlossenes Kabel haben &mdash; n&uuml;tzlich, um unbenutzte Eing&auml;nge auszugrauen.`,
+      tagParams: `Parameter`,
+      titleParams: `Zeiteinstellungen`,
+      paramsLi1: `<b>PollIntervalSec</b> &mdash; wie oft gepollt wird (Standard 10&nbsp;s)`,
+      paramsLi2: `<b>ShutdownBusySec</b> / <b>RebootBusySec</b> &mdash; wie lange der Bildschirm danach jeweils voraussichtlich nicht erreichbar ist`,
+      paramsDesc: `Ein <code>BusyFb</code>-Ausgang bleibt so lange high, damit das Panel &bdquo;bitte warten&ldquo; anzeigen kann, statt w&auml;hrend des Neustarts unresponsiv zu wirken.`,
+      h2_04: `Gut zu wissen`,
+      calloutStandby: `<strong>Im Standby k&ouml;nnen Lautst&auml;rke/Helligkeit/Quelle nicht gelesen werden.</strong> Das Modul zeigt diese dann als unbekannt an, statt eines alten, m&ouml;glicherweise falschen Werts &mdash; sie kehren automatisch zur&uuml;ck, sobald der Bildschirm wieder wach ist. Das ist erwartetes Verhalten, kein Fehler.`,
+      calloutHdmi: `<strong>Vier HDMI-Tasten, auch bei Bildschirmen mit zwei Eing&auml;ngen.</strong> Das Modul unterst&uuml;tzt HDMI1&ndash;4 f&uuml;r die eXview-AIO-Familie. Bei einem eXview-Edge-Ger&auml;t mit nur HDMI1/2 tun die zus&auml;tzlichen Tasten schlicht nichts &mdash; kein Fehler, sie sind einfach inaktiv.`,
+      calloutBusy: `<strong>Shutdown und Reboot nehmen den Bildschirm eine Weile vom Netz.</strong> Rechnen Sie w&auml;hrend des Neustarts mit etwa einer Minute ohne Reaktion &mdash; daf&uuml;r sind <code>BusyFb</code> und die Zeitparameter aus Abschnitt 03 da.`,
+      footerText: `F&uuml;r Crestron-Programmierer und Systemintegratoren, die eXview-Edge/AIO-Steuerung in ein Panel-Projekt einbinden. Fragen oder ein firmwarespezifisches Problem? Wenden Sie sich an den Expromo-Support.`
+    },
+    zh: {
+      eyebrow: `面向Crestron程序员与AV系统集成商`,
+      h1: `eXview Edge &mdash; Crestron控制模块`,
+      subtitle: `一个用于Crestron控制处理器的SIMPL+模块，让控制面板可以完整控制eXview Edge或eXview AIO屏幕：电源、音量、亮度、信号源及HDMI信号状态。`,
+      h2_01: `模块简介`,
+      secIntro01: `这是一个SIMPL+模块（<code>.usp</code>文件），可直接加入SIMPL Windows程序。连接到eXview屏幕后，它会提供简单的信号点供面板程序直接使用 &mdash; 无需了解屏幕自身的命令协议。`,
+      factWorks: `适用于`,
+      factWorksDesc: `eXview Edge 与 eXview AIO`,
+      factTransport: `通信方式`,
+      factTransportDesc: `网络（UDP）或RS-232`,
+      factPlatform: `平台`,
+      factPlatformDesc: `SIMPL Windows，3系列/4系列处理器`,
+      downloadText: `已编译的模块以单一文件形式提供下载。`,
+      downloadNote: `占位链接 &mdash; 稍后将托管于nextcloud.expromo.eu`,
+      downloadBtn: `下载模块`,
+      h2_02: `如何接线`,
+      step1Title: `添加通信符号`,
+      step1Desc: `大多数安装使用UDP/IP Communications符号，指向屏幕的IP地址，端口<code>8600</code>。若使用RS-232，则改用COM口符号，设置为115200波特率、8-N-1。`,
+      step2Title: `将模块与其连接`,
+      step2Desc: `将模块的<code>ToDevice</code>输出接到该符号的发送线，<code>FromDevice</code>输入接到接收线。除了您自己的按钮/反馈信号外，模块本身只需要这些接线。`,
+      step3Title: `开启轮询`,
+      step3Desc: `将<code>PollEnable</code>输入保持为高电平。屏幕不会主动上报任何变化，因此这是保持面板反馈同步的唯一方式 &mdash; 包括在屏幕本地（遥控器、屏幕菜单）所做的更改。`,
+      step3Note: `轮询频率由PollIntervalSec参数设置，详见第04节。`,
+      h2_03: `各信号的作用`,
+      secIntro03: `每个输入都是普通的按钮或滑块；每个输出都是普通的反馈信号，面板可直接绑定使用。`,
+      tagPower: `电源`,
+      titlePower: `电源控制`,
+      powerLi1: `<b>Standby</b>（待机）&mdash; 快速关闭画面，屏幕保持在线`,
+      powerLi2: `<b>Shutdown</b>（关机）&mdash; 深度断电`,
+      powerLi3: `<b>WakeUp</b>（唤醒）&mdash; 从任一状态唤醒屏幕`,
+      powerLi4: `<b>Reboot</b>（重启）、<b>Query</b>（查询）`,
+      powerDesc: `反馈信号（<code>AwakeFb</code> / <code>BlackoutFb</code> / <code>StandbyFb</code>，以及综合的<code>PowerStateFb</code>）会告知面板屏幕当前实际处于三种状态中的哪一种。`,
+      tagAV: `音量与亮度`,
+      titleAV: `滑块`,
+      avLi1: `<b>VolumeSet</b> / <b>BrightnessSet</b> &mdash; 0&ndash;100`,
+      avDesc: `<code>VolumeFb</code> / <code>BrightnessFb</code>会回传当前实际数值，因此面板上的滑块始终显示屏幕的真实状态，而不仅仅是上一次设置的值。`,
+      tagSource: `信号源`,
+      titleSource: `信号源选择`,
+      sourceLi1: `<b>SrcAndroid</b>、<b>SrcHdmi1&ndash;4</b> &mdash; 每个信号源一个按钮`,
+      sourceDesc: `按信号源反馈会显示当前激活的输入，另有一组独立的<code>Input_Active_Fb</code>信号显示哪些HDMI端口实际接有信号线缆 &mdash; 便于将未连接的输入置灰显示。`,
+      tagParams: `参数`,
+      titleParams: `时间设置`,
+      paramsLi1: `<b>PollIntervalSec</b> &mdash; 轮询频率（默认10秒）`,
+      paramsLi2: `<b>ShutdownBusySec</b> / <b>RebootBusySec</b> &mdash; 关机/重启后预计屏幕无法响应的时长`,
+      paramsDesc: `<code>BusyFb</code>输出会在该时长内保持高电平，以便面板显示&ldquo;请稍候&rdquo;，而不是在屏幕重启期间显得无响应。`,
+      h2_04: `实用提示`,
+      calloutStandby: `<strong>屏幕处于待机状态时，无法读取音量/亮度/信号源。</strong>此时模块会将这些值显示为&ldquo;未知&rdquo;，而不是显示可能已过时或不准确的旧数值 &mdash; 屏幕重新唤醒后会自动恢复。这是预期行为，并非故障。`,
+      calloutHdmi: `<strong>即使是双输入屏幕，也会显示四个HDMI按钮。</strong>模块为eXview AIO系列提供HDMI1&ndash;4支持。在只有HDMI1/2的eXview Edge设备上，多出的按钮不会产生任何效果 &mdash; 没有报错，只是处于未启用状态。`,
+      calloutBusy: `<strong>关机与重启会使屏幕暂时离线一段时间。</strong>重启期间预计约有一分钟无响应 &mdash; 这正是<code>BusyFb</code>和第03节中时间参数的作用所在。`,
+      footerText: `面向将eXview Edge/AIO控制集成到面板项目中的Crestron程序员与系统集成商。如有疑问或特定固件问题，请联系Expromo支持团队。`
+    }
+  };
+
+  var HTML_LANG = { en: 'en', da: 'da', de: 'de', zh: 'zh-CN' };
+  var STORAGE_KEY = 'exview-edge-lang';
+
+  function applyLang(lang) {
+    var currentLang = STRINGS[lang] ? lang : 'en';
+    var dict = STRINGS[currentLang];
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var key = nodes[i].getAttribute('data-i18n');
+      if (dict[key] !== undefined) { nodes[i].innerHTML = dict[key]; }
+    }
+    document.documentElement.lang = HTML_LANG[currentLang] || 'en';
+    var btns = document.querySelectorAll('.lang-switch button');
+    for (var j = 0; j < btns.length; j++) {
+      var isActive = btns[j].getAttribute('data-lang') === currentLang;
+      btns[j].classList.toggle('active', isActive);
+      btns[j].setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    }
+    try { localStorage.setItem(STORAGE_KEY, currentLang); } catch (e) {}
+  }
+
+  var switchBtns = document.querySelectorAll('.lang-switch button');
+  for (var k = 0; k < switchBtns.length; k++) {
+    switchBtns[k].addEventListener('click', function () { applyLang(this.getAttribute('data-lang')); });
+  }
+
+  var saved = null;
+  try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+  applyLang(saved && STRINGS[saved] ? saved : 'en');
+})();
+</script>
+
+</body>
+</html>
