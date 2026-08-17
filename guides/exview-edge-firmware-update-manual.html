@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>eXview AIO / Edge — Firmware Update Manual</title>
+  <style>
+    :root {
+      --accent: #2f75b5;
+      --accent-dark: #1f4e79;
+      --text: #101418;
+      --muted: #626b76;
+      --line: #d9dee5;
+      --paper: #ffffff;
+      --soft: #f3f7fb;
+      --warning: #fff4cc;
+      --warning-border: #d7ac34;
+      --bg: #eef1f5;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, "Noto Sans", "Microsoft YaHei", "PingFang SC", Helvetica, sans-serif;
+      line-height: 1.42;
+    }
+
+    .toolbar {
+      width: 210mm;
+      max-width: calc(100% - 24px);
+      margin: 18px auto 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .language-switcher {
+      display: inline-flex;
+      gap: 4px;
+      padding: 4px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.04);
+    }
+
+    .language-switcher button,
+    .print-button {
+      border: 0;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background .15s ease, color .15s ease;
+    }
+
+    .language-switcher button {
+      min-width: 44px;
+      padding: 7px 10px;
+      background: transparent;
+      color: #39424d;
+      font-weight: 700;
+    }
+
+    .language-switcher button:hover { background: #edf3f9; }
+
+    .language-switcher button.active {
+      background: var(--accent-dark);
+      color: #fff;
+    }
+
+    .print-button {
+      padding: 10px 14px;
+      background: var(--accent-dark);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .print-button:hover { background: #173b5c; }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 10px auto 24px;
+      padding: 16mm 18mm 18mm;
+      background: var(--paper);
+      box-shadow: 0 4px 22px rgba(0,0,0,.10);
+    }
+
+    .brandline {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 14px;
+      padding-bottom: 9px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 10.5px;
+      letter-spacing: .25px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0 0 4px;
+      font-size: 26px;
+      line-height: 1.15;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .subtitle {
+      margin: 0 0 17px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    h2 {
+      margin: 18px 0 7px;
+      font-size: 17px;
+      line-height: 1.2;
+      page-break-after: avoid;
+    }
+
+    p { margin: 6px 0; }
+
+    ul, ol {
+      margin: 5px 0 9px 22px;
+      padding: 0;
+    }
+
+    li { margin: 3px 0; }
+
+    .download {
+      margin: 14px 0;
+      padding: 11px 13px;
+      border-left: 4px solid var(--accent);
+      background: var(--soft);
+      page-break-inside: avoid;
+    }
+
+    .download a {
+      color: #0563c1;
+      word-break: break-all;
+    }
+
+    .important {
+      margin: 14px 0 15px;
+      padding: 10px 13px;
+      background: var(--accent);
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      page-break-inside: avoid;
+    }
+
+    .important strong {
+      display: block;
+      margin-bottom: 2px;
+      font-size: 14px;
+    }
+
+    .note {
+      margin: 10px 0;
+      padding: 10px 13px;
+      border: 1px solid var(--warning-border);
+      background: var(--warning);
+      page-break-inside: avoid;
+    }
+
+    code {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.93em;
+      background: #f1f2f4;
+      border: 1px solid #e0e3e7;
+      border-radius: 3px;
+      padding: 1px 4px;
+    }
+
+    .step-strong { font-weight: 700; }
+
+    .footer {
+      margin-top: 22px;
+      padding-top: 9px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 10.5px;
+    }
+
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    @media (max-width: 850px) {
+      .toolbar {
+        width: auto;
+        max-width: none;
+        margin: 12px;
+      }
+      .page {
+        width: auto;
+        min-height: 0;
+        margin: 0;
+        padding: 28px 22px 36px;
+        box-shadow: none;
+      }
+    }
+
+    @media print {
+      html, body { background: #fff; }
+      .toolbar { display: none !important; }
+      .page {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0;
+        box-shadow: none;
+        padding: 16mm 18mm 18mm;
+      }
+      a { color: #000; text-decoration: none; }
+      .important, .download, .note {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar" aria-label="Document controls">
+    <div class="language-switcher" aria-label="Language selector">
+      <button type="button" data-lang="en" class="active">EN</button>
+      <button type="button" data-lang="da">DA</button>
+      <button type="button" data-lang="de">DE</button>
+      <button type="button" data-lang="zh">中文</button>
+    </div>
+    <button type="button" class="print-button" id="printButton" onclick="window.print()">Print / Save as PDF</button>
+  </div>
+
+  <main class="page">
+    <div class="brandline">
+      <span>Expromo · eXview AIO / Edge</span>
+      <span id="docType">Service Manual</span>
+    </div>
+
+    <h1 id="title">Updating eXview AIO / Edge</h1>
+    <p class="subtitle" id="subtitle">Firmware update procedure</p>
+
+    <h2 id="hPrereq">1. Prerequisites</h2>
+    <ol>
+      <li id="preUsb">USB-A drive.</li>
+      <li id="preKm">Keyboard and mouse.</li>
+      <li id="preFw">Latest firmware package.</li>
+      <li><span id="prePass">Android menu password:</span> <strong>Expromo123</strong>.</li>
+    </ol>
+
+    <div class="download">
+      <strong id="fwPackageLabel">Firmware package</strong><br>
+      <span id="downloadText">Download the newest firmware package from:</span><br>
+      <a href="https://nextcloud.expromo.eu/s/NrWcbTKJPgEeEcF" target="_blank" rel="noopener">https://nextcloud.expromo.eu/s/NrWcbTKJPgEeEcF</a>
+    </div>
+
+    <div class="important">
+      <strong id="importantLabel">Important</strong>
+      <span id="importantText">If the screen displays a distorted picture and you have been instructed to reset the HDMI firmware, scroll to the bottom of the full service guide and follow the instructions in the green box.</span>
+    </div>
+
+    <h2 id="hPrecautions">2. Precautions</h2>
+    <ul>
+      <li id="prec1">All Android configurations will be erased.</li>
+      <li id="prec2">Take note of the current IP/network settings before proceeding. They must be re-established after the update.</li>
+      <li id="prec4">The standby time must be adjusted again after the update.</li>
+      <li id="prec5">Always use the firmware file supplied in the newest firmware package.</li>
+    </ul>
+
+    <h2 id="hPrepare">3. Prepare the USB Drive</h2>
+    <ol>
+      <li id="prep1">Use the firmware file named <code>allupgrade 3588 64G 8G.img</code>.</li>
+      <li id="prep2">Create a folder named <code>upgrade_3588</code> in the root of the USB drive.</li>
+      <li id="prep3">Place <code>allupgrade 3588 64G 8G.img</code> inside the <code>upgrade_3588</code> folder.</li>
+    </ol>
+
+    <div class="note">
+      <strong id="usbStructureLabel">Required USB structure:</strong><br>
+      <code>USB drive / upgrade_3588 / allupgrade 3588 64G 8G.img</code>
+    </div>
+
+    <h2 id="hUpdate">4. Update Android</h2>
+    <ol>
+      <li id="upd1">Before updating, confirm that you have recorded the current Ethernet/IP settings to avoid loss of network control after the firmware update.</li>
+      <li id="upd2">Change the current source of the eXview screen to <strong>Android</strong>.</li>
+      <li id="upd3" class="step-strong">Plug the USB drive into any available USB port on the eXview AIO / Edge.</li>
+      <li id="upd4">A notification window will pop up.</li>
+      <li id="upd5">Use the remote control to accept the update, or connect a keyboard/mouse to another available USB port and accept the update.</li>
+      <li id="upd6">Wait until the update is finished. <strong>The screen will reboot automatically.</strong></li>
+    </ol>
+
+    <h2 id="hAfter">5. After the Update</h2>
+    <ul>
+      <li id="after1">Restore the required Ethernet/IP settings.</li>
+      <li id="after2">Re-enable <strong>Centralized Management Service</strong> under <strong>Functional Management</strong> if RS-232/LAN control is required.</li>
+      <li id="after3">Restore the required standby-time settings.</li>
+      <li id="after4">Verify that the normal video source, network control, and other required functions operate correctly.</li>
+    </ul>
+
+    <div class="footer">
+      <span id="footerLeft">eXview AIO / Edge — Firmware Update Procedure</span>
+      <span>Expromo</span>
+    </div>
+  </main>
+
+  <script>
+    const translations = {
+      en: {
+        pageTitle: "eXview AIO / Edge — Firmware Update Manual",
+        printButton: "Print / Save as PDF",
+        docType: "Service Manual",
+        title: "Updating eXview AIO / Edge",
+        subtitle: "Firmware update procedure",
+        hPrereq: "1. Prerequisites",
+        preUsb: "USB-A drive.",
+        preKm: "Keyboard and mouse.",
+        preFw: "Latest firmware package.",
+        prePass: "Android menu password:",
+        fwPackageLabel: "Firmware package",
+        downloadText: "Download the newest firmware package from:",
+        importantLabel: "Important",
+        importantText: "If the screen displays a distorted picture and you have been instructed to reset the HDMI firmware, scroll to the bottom of the full service guide and follow the instructions in the green box.",
+        hPrecautions: "2. Precautions",
+        prec1: "All Android configurations will be erased.",
+        prec2: "Take note of the current IP/network settings before proceeding. They must be re-established after the update.",
+        prec4: "The standby time must be adjusted again after the update.",
+        prec5: "Always use the firmware file supplied in the newest firmware package.",
+        hPrepare: "3. Prepare the USB Drive",
+        prep1: "Use the firmware file named <code>allupgrade 3588 64G 8G.img</code>.",
+        prep2: "Create a folder named <code>upgrade_3588</code> in the root of the USB drive.",
+        prep3: "Place <code>allupgrade 3588 64G 8G.img</code> inside the <code>upgrade_3588</code> folder.",
+        usbStructureLabel: "Required USB structure:",
+        hUpdate: "4. Update Android",
+        upd1: "Before updating, confirm that you have recorded the current Ethernet/IP settings to avoid loss of network control after the firmware update.",
+        upd2: "Change the current source of the eXview screen to <strong>Android</strong>.",
+        upd3: "Plug the USB drive into any available USB port on the eXview AIO / Edge.",
+        upd4: "A notification window will pop up.",
+        upd5: "Use the remote control to accept the update, or connect a keyboard/mouse to another available USB port and accept the update.",
+        upd6: "Wait until the update is finished. <strong>The screen will reboot automatically.</strong>",
+        hAfter: "5. After the Update",
+        after1: "Restore the required Ethernet/IP settings.",
+        after2: "Re-enable <strong>Centralized Management Service</strong> under <strong>Functional Management</strong> if RS-232/LAN control is required.",
+        after3: "Restore the required standby-time settings.",
+        after4: "Verify that the normal video source, network control, and other required functions operate correctly.",
+        footerLeft: "eXview AIO / Edge — Firmware Update Procedure"
+      },
+      da: {
+        pageTitle: "eXview AIO / Edge — Firmwareopdateringsmanual",
+        printButton: "Udskriv / Gem som PDF",
+        docType: "Servicemanual",
+        title: "Opdatering af eXview AIO / Edge",
+        subtitle: "Procedure for firmwareopdatering",
+        hPrereq: "1. Forudsætninger",
+        preUsb: "USB-A-drev.",
+        preKm: "Tastatur og mus.",
+        preFw: "Nyeste firmwarepakke.",
+        prePass: "Adgangskode til Android-menu:",
+        fwPackageLabel: "Firmwarepakke",
+        downloadText: "Download den nyeste firmwarepakke fra:",
+        importantLabel: "Vigtigt",
+        importantText: "Hvis skærmen viser et forvrænget billede, og du er blevet instrueret i at nulstille HDMI-firmwaren, skal du gå til bunden af den fulde servicevejledning og følge instruktionerne i den grønne boks.",
+        hPrecautions: "2. Forholdsregler",
+        prec1: "Alle Android-konfigurationer slettes.",
+        prec2: "Notér de aktuelle IP-/netværksindstillinger, før du fortsætter. De skal konfigureres igen efter opdateringen.",
+        prec4: "Standby-tiden skal indstilles igen efter opdateringen.",
+        prec5: "Brug altid firmwarefilen fra den nyeste firmwarepakke.",
+        hPrepare: "3. Klargør USB-drevet",
+        prep1: "Brug firmwarefilen med navnet <code>allupgrade 3588 64G 8G.img</code>.",
+        prep2: "Opret en mappe med navnet <code>upgrade_3588</code> i roden af USB-drevet.",
+        prep3: "Placér <code>allupgrade 3588 64G 8G.img</code> i mappen <code>upgrade_3588</code>.",
+        usbStructureLabel: "Påkrævet USB-struktur:",
+        hUpdate: "4. Opdater Android",
+        upd1: "Før opdateringen skal du kontrollere, at de aktuelle Ethernet-/IP-indstillinger er noteret, så netværksstyringen kan gendannes efter firmwareopdateringen.",
+        upd2: "Skift den aktuelle kilde på eXview-skærmen til <strong>Android</strong>.",
+        upd3: "Tilslut USB-drevet til en hvilken som helst ledig USB-port på eXview AIO / Edge.",
+        upd4: "Et meddelelsesvindue vises.",
+        upd5: "Brug fjernbetjeningen til at acceptere opdateringen, eller tilslut tastatur/mus til en anden ledig USB-port og accepter opdateringen.",
+        upd6: "Vent, indtil opdateringen er færdig. <strong>Skærmen genstarter automatisk.</strong>",
+        hAfter: "5. Efter opdateringen",
+        after1: "Gendan de nødvendige Ethernet-/IP-indstillinger.",
+        after2: "Aktivér <strong>Centralized Management Service</strong> under <strong>Functional Management</strong> igen, hvis RS-232/LAN-styring er nødvendig.",
+        after3: "Gendan de nødvendige standby-indstillinger.",
+        after4: "Kontrollér, at den normale videokilde, netværksstyring og øvrige nødvendige funktioner fungerer korrekt.",
+        footerLeft: "eXview AIO / Edge — Firmwareopdateringsprocedure"
+      },
+      de: {
+        pageTitle: "eXview AIO / Edge — Firmware-Update-Anleitung",
+        printButton: "Drucken / Als PDF speichern",
+        docType: "Serviceanleitung",
+        title: "eXview AIO / Edge aktualisieren",
+        subtitle: "Vorgehensweise für das Firmware-Update",
+        hPrereq: "1. Voraussetzungen",
+        preUsb: "USB-A-Laufwerk.",
+        preKm: "Tastatur und Maus.",
+        preFw: "Aktuelles Firmware-Paket.",
+        prePass: "Passwort für das Android-Menü:",
+        fwPackageLabel: "Firmware-Paket",
+        downloadText: "Laden Sie das neueste Firmware-Paket hier herunter:",
+        importantLabel: "Wichtig",
+        importantText: "Wenn das Display ein verzerrtes Bild zeigt und Sie angewiesen wurden, die HDMI-Firmware zurückzusetzen, scrollen Sie im vollständigen Servicehandbuch nach unten und folgen Sie den Anweisungen im grünen Feld.",
+        hPrecautions: "2. Vorsichtsmaßnahmen",
+        prec1: "Alle Android-Konfigurationen werden gelöscht.",
+        prec2: "Notieren Sie vor dem Fortfahren die aktuellen IP-/Netzwerkeinstellungen. Diese müssen nach dem Update erneut eingerichtet werden.",
+        prec4: "Die Standby-Zeit muss nach dem Update erneut eingestellt werden.",
+        prec5: "Verwenden Sie immer die Firmware-Datei aus dem neuesten Firmware-Paket.",
+        hPrepare: "3. USB-Laufwerk vorbereiten",
+        prep1: "Verwenden Sie die Firmware-Datei <code>allupgrade 3588 64G 8G.img</code>.",
+        prep2: "Erstellen Sie im Stammverzeichnis des USB-Laufwerks einen Ordner mit dem Namen <code>upgrade_3588</code>.",
+        prep3: "Legen Sie <code>allupgrade 3588 64G 8G.img</code> in den Ordner <code>upgrade_3588</code>.",
+        usbStructureLabel: "Erforderliche USB-Struktur:",
+        hUpdate: "4. Android aktualisieren",
+        upd1: "Stellen Sie vor dem Update sicher, dass Sie die aktuellen Ethernet-/IP-Einstellungen notiert haben, damit die Netzwerksteuerung nach dem Firmware-Update wiederhergestellt werden kann.",
+        upd2: "Stellen Sie die aktuelle Quelle des eXview-Displays auf <strong>Android</strong>.",
+        upd3: "Stecken Sie das USB-Laufwerk in einen beliebigen freien USB-Anschluss des eXview AIO / Edge.",
+        upd4: "Ein Benachrichtigungsfenster wird angezeigt.",
+        upd5: "Bestätigen Sie das Update mit der Fernbedienung oder schließen Sie Tastatur/Maus an einen anderen freien USB-Anschluss an und bestätigen Sie das Update.",
+        upd6: "Warten Sie, bis das Update abgeschlossen ist. <strong>Das Display startet automatisch neu.</strong>",
+        hAfter: "5. Nach dem Update",
+        after1: "Stellen Sie die erforderlichen Ethernet-/IP-Einstellungen wieder her.",
+        after2: "Aktivieren Sie den <strong>Centralized Management Service</strong> unter <strong>Functional Management</strong> erneut, wenn RS-232/LAN-Steuerung benötigt wird.",
+        after3: "Stellen Sie die erforderlichen Standby-Einstellungen wieder her.",
+        after4: "Prüfen Sie, ob die normale Videoquelle, die Netzwerksteuerung und alle weiteren benötigten Funktionen ordnungsgemäß funktionieren.",
+        footerLeft: "eXview AIO / Edge — Firmware-Update-Verfahren"
+      },
+      zh: {
+        pageTitle: "eXview AIO / Edge — 固件升级手册",
+        printButton: "打印 / 保存为 PDF",
+        docType: "服务手册",
+        title: "eXview AIO / Edge 固件升级",
+        subtitle: "固件升级操作步骤",
+        hPrereq: "1. 准备工作",
+        preUsb: "USB-A U盘。",
+        preKm: "键盘和鼠标。",
+        preFw: "最新固件包。",
+        prePass: "Android 菜单密码：",
+        fwPackageLabel: "固件包",
+        downloadText: "请从以下链接下载最新固件包：",
+        importantLabel: "重要",
+        importantText: "如果屏幕画面出现失真，并且您已被要求重置 HDMI 固件，请滚动到完整服务指南底部，并按照绿色框中的说明操作。",
+        hPrecautions: "2. 注意事项",
+        prec1: "所有 Android 配置都会被清除。",
+        prec2: "升级前请记录当前 IP/网络设置。升级完成后需要重新配置这些设置。",
+        prec4: "升级后需要重新设置待机时间。",
+        prec5: "请始终使用最新固件包中提供的固件文件。",
+        hPrepare: "3. 准备 U 盘",
+        prep1: "使用名为 <code>allupgrade 3588 64G 8G.img</code> 的固件文件。",
+        prep2: "在 U 盘根目录中创建名为 <code>upgrade_3588</code> 的文件夹。",
+        prep3: "将 <code>allupgrade 3588 64G 8G.img</code> 放入 <code>upgrade_3588</code> 文件夹中。",
+        usbStructureLabel: "U 盘目录结构要求：",
+        hUpdate: "4. 升级 Android",
+        upd1: "升级前请确认已经记录当前 Ethernet/IP 设置，以便固件升级后恢复网络控制。",
+        upd2: "将 eXview 屏幕的当前信号源切换到 <strong>Android</strong>。",
+        upd3: "将 U 盘插入 eXview AIO / Edge 上任意可用的 USB 端口。",
+        upd4: "屏幕会弹出通知窗口。",
+        upd5: "使用遥控器确认升级；也可以将键盘/鼠标连接到另一个可用的 USB 端口并确认升级。",
+        upd6: "等待升级完成。<strong>屏幕将自动重启。</strong>",
+        hAfter: "5. 升级完成后",
+        after1: "恢复所需的 Ethernet/IP 设置。",
+        after2: "如需使用 RS-232/LAN 控制，请重新启用 <strong>Functional Management</strong> 下的 <strong>Centralized Management Service</strong>。",
+        after3: "恢复所需的待机时间设置。",
+        after4: "确认正常视频信号源、网络控制及其他所需功能均工作正常。",
+        footerLeft: "eXview AIO / Edge — 固件升级操作步骤"
+      }
+    };
+
+    const richTextKeys = new Set(["prep1", "prep2", "prep3", "upd2", "upd6", "after2"]);
+
+    function setLanguage(lang) {
+      const t = translations[lang] || translations.en;
+      document.documentElement.lang = lang === "zh" ? "zh-CN" : lang;
+      document.title = t.pageTitle;
+
+      Object.entries(t).forEach(([key, value]) => {
+        if (key === "pageTitle") return;
+        const el = key === "printButton" ? document.getElementById("printButton") : document.getElementById(key);
+        if (!el) return;
+        if (richTextKeys.has(key)) el.innerHTML = value;
+        else el.textContent = value;
+      });
+
+      document.querySelectorAll("[data-lang]").forEach(btn => {
+        const active = btn.dataset.lang === lang;
+        btn.classList.toggle("active", active);
+        btn.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+
+      try { localStorage.setItem("exviewManualLang", lang); } catch (_) {}
+    }
+
+    document.querySelectorAll("[data-lang]").forEach(btn => {
+      btn.addEventListener("click", () => setLanguage(btn.dataset.lang));
+    });
+
+    let initialLang = "en";
+    try {
+      const saved = localStorage.getItem("exviewManualLang");
+      if (saved && translations[saved]) initialLang = saved;
+    } catch (_) {}
+    setLanguage(initialLang);
+  </script>
+</body>
+</html>
